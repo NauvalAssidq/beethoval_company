@@ -19,11 +19,11 @@ export function NavUser({ user }: { user?: { name?: string | null, email?: strin
   return (
     <SidebarMenuItem>
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex w-full items-center justify-between gap-2 overflow-hidden rounded-md p-2 text-left text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-          <div className="flex items-center gap-2">
-            <Avatar className="h-6 w-6">
+        <DropdownMenuTrigger className="flex w-full items-center justify-between gap-2 overflow-hidden rounded-full p-2 text-left text-sm hover:bg-gray-100 transition-colors">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-8 w-8 ring-1 ring-indigo-500/20">
               <AvatarImage src={user?.image || ""} />
-              <AvatarFallback>{user?.name ? user.name.charAt(0).toUpperCase() : "U"}</AvatarFallback>
+              <AvatarFallback className="bg-indigo-50 text-indigo-600 font-semibold">{user?.name ? user.name.charAt(0).toUpperCase() : "U"}</AvatarFallback>
             </Avatar>
             <span className="truncate font-medium">{user?.name || "User"}</span>
           </div>
@@ -31,15 +31,15 @@ export function NavUser({ user }: { user?: { name?: string | null, email?: strin
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56" side="right" sideOffset={8}>
           <DropdownMenuGroup>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel className="font-serif">My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem render={<Link href="/dashboard/profile" className="w-full cursor-pointer" />}>
+            <DropdownMenuItem className="cursor-pointer focus:bg-indigo-50 focus:text-indigo-600 transition-colors" render={<Link href="/dashboard/profile" className="w-full" />}>
               <User className="mr-2 h-4 w-4" />
               <span>Profile</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/login" })} className="cursor-pointer">
+          <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/login" })} className="cursor-pointer focus:bg-red-50 focus:text-red-600 transition-colors">
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
           </DropdownMenuItem>
