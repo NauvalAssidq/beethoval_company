@@ -1,7 +1,7 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -65,7 +65,7 @@
   --accent: #f3f4f6;
   --accent-foreground: #111827;
   --destructive: #ef4444;
-  --border: #e5e7eb;
+  --border: #dedede;
   --input: #e5e7eb;
   --ring: #4f46e5;
   --chart-1: #4f46e5;
