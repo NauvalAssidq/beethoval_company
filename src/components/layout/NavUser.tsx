@@ -19,7 +19,7 @@ export function NavUser({ user }: { user?: { name?: string | null, email?: strin
   return (
     <SidebarMenuItem>
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex w-full items-center justify-between gap-2 overflow-hidden border border-gray-200 rounded-full p-2 text-left text-sm bg-gray-100 hover:bg-blue-100 transition-colors">
+        <DropdownMenuTrigger className="flex w-full items-center justify-between gap-2 overflow-hidden border border-gray-200 rounded-full p-1 text-left text-sm bg-gray-100 hover:bg-blue-100 transition-colors">
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8 ring-1 ring-indigo-500/20">
               <AvatarImage src={user?.image || ""} />
