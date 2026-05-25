@@ -8,17 +8,22 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text" },
+        identifier: { label: "Username or Email", type: "text" },
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.username || !credentials?.password) {
+        if (!credentials?.identifier || !credentials?.password) {
           return null;
         }
 
         const client = await clientPromise;
         const db = client.db("portfolio");
-        const user = await db.collection("users").findOne({ username: credentials.username });
+        const user = await db.collection("users").findOne({
+          $or: [
+            { username: credentials.identifier },
+            { email: credentials.identifier }
+          ]
+        });
 
         if (!user) {
           return null;
@@ -30,7 +35,7 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        return { id: user._id.toString(), name: user.username };
+        return { id: user._id.toString(), name: user.fullname || user.username, email: user.email };
       }
     })
   ],
@@ -46,12 +51,14 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.name = user.name;
+        token.email = user.email;
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.name = token.name;
+        session.user.email = token.email as string;
       }
       return session;
     }

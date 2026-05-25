@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 
 export default function LoginPage() {
     const router = useRouter();
-    const [username, setUsername] = useState("");
+    const [identifier, setIdentifier] = useState("");
     const [password, setPassword] = useState("");
     const [remember, setRemember] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -26,7 +26,7 @@ export default function LoginPage() {
         e.preventDefault();
         setLoading(true);
         const res = await signIn("credentials", {
-            username,
+            identifier,
             password,
             redirect: false,
         });
@@ -88,9 +88,9 @@ export default function LoginPage() {
                             <User className="absolute left-6 top-[16px] h-5 w-5 pointer-events-none transition-colors text-gray-400" />
                             <Input
                                 type="text"
-                                placeholder="Username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                placeholder="Username or Email"
+                                value={identifier}
+                                onChange={(e) => setIdentifier(e.target.value)}
                                 className={cn(INPUT_STYLE, "pl-14")}
                                 required
                                 autoFocus
