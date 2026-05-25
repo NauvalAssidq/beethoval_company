@@ -9,6 +9,13 @@ export function Hero() {
     const sectionRef = useRef<HTMLElement | null>(null);
     const [isInView, setIsInView] = useState(false);
 
+    const images = [
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&h=350&q=80",
+        "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&h=350&q=80",
+        "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&h=350&q=80",
+        "https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=600&h=350&q=80",
+    ];
+
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -35,17 +42,17 @@ export function Hero() {
     return (
         <section
             ref={sectionRef}
-            className="relative min-h-dvh flex items-center justify-center bg-[#fafafa] pt-32 pb-20 sm:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden"
+            className="relative h-dvh flex flex-col bg-[#fafafa] overflow-hidden"
         >
-            <div className="absolute inset-0 z-0 flex items-center justify-center bg-[#fafafa]">
-                <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_20%,transparent_100%)]" />
-            </div>
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent z-10" />
 
-            <div className="max-w-7xl mx-auto z-10 w-full relative">
-                <div className="text-center flex flex-col items-center">
-                    <h1 className={cn(animateIn, "delay-300 text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-gray-900 mb-4 text-center leading-[1.05] tracking-tight")}>
-                        <span className="font-sans font-medium">Crafting Digital</span>{" "}
+            <div className="flex-1 w-full max-w-9xl mx-auto z-10 relative flex flex-col justify-end px-4 sm:px-6 lg:px-8 pt-20 pb-24">
+                <div className="text-left flex flex-col items-start">
+                    <h1 className={cn(animateIn, "delay-300 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>
+                        <span className="font-sans font-medium">Crafting Digital</span>
+                    </h1>
+                    <h1 className={cn(animateIn, "delay-300 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>
+                        {" "}
                         <Highlighter action="circle" color="#4f46e5" isView={isInView} className="font-serif italic text-indigo-600">
                             Experiences
                         </Highlighter>
@@ -55,26 +62,19 @@ export function Hero() {
                         </Highlighter>
                     </h1>
                    
-                    <p className={cn(animateIn, "delay-700 text-lg sm:text-xl text-gray-600 mb-12 max-w-2xl text-center mx-auto leading-relaxed font-medium")}>
-                        I build high-performance web applications and clean, professional user interfaces using Next.js, Node.js, and modern CSS architecture.
+                    <p className={cn(animateIn, "delay-700 text-sm sm:text-sm md:text-lg lg:text-xl text-gray-400 mb-0 max-w-3xl text-left leading-relaxed font-medium")}>
+                        High-performance web applications on hand, with professional grade interface
                     </p>
+                </div>
+            </div>
 
-                    <div className={cn(animateIn, "delay-1000 flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-center w-full sm:w-auto")}>
-                        <a
-                            href="#showcase"
-                            className="group inline-flex items-center justify-center gap-3 h-[52px] px-8 rounded-full text-base font-medium text-white bg-gray-900 hover:bg-gray-800 transition-colors duration-200 shadow-none"
-                        >
-                            <span>View Projects</span>
-                            <ArrowRight size={18} className="transition-transform duration-200 group-hover:translate-x-1" />
-                        </a>
-                        <a
-                            href="#contact"
-                            className="group inline-flex items-center justify-center gap-3 h-[52px] px-8 rounded-full text-base font-medium text-gray-900 bg-white border border-gray-200 hover:border-gray-300 transition-colors duration-200 shadow-none"
-                        >
-                            <span>Schedule Call</span>
-                            <ArrowRight size={18} className="transition-transform duration-200 group-hover:translate-x-1" />
-                        </a>
-                    </div>
+            <div className={cn(animateIn, "delay-1000 w-full z-10 relative mt-auto pb-12 overflow-hidden flex")}>
+                <div className="flex w-max animate-marquee gap-8 pr-8">
+                    {[...images, ...images].map((src, i) => (
+                        <div key={i} className="w-[500px] h-[320px] md:w-[720px] md:h-[450px] shrink-0 overflow-hidden">
+                            <img src={src} className="w-full h-full object-cover" alt="Portfolio showcase placeholder" />
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>

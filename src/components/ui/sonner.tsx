@@ -39,8 +39,18 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         classNames: {
           toast:
-            "group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border group-[.toaster]:border-border group-[.toaster]:shadow-none group-[.toaster]:rounded-xl font-sans",
-          description: "group-[.toast]:text-muted-foreground",
+            "group toast font-sans !border !shadow-none !rounded-xl",
+          default:
+            "!bg-background !text-foreground !border-border",
+          error:
+            "!bg-red-50 !text-red-600 !border-red-200 dark:!bg-red-950/30 dark:!border-red-900/50",
+          success:
+            "!bg-green-50 !text-green-600 !border-green-200 dark:!bg-green-950/30 dark:!border-green-900/50",
+          warning:
+            "!bg-amber-50 !text-amber-600 !border-amber-200 dark:!bg-amber-950/30 dark:!border-amber-900/50",
+          info:
+            "!bg-indigo-50 !text-indigo-600 !border-indigo-200 dark:!bg-indigo-950/30 dark:!border-indigo-900/50",
+          description: "!text-muted-foreground",
           actionButton:
             "group-[.toast]:bg-gray-900 group-[.toast]:text-white group-[.toast]:rounded-full",
           cancelButton:
