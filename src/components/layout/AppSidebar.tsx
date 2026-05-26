@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, FolderKanban, FileText, Settings } from "lucide-react";
+import { LayoutDashboard, FolderKanban, FileText, Settings, Images } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavUser } from "@/components/layout/NavUser";
@@ -20,7 +20,8 @@ import { NavUser } from "@/components/layout/NavUser";
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Projects", url: "/dashboard/projects", icon: FolderKanban },
-  { title: "Journal", url: "/dashboard/news", icon: FileText },
+  { title: "Gallery", url: "/dashboard/gallery", icon: Images },
+  { title: "News", url: "/dashboard/news", icon: FileText },
   { title: "Settings", url:"/dashboard/settings", icon: Settings}
 ];
 

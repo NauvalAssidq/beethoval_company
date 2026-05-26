@@ -45,7 +45,7 @@ export default function LoginPage() {
     const HIDDEN = "opacity-0 translate-y-4";
     const VISIBLE = "opacity-100 translate-y-0";
     const INPUT_STYLE = "w-full bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 focus-visible:border-indigo-500 focus-visible:ring-1 focus-visible:ring-indigo-500 h-[52px] rounded-full px-6 text-base transition-colors duration-200 shadow-none";
-    const BUTTON_STYLE = "group w-full inline-flex items-center justify-center gap-3 h-[52px] rounded-full text-base font-medium text-white bg-gray-900 hover:bg-gray-800 transition-colors duration-200 shadow-none";
+    const BUTTON_STYLE = "group w-full inline-flex items-center justify-center gap-2 pl-[14px] pr-[16px] py-[14px] rounded-[10px] text-[14px] font-medium leading-none text-white bg-gray-900 hover:bg-gray-800 transition-colors duration-200 active:scale-[0.98] shadow-none [&_svg]:translate-y-[1px]";
 
     return (
         <section className="relative min-h-screen flex items-center justify-center bg-[#fafafa] px-4 overflow-hidden">

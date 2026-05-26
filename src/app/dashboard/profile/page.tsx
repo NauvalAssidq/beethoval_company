@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -84,7 +85,6 @@ export default function ProfilePage() {
 
       toast.success("Profile updated successfully!");
       
-      // If credentials changed significantly, force a re-login to refresh the session token safely
       setTimeout(() => {
         toast.info("Please sign in again to apply all changes.");
         signOut({ callbackUrl: "/login" });
@@ -99,8 +99,50 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 border border-gray-200 rounded-xl bg-white dark:bg-gray-900 dark:border-gray-800">
-        <Loader2 className="h-6 w-6 border-indigo-600 text-indigo-600 animate-spin" />
+      <div className="max-w-3xl mx-auto w-full flex flex-col gap-6">
+        <div>
+          <Skeleton className="h-9 w-48 mb-2" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        
+        <div className="border border-gray-200 rounded-xl bg-white overflow-hidden dark:bg-gray-900 dark:border-gray-800">
+          <div className="p-6 md:p-8 space-y-8">
+            <div className="space-y-4">
+              <Skeleton className="h-6 w-48" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4 pt-6 border-t border-gray-100 dark:border-gray-800">
+              <Skeleton className="h-6 w-32" />
+              <div className="space-y-2 max-w-md">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-10 w-full" />
+              </div>
+            </div>
+
+            <div className="space-y-4 pt-6 border-t border-gray-100 dark:border-gray-800">
+              <Skeleton className="h-6 w-32" />
+              <div className="space-y-2 max-w-md">
+                <Skeleton className="h-4 w-40" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-3 w-64 mt-1" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="p-4 md:px-8 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 flex justify-end">
+            <Skeleton className="h-[44px] w-[140px] rounded-[10px]" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -207,12 +249,12 @@ export default function ProfilePage() {
           <Button 
             type="submit" 
             disabled={saving}
-            className="rounded-full shadow-none bg-indigo-600 hover:bg-indigo-700 text-white min-w-[120px]"
+            className="shadow-none rounded-full bg-indigo-600 hover:bg-indigo-700 text-white min-w-[120px]"
           >
             {saving ? (
-              <Loader2 className="size-4 animate-spin mr-2" />
+              <Loader2 className="size-4 animate-spin mr-1" />
             ) : (
-              <Save className="size-4 mr-2" />
+              <Save className="size-4 mr-1" />
             )}
             Save Changes
           </Button>
