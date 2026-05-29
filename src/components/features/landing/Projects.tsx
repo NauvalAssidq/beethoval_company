@@ -168,7 +168,7 @@ export function Projects() {
             Selected Work
           </p>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <h2 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-gray-900 tracking-tight leading-[1]">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 tracking-tight leading-[1.05]">
               Projects
             </h2>
             <p className="text-[14px] text-gray-400 font-medium max-w-sm leading-relaxed md:text-right pb-2">
@@ -187,7 +187,7 @@ export function Projects() {
             <div className="flex flex-col gap-12">
               {[1, 2].map((i) => (
                 <div key={i} className="animate-pulse">
-                  <div className="bg-gray-200 aspect-[4/3] w-full" />
+                  <div className="bg-gray-200 aspect-square w-full" />
                   <div className="mt-5 space-y-2">
                     <div className="h-6 bg-gray-200 w-48" />
                     <div className="h-4 bg-gray-100 w-72" />
@@ -195,10 +195,10 @@ export function Projects() {
                 </div>
               ))}
             </div>
-            <div className="flex flex-col gap-12 md:mt-32">
+            <div className="flex flex-col gap-12 md:mt-[calc(50%+6rem)]">
               {[3, 4].map((i) => (
                 <div key={i} className="animate-pulse">
-                  <div className="bg-gray-200 aspect-[3/4] w-full" />
+                  <div className="bg-gray-200 aspect-square w-full" />
                   <div className="mt-5 space-y-2">
                     <div className="h-6 bg-gray-200 w-48" />
                     <div className="h-4 bg-gray-100 w-64" />
@@ -222,24 +222,23 @@ export function Projects() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            {/* Left column */}
             <div className="flex flex-col gap-12 md:gap-16">
               {leftCol.map((project, i) => (
                 <ProjectItem
                   key={project._id}
                   project={project}
                   index={i * 2}
-                  className="[&_a]:aspect-[4/3]"
+                  className="[&_a]:aspect-square"
                 />
               ))}
             </div>
-            <div className="flex flex-col gap-12 md:gap-16 md:mt-32">
+            <div className="flex flex-col gap-12 md:gap-16 md:mt-[calc(50%+6rem)]">
               {rightCol.map((project, i) => (
                 <ProjectItem
                   key={project._id}
                   project={project}
                   index={i * 2 + 1}
-                  className="[&_a]:aspect-[3/4]"
+                  className="[&_a]:aspect-square"
                 />
               ))}
             </div>

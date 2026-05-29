@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Highlighter } from "@/components/ui/highlighter";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function Hero() {
     const sectionRef = useRef<HTMLElement | null>(null);
@@ -16,7 +17,8 @@ export function Hero() {
         "https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=600&h=350&q=80",
     ];
     
-    const [marqueeImages, setMarqueeImages] = useState<string[]>(fallbackImages);
+    const [marqueeImages, setMarqueeImages] = useState<string[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchProjects() {
@@ -27,10 +29,17 @@ export function Hero() {
                     const urls = data.map((p: any) => p.url).filter(Boolean);
                     if (urls.length > 0) {
                         setMarqueeImages(urls);
+                    } else {
+                        setMarqueeImages(fallbackImages);
                     }
+                } else {
+                    setMarqueeImages(fallbackImages);
                 }
             } catch (err) {
                 console.error("Failed to load marquee images:", err);
+                setMarqueeImages(fallbackImages);
+            } finally {
+                setLoading(false);
             }
         }
         fetchProjects();
@@ -93,13 +102,21 @@ export function Hero() {
 
             <div className={cn(animateIn, "delay-1000 w-full z-10 relative mt-auto pb-12 overflow-hidden flex")}>
                 <div className="flex w-max animate-marquee gap-8 pr-8">
-                    {Array.from({ length: Math.max(2, Math.ceil(8 / marqueeImages.length)) })
-                        .flatMap(() => marqueeImages)
-                        .map((src, i) => (
-                        <div key={i} className="w-[300px] h-[300px] md:w-[500px] md:h-[500px] shrink-0 overflow-hidden">
-                            <img src={src} className="w-full h-full object-contain object-bottom" alt="Portfolio showcase" />
-                        </div>
-                    ))}
+                    {loading ? (
+                        Array.from({ length: 6 }).map((_, i) => (
+                            <div key={`skel-${i}`} className="w-[450px] h-[450px] md:w-[500px] md:h-[500px] shrink-0 overflow-hidden">
+                                <Skeleton className="w-full h-full rounded-none bg-gray-200/50" />
+                            </div>
+                        ))
+                    ) : (
+                        Array.from({ length: Math.max(2, Math.ceil(8 / marqueeImages.length)) })
+                            .flatMap(() => marqueeImages)
+                            .map((src, i) => (
+                            <div key={i} className="w-[450px] h-[450px] md:w-[500px] md:h-[500px] shrink-0 overflow-hidden">
+                                <img src={src} className="w-full h-full object-contain object-bottom" alt="Portfolio showcase" />
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
         </section>
