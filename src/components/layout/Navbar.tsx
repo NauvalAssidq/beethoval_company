@@ -91,7 +91,7 @@ export function Navbar() {
                   "relative text-[12px] font-semibold uppercase tracking-[0.15em] transition-colors duration-300 py-1 group",
                   activeSection === link.key
                     ? "text-gray-900"
-                    : "text-gray-400 hover:text-gray-900"
+                    : "text-gray-500 hover:text-gray-900"
                 )}
               >
                 {link.name}
@@ -152,7 +152,7 @@ export function Navbar() {
                 }}
               >
                 <div className="flex items-baseline gap-4">
-                  <span className="text-[11px] font-mono text-gray-300 tabular-nums">
+                  <span className="text-[11px] font-mono text-gray-400 tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <span
@@ -160,7 +160,7 @@ export function Navbar() {
                       "font-serif text-4xl sm:text-5xl tracking-tight transition-colors",
                       activeSection === link.key
                         ? "text-gray-900"
-                        : "text-gray-400"
+                        : "text-gray-500"
                     )}
                   >
                     {link.name}
@@ -206,7 +206,7 @@ export function Navbar() {
               : "0ms",
           }}
         >
-          <p className="text-[11px] text-gray-300 tracking-widest uppercase font-medium">
+          <p className="text-[11px] text-gray-400 tracking-widest uppercase font-medium">
             © {new Date().getFullYear()} Beethoval.dev
           </p>
         </div>
