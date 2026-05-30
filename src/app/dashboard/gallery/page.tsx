@@ -182,8 +182,7 @@ export default function GalleryPage() {
             <div className="opacity-90">
                 <ImageUploader 
                   value=""
-                  onChange={handleUpload}
-                  disabled={uploading}
+                  onChange={(url) => handleUpload(url as string)}
                 />
             </div>
             <p className="text-[12px] text-gray-400 mt-3 leading-relaxed">
