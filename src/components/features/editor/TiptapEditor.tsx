@@ -3,10 +3,28 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import Underline from "@tiptap/extension-underline";
+import Highlight from "@tiptap/extension-highlight";
+import TextAlign from "@tiptap/extension-text-align";
+import Link from "@tiptap/extension-link";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import Placeholder from "@tiptap/extension-placeholder";
+import Color from "@tiptap/extension-color";
+import { TextStyle } from "@tiptap/extension-text-style";
+import Youtube from "@tiptap/extension-youtube";
+import { Table } from "@tiptap/extension-table";
+import TableRow from "@tiptap/extension-table-row";
+import TableCell from "@tiptap/extension-table-cell";
+import TableHeader from "@tiptap/extension-table-header";
+import { common, createLowlight } from "lowlight";
 import { EditorToolbar } from "./EditorToolbar";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { toast } from "sonner";
+
+const lowlight = createLowlight(common);
 
 interface TiptapEditorProps {
   content: string;
@@ -19,11 +37,50 @@ export function TiptapEditor({ content, onChange, className }: TiptapEditorProps
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        codeBlock: false,
+      }),
       Image.configure({
         inline: true,
         allowBase64: true,
       }),
+      Underline,
+      Highlight.configure({
+        multicolor: true,
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        HTMLAttributes: {
+          class: "editor-link",
+        },
+      }),
+      CodeBlockLowlight.configure({
+        lowlight,
+      }),
+      Subscript,
+      Superscript,
+      Placeholder.configure({
+        placeholder: "Start writing your project content...",
+      }),
+      Color,
+      TextStyle,
+      Youtube.configure({
+        width: 640,
+        height: 360,
+        HTMLAttributes: {
+          class: "youtube-embed",
+        },
+      }),
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableCell,
+      TableHeader,
     ],
     content,
     onUpdate: ({ editor }) => {
