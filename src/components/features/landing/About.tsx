@@ -28,7 +28,7 @@ export function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative bg-[#fafafa] py-32 md:py-40 lg:py-52 overflow-hidden"
+      className="relative bg-[#fafafa] border-b border-gray-100 h-dvh flex flex-col justify-center overflow-hidden"
     >
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div

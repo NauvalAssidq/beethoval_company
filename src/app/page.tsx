@@ -2,6 +2,7 @@
 import { Hero } from "@/components/features/landing/Hero";
 import { Projects } from "@/components/features/landing/Projects";
 import { About } from "@/components/features/landing/About";
+import { News } from "@/components/features/landing/News";
 import { Navbar } from "@/components/layout/Navbar";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
             </div>
             <About />
             <Projects />
+            <News />
         </main>
     );
 }

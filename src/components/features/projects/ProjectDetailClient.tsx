@@ -245,17 +245,19 @@ export function ProjectDetailClient({
         <article className="max-w-2xl mx-auto px-4 sm:px-6 py-16 md:py-24 lg:py-32">
           <div
             className={cn(
-              "prose prose-lg max-w-none",
+              "prose prose-lg max-w-none prose-public",
               "prose-headings:font-serif prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-gray-900",
               "prose-p:font-sans prose-p:text-gray-600 prose-p:leading-[1.8] prose-p:text-[17px]",
-              "prose-a:text-indigo-600 prose-a:no-underline hover:prose-a:underline prose-a:font-medium",
+              "prose-a:text-indigo-600 prose-a:underline prose-a:underline-offset-[3px] hover:prose-a:text-indigo-800 prose-a:font-medium prose-a:decoration-indigo-300",
               "prose-img:rounded-none prose-img:shadow-none prose-img:my-12 prose-img:w-[100vw] prose-img:max-w-[100vw] prose-img:relative prose-img:-left-1/2 prose-img:translate-x-[-50%] prose-img:ml-[50%]",
               "prose-blockquote:border-l-2 prose-blockquote:border-indigo-500 prose-blockquote:font-serif prose-blockquote:italic prose-blockquote:text-gray-500 prose-blockquote:pl-6 prose-blockquote:not-italic",
               "prose-code:font-mono prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none",
-              "prose-pre:bg-gray-900 prose-pre:rounded-xl prose-pre:text-sm",
+              "prose-pre:bg-[#1e1e2e] prose-pre:rounded-xl prose-pre:text-sm",
               "prose-li:text-gray-600 prose-li:text-[17px] prose-li:leading-[1.8]",
               "prose-strong:text-gray-900 prose-strong:font-semibold",
-              "prose-hr:border-gray-200 prose-hr:my-16"
+              "prose-hr:border-gray-200 prose-hr:my-16",
+              "prose-table:border-collapse prose-table:w-full",
+              "prose-sub:text-xs prose-sup:text-xs"
             )}
             dangerouslySetInnerHTML={{ __html: project.content }}
           />

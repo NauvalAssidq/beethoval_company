@@ -71,10 +71,8 @@ export function Hero() {
     return (
         <section
             ref={sectionRef}
-            className="relative h-dvh flex flex-col bg-[#fafafa] overflow-hidden"
+            className="relative h-dvh flex flex-col bg-white overflow-hidden border-b border-gray-100"
         >
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent z-10" />
-
             <div className="flex-1 w-full max-w-9xl mx-auto z-10 relative flex flex-col justify-end px-4 sm:px-6 lg:px-8 pt-20 pb-12">
                 <div className="text-left flex flex-col items-start">
                     <h1 className={cn(animateIn, "delay-300 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>

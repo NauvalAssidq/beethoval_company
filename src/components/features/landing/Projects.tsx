@@ -54,7 +54,7 @@ function ProjectItem({
     >
       <a
         href={`/project/${project.slug}`}
-        className="block relative overflow-hidden bg-gray-100 cursor-pointer"
+        className="block relative overflow-hidden bg-white cursor-pointer"
       >
         {project.coverImage ? (
           <img
@@ -155,7 +155,7 @@ export function Projects() {
     <section
       ref={sectionRef}
       id="projects"
-      className="relative bg-[#fafafa] py-24 md:py-32 overflow-hidden"
+      className="relative bg-white py-24 md:py-32 overflow-hidden"
     >
       <div className="w-full max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <div
