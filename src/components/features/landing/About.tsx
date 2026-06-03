@@ -30,36 +30,32 @@ export function About() {
       id="about"
       className="relative bg-[#fafafa] border-b border-gray-100 h-dvh flex flex-col justify-center overflow-hidden"
     >
-      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         <div
           className={cn(
-            "flex items-center gap-4 mb-16 md:mb-20 transition-all duration-1000 ease-out",
+            "flex items-center justify-center gap-4 mb-12 md:mb-16 transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           )}
         >
-          <div className="h-px w-10 bg-indigo-600" />
-          <span className="text-[11px] font-semibold text-indigo-600 uppercase tracking-[0.2em]">
-            Philosophy
-          </span>
         </div>
 
         <h2
           className={cn(
-            "font-serif text-[1.75rem] sm:text-[2.25rem] md:text-[2.75rem] lg:text-[3.25rem] text-gray-900 tracking-tight leading-[1.35] mb-20 md:mb-28 transition-all duration-1000 ease-out delay-200",
+            "text-[1.75rem] sm:text-[2.25rem] md:text-[2.75rem] lg:text-[3.25rem] text-gray-900 tracking-tight leading-[1.35] mb-16 md:mb-20 transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] delay-200",
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}
         >
-          Technology shouldn&apos;t be a barrier; it should be an{" "}
-          <span className="italic text-indigo-600">equalizer</span>. Great
-          digital products are no longer just about complex code, but about{" "}
-          <span className="italic">clarity</span>,{" "}
-          <span className="italic">purpose</span>, and{" "}
-          <span className="italic">seamless experiences</span>.
+          <span className="font-sans">Technology shouldn&apos;t be a barrier; it should be an</span>{" "}
+          <span className="font-serif italic text-indigo-600">equalizer</span><span className="font-sans">.</span><br className="hidden md:block"/>
+          <span className="font-sans">Great digital products are no longer just about complex code, but about</span>{" "}
+          <span className="font-serif italic">clarity</span><span className="font-sans">,</span>{" "}
+          <span className="font-serif italic">purpose</span><span className="font-sans">, and</span>{" "}
+          <span className="font-serif italic">seamless experiences</span><span className="font-sans">.</span>
         </h2>
 
         <div
           className={cn(
-            "max-w-2xl ml-auto transition-all duration-1000 ease-out delay-[500ms]",
+            "max-w-2xl mx-auto transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] delay-[500ms]",
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}
         >
@@ -75,7 +71,7 @@ export function About() {
 
           <div
             className={cn(
-              "mt-10 flex items-center gap-5 transition-all duration-1000 ease-out delay-[700ms]",
+              "mt-10 flex items-center justify-center gap-5 transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] delay-[700ms]",
               isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             )}
           >

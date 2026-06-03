@@ -16,13 +16,12 @@ const generateData = () => {
     const currentDate = new Date(startDate);
     currentDate.setDate(startDate.getDate() + i);
     
-    // Format as "Apr 1", "May 10", etc.
+
     const month = currentDate.toLocaleString('default', { month: 'short' });
     const day = currentDate.getDate();
     const dateStr = `${month} ${day}`;
     
-    // Generate a random but somewhat realistic looking value (between 20 and 100)
-    // with some peaks and valleys
+
     const baseValue = 30 + Math.random() * 40;
     const peak = Math.random() > 0.8 ? Math.random() * 40 : 0;
     

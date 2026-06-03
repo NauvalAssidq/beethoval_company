@@ -40,7 +40,7 @@ export function News() {
   useEffect(() => {
     async function fetchNews() {
       try {
-        const res = await fetch("/api/public/news?limit=3");
+        const res = await fetch("/api/public/news?limit=4");
         if (res.ok) {
           const data = await res.json();
           setNews(data);
@@ -65,23 +65,17 @@ export function News() {
     <section
       ref={sectionRef}
       id="news"
-      className="relative bg-white py-24 md:py-32 overflow-hidden border-t border-gray-100"
+      className="relative bg-white py-12 md:py-16 overflow-hidden border-t border-gray-100"
     >
-      <div className="w-full max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 mb-16 md:mb-20">
+      <div className="w-full max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 md:mb-12">
         <div
           className={cn(
-            "transition-all duration-1000 ease-out",
+            "transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}
         >
-          <div className="flex items-center gap-4 mb-4">
-            <div className="h-px w-10 bg-indigo-600" />
-            <p className="text-[11px] font-semibold text-indigo-600 tracking-[0.2em] uppercase">
-              Latest Insights
-            </p>
-          </div>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 tracking-tight leading-[1.05]">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-gray-700 tracking-tight leading-[1.05]">
               News & Articles
             </h2>
             <Link
@@ -97,8 +91,8 @@ export function News() {
 
       <div className="w-full max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {[1, 2, 3].map((i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            {[1, 2, 3, 4].map((i) => (
               <div key={i} className="animate-pulse">
                 <div className="bg-gray-100 aspect-[16/10] w-full mb-6" />
                 <div className="h-4 bg-gray-100 w-24 mb-4" />
@@ -112,7 +106,7 @@ export function News() {
         ) : news.length === 0 ? (
           <div
             className={cn(
-              "flex flex-col items-center justify-center py-24 text-center transition-all duration-700",
+              "flex flex-col items-center justify-center py-24 text-center transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]",
               isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             )}
           >
@@ -125,13 +119,13 @@ export function News() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 xl:gap-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {news.map((item, index) => (
               <Link
                 key={item._id}
                 href={`/news/${item.slug}`}
                 className={cn(
-                  "group flex flex-col transition-all duration-1000 ease-out",
+                  "group flex flex-col transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
                   isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-16"
                 )}
                 style={{ transitionDelay: `${index * 150}ms` }}
@@ -141,11 +135,11 @@ export function News() {
                     <img
                       src={item.coverImage}
                       alt={item.title}
-                      className="w-full h-full object-cover grayscale opacity-90 transition-all duration-[1.2s] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-100"
+                      className="w-full h-full object-cover grayscale opacity-90 transition-all duration-[1.5s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-100"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-indigo-50 to-indigo-100/50 flex items-center justify-center">
-                      <span className="text-indigo-200 font-serif italic text-6xl select-none">
+                      <span className="text-indigo-200 font-serif italic text-4xl select-none">
                         {item.title[0]}
                       </span>
                     </div>
@@ -162,7 +156,7 @@ export function News() {
                   <span className="text-[11px] font-semibold text-gray-400 mb-4 tracking-widest uppercase block">
                     {formatDate(item.createdAt)}
                   </span>
-                  <h3 className="font-serif text-2xl lg:text-3xl xl:text-4xl text-gray-900 leading-[1.15] mb-4 group-hover:text-indigo-600 transition-colors line-clamp-3">
+                  <h3 className="font-serif text-lg lg:text-xl text-gray-900 leading-[1.15] mb-3 group-hover:text-indigo-600 transition-colors line-clamp-3">
                     {item.title}
                   </h3>
                   {item.excerpt && (

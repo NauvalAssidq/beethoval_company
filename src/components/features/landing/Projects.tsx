@@ -46,7 +46,7 @@ function ProjectItem({
     <div
       ref={ref}
       className={cn(
-        "group transition-all duration-1000 ease-out",
+        "group transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
         isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-16",
         className
       )}
@@ -60,7 +60,7 @@ function ProjectItem({
           <img
             src={project.coverImage}
             alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.05]"
+            className="w-full h-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-200 flex items-center justify-center">
@@ -160,28 +160,22 @@ export function Projects() {
       <div className="w-full max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <div
           className={cn(
-            "transition-all duration-1000 ease-out",
+            "flex flex-col items-center justify-center text-center transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}
         >
-          <p className="text-[13px] font-medium text-indigo-600 tracking-widest uppercase mb-4">
-            Selected Work
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 tracking-tight leading-[1.05] mb-6">
+            <span className="font-sans font-regular">Projects</span> <span className="font-sans">&amp;</span> <span className="font-serif italic text-indigo-600">Past Experiences</span>
+          </h2>
+          <p className="text-[14px] text-gray-400 font-medium max-w-lg leading-relaxed pb-2">
+            A curated selection of the digital products and web experiences we&rsquo;ve crafted.
           </p>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 tracking-tight leading-[1.05]">
-              Projects
-            </h2>
-            <p className="text-[14px] text-gray-400 font-medium max-w-sm leading-relaxed md:text-right pb-2">
-              A curated selection of the digital products
-              <br className="hidden md:block" /> and web experiences we&rsquo;ve crafted.
-            </p>
-          </div>
         </div>
       </div>
 
       <div className="h-px bg-gray-200 w-full mb-16 md:mb-24" />
 
-      <div className="w-full max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             <div className="flex flex-col gap-12">
@@ -210,7 +204,7 @@ export function Projects() {
         ) : projects.length === 0 ? (
           <div
             className={cn(
-              "flex flex-col items-center justify-center py-24 text-center transition-all duration-700",
+              "flex flex-col items-center justify-center py-24 text-center transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]",
               isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             )}
           >

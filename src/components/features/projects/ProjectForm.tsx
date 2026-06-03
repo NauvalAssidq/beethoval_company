@@ -163,7 +163,7 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
 
       <form onSubmit={handleSubmit} onChange={() => setIsDirty(true)} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        {/* Main Content */}
+
         <div className="lg:col-span-2 flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Label htmlFor="title" className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -216,7 +216,7 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
           </div>
         </div>
 
-        {/* Sidebar Settings */}
+
         <div className="flex flex-col gap-6">
           <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 dark:bg-gray-900/50 dark:border-gray-800 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
@@ -241,7 +241,7 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
             </div>
           </div>
 
-          {/* Action Buttons */}
+
           <div className="flex items-center justify-end gap-3 lg:mt-auto">
             <Button
               type="button"

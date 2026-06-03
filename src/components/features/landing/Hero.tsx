@@ -64,7 +64,7 @@ export function Hero() {
     }, []);
 
     const animateIn = cn(
-        "transition-all duration-1000 ease-out",
+        "transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
         isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
     );
 
@@ -102,7 +102,7 @@ export function Hero() {
                 <div className="flex w-max animate-marquee gap-8 pr-8">
                     {loading ? (
                         Array.from({ length: 6 }).map((_, i) => (
-                            <div key={`skel-${i}`} className="w-[450px] h-[450px] md:w-[500px] md:h-[500px] shrink-0 overflow-hidden">
+                            <div key={`skel-${i}`} className="w-[320px] h-[320px] md:w-[380px] md:h-[380px] shrink-0 overflow-hidden">
                                 <Skeleton className="w-full h-full rounded-none bg-gray-200/50" />
                             </div>
                         ))
@@ -110,7 +110,7 @@ export function Hero() {
                         Array.from({ length: Math.max(2, Math.ceil(8 / marqueeImages.length)) })
                             .flatMap(() => marqueeImages)
                             .map((src, i) => (
-                            <div key={i} className="w-[450px] h-[450px] md:w-[500px] md:h-[500px] shrink-0 overflow-hidden">
+                            <div key={i} className="w-[320px] h-[320px] md:w-[380px] md:h-[380px] shrink-0 overflow-hidden">
                                 <img src={src} className="w-full h-full object-contain object-bottom" alt="Portfolio showcase" />
                             </div>
                         ))

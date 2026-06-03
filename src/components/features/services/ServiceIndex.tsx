@@ -186,9 +186,21 @@ export function ServiceIndex() {
           </div>
           <Skeleton className="h-10 w-32 rounded-lg" />
         </div>
-        <div className="flex flex-col gap-3">
-          {[1, 2, 3, 4].map((i) => (
-            <Skeleton key={i} className="h-20 w-full rounded-xl" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="flex flex-col bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden">
+              <Skeleton className="w-full aspect-video rounded-none" />
+              <div className="p-4 flex flex-col flex-1">
+                <Skeleton className="h-5 w-3/4 mb-2 rounded-md" />
+                <Skeleton className="h-3 w-full mb-1.5 rounded-sm" />
+                <Skeleton className="h-3 w-5/6 mb-4 rounded-sm" />
+                <div className="flex flex-wrap gap-1 mt-auto">
+                  <Skeleton className="h-4 w-12 rounded" />
+                  <Skeleton className="h-4 w-16 rounded" />
+                  <Skeleton className="h-4 w-14 rounded" />
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>

@@ -19,24 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DeleteDialog } from "./DeleteDialog";
 import { toast } from "sonner";
-
-interface Project {
-  _id: string;
-  title: string;
-  slug: string;
-  description: string;
-  coverImage?: string;
-  marqueeImage?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface ProjectsResponse {
-  projects: Project[];
-  total: number;
-  page: number;
-  totalPages: number;
-}
+import { type Project, type ProjectsResponse } from "@/types/project";
 
 const SORT_OPTIONS = [
   { label: "Newest", value: "createdAt", order: "desc" },

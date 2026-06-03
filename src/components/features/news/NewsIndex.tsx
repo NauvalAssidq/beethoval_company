@@ -19,24 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DeleteDialog } from "@/components/features/projects/DeleteDialog";
 import { toast } from "sonner";
-
-interface NewsArticle {
-  _id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  coverImage?: string;
-  tags: string[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface NewsResponse {
-  news: NewsArticle[];
-  total: number;
-  page: number;
-  totalPages: number;
-}
+import { type NewsArticle, type NewsResponse } from "@/types/news";
 
 const SORT_OPTIONS = [
   { label: "Newest", value: "createdAt", order: "desc" },
@@ -238,7 +221,7 @@ export function NewsIndex() {
                       <Trash2 className="size-3.5" />
                     </Button>
                   </div>
-                  {article.tags.length > 0 && (
+                  {article.tags && article.tags.length > 0 && (
                     <div className="absolute bottom-3 left-3 flex flex-wrap gap-1.5">
                       {article.tags.slice(0, 2).map((tag) => (
                         <span
