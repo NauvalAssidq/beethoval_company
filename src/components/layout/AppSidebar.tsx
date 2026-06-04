@@ -12,17 +12,20 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, FolderKanban, FileText, Settings, Images } from "lucide-react";
+import { LayoutDashboard, FolderKanban, FileText, Settings, Images, User, HelpCircle, Briefcase, PanelBottom } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavUser } from "@/components/layout/NavUser";
 
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "Profile", url: "/dashboard/profile", icon: User },
   { title: "Projects", url: "/dashboard/projects", icon: FolderKanban },
+  { title: "Services", url: "/dashboard/services", icon: Briefcase },
   { title: "Gallery", url: "/dashboard/gallery", icon: Images },
   { title: "News", url: "/dashboard/news", icon: FileText },
-  { title: "Settings", url:"/dashboard/settings", icon: Settings}
+  { title: "FAQs", url: "/dashboard/faqs", icon: HelpCircle },
+  { title: "Footer", url: "/dashboard/footer", icon: PanelBottom },
 ];
 
 export function AppSidebar({ user }: { user?: { name?: string | null, email?: string | null, image?: string | null } }) {
