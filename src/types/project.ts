@@ -5,8 +5,15 @@ export interface Project {
   description: string;
   content: string;
   coverImage: string;
-  marqueeImages: string[];
+  marqueeImage?: string;
   techStack: string[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface ProjectsResponse {
+  projects: Project[];
+  total: number;
+  page: number;
+  totalPages: number;
 }

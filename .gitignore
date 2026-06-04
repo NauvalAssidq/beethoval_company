@@ -43,3 +43,12 @@ next-env.d.ts
 # AI slops and skills
 /.agent
 /.handover
+
+# Docker file
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# AI artifact
+AGENTS.md
+ClAUDE.md

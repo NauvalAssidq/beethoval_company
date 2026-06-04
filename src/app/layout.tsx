@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Playfair_Display, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Toaster } from "@/components/ui/sonner";
+import { Footer } from "@/components/layout/Footer";
+import { ClientToaster } from "@/components/providers/ClientToaster";
+
 
 const sans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -70,7 +72,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
-        <Toaster />
+        <ClientToaster />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
