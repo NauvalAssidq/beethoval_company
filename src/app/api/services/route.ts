@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { title, description, icon } = body;
+    const { title, description, icon, image, languages } = body;
 
     if (!title || !description) {
       return NextResponse.json({ error: "Title and description are required" }, { status: 400 });
@@ -76,6 +76,8 @@ export async function POST(req: Request) {
       title,
       description,
       icon: icon || null,
+      image: image || null,
+      languages: Array.isArray(languages) ? languages : [],
       order: nextOrder,
       createdAt: new Date(),
       updatedAt: new Date(),

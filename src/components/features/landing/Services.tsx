@@ -186,7 +186,7 @@ export function Services({ initialServices }: ServicesProps) {
           </p>
         </div>
       ) : (
-        <div className="w-full max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative flex flex-col gap-8 md:gap-0">
             {services.map((service, index) => (
               <div
@@ -230,12 +230,14 @@ export function Services({ initialServices }: ServicesProps) {
                       )}
                     </div>
 
-                    <div className="group relative overflow-hidden order-1 md:order-2 h-[200px] md:h-full border-b md:border-b-0 md:border-l border-gray-300">
-                      <img
-                        src={service.image || "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600&q=80"}
-                        alt={service.title}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
-                      />
+                    <div className="group relative order-1 md:order-2 h-[200px] sm:h-[250px] md:h-full border-b">
+                      <div className="relative w-full h-full overflow-hidden">
+                        <img
+                          src={service.image || "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600&q=80"}
+                          alt={service.title}
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

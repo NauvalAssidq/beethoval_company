@@ -53,7 +53,7 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const { title, description, icon } = body;
+    const { title, description, icon, image, languages } = body;
 
     if (!title || !description) {
       return NextResponse.json({ error: "Title and description are required" }, { status: 400 });
@@ -69,6 +69,8 @@ export async function PUT(
           title,
           description,
           icon: icon || null,
+          image: image || null,
+          languages: Array.isArray(languages) ? languages : [],
           updatedAt: new Date(),
         },
       }
