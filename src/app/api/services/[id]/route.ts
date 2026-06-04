@@ -69,7 +69,7 @@ export async function PUT(
           title,
           description,
           icon: icon || null,
-          image: image || null,
+          image: image || "",
           languages: Array.isArray(languages) ? languages : [],
           updatedAt: new Date(),
         },

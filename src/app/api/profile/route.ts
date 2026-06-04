@@ -46,7 +46,6 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Username, fullname, and email are required" }, { status: 400 });
     }
 
-    // Password validation
     if (password) {
       const hasUppercase = /[A-Z]/.test(password);
       const hasNumber = /[0-9]/.test(password);
@@ -63,7 +62,6 @@ export async function PUT(request: Request) {
     const db = client.db("portfolio");
     const userId = new ObjectId((session.user as any).id);
 
-    // Check uniqueness for username and email (excluding current user)
     const existingUser = await db.collection("users").findOne({
       $and: [
         { _id: { $ne: userId } },

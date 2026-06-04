@@ -2,9 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import sharp from "sharp";
-import { join } from "path";
-import { writeFile, mkdir } from "fs/promises";
-import { existsSync } from "fs";
+import { uploadFile } from "@/lib/storage";
 
 export async function POST(req: Request) {
   try {
@@ -26,7 +24,6 @@ export async function POST(req: Request) {
 
     const buffer = Buffer.from(await file.arrayBuffer());
 
-    // Process image with sharp: resize if too large, convert to webp
     const optimizedBuffer = await sharp(buffer)
       .resize(1920, 1920, {
         fit: 'inside',
@@ -37,16 +34,10 @@ export async function POST(req: Request) {
 
     const timestamp = Date.now();
     const filename = `${timestamp}.webp`;
-    const uploadDir = join(process.cwd(), "public", "uploads");
 
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
+    const fileUrl = await uploadFile(optimizedBuffer, filename, "image/webp");
 
-    const filePath = join(uploadDir, filename);
-    await writeFile(filePath, optimizedBuffer);
-
-    return NextResponse.json({ url: `/uploads/${filename}` });
+    return NextResponse.json({ url: fileUrl });
   } catch (error: any) {
     console.error("Upload error:", error);
     return NextResponse.json({ error: error.message || "Failed to upload image" }, { status: 500 });

@@ -76,7 +76,7 @@ export async function POST(req: Request) {
       title,
       description,
       icon: icon || null,
-      image: image || null,
+      image: image || "",
       languages: Array.isArray(languages) ? languages : [],
       order: nextOrder,
       createdAt: new Date(),

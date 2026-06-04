@@ -76,8 +76,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
 
   const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     setMobileOpen(false);
-    
-    // Only intercept and do smooth scrolling if we are already on the landing page
+
     if (pathname === "/") {
       const targetId = href.split("#")[1];
       if (targetId) {
@@ -91,7 +90,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
         }
       }
     }
-    // If not on landing page, let Next.js Link handle the soft navigation naturally
+
   };
 
   const isTransparent = mounted && atTop && !mobileOpen;

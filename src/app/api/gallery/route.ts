@@ -49,7 +49,6 @@ export async function POST(req: Request) {
     const client = await clientPromise;
     const db = client.db("portfolio");
 
-    // Put new images at the end by default
     const highestOrderDoc = await db.collection("galleries").find().sort({ order: -1 }).limit(1).toArray();
     const newOrder = highestOrderDoc.length > 0 ? (highestOrderDoc[0].order || 0) + 1 : 1;
 

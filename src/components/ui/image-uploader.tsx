@@ -27,7 +27,7 @@ export function ImageUploader({ value, onChange, multiple = false, className }: 
 
     if (!multiple && validFiles.length > 1) {
       toast.error("You can only upload one image here");
-      validFiles.splice(1); // Keep only the first
+      validFiles.splice(1);
     }
 
     setIsUploading(true);
@@ -35,8 +35,7 @@ export function ImageUploader({ value, onChange, multiple = false, className }: 
 
     try {
       const uploadedUrls: string[] = [];
-      
-      // Upload sequentially or in parallel; let's do parallel
+
       await Promise.all(
         validFiles.map(async (file) => {
           const formData = new FormData();

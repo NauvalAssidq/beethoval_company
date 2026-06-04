@@ -20,7 +20,6 @@ export async function PUT(req: Request) {
     const client = await clientPromise;
     const db = client.db("portfolio");
 
-    // Perform bulk updates
     const bulkOperationsByCollection: Record<string, any[]> = {
       projects: [],
       galleries: []
