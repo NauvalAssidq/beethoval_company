@@ -2,21 +2,29 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useRouter, usePathname } from "next/navigation";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { key: "home", name: "Home", href: "#home" },
-  { key: "about", name: "About", href: "#about" },
-  { key: "projects", name: "Projects", href: "#projects" },
-  { key: "news", name: "News", href: "#news" },
+  { key: "home", name: "Home", href: "/#home" },
+  { key: "about", name: "About", href: "/#about" },
+  { key: "projects", name: "Projects", href: "/#projects" },
+  { key: "services", name: "Services", href: "/#services"},
+  { key: "news", name: "News", href: "/#news"},
 ];
 
-export function Navbar() {
+interface NavbarProps {
+  transparentTheme?: "light" | "dark";
+}
+
+export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
   const [atTop, setAtTop] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
@@ -26,9 +34,21 @@ export function Navbar() {
     requestAnimationFrame(() => {
       setAtTop(window.scrollY < 40);
 
+      if (pathname !== "/") {
+        if (pathname.startsWith("/news")) {
+          setActiveSection("news");
+        } else if (pathname.startsWith("/project")) {
+          setActiveSection("projects");
+        } else {
+          setActiveSection("");
+        }
+        return;
+      }
+
       let current = "home";
       for (const link of navLinks) {
-        const id = link.href.substring(1);
+        const id = link.href.split("#")[1];
+        if (!id) continue;
         const el = document.getElementById(id);
         if (el) {
           const rect = el.getBoundingClientRect();
@@ -39,7 +59,7 @@ export function Navbar() {
       }
       setActiveSection(current);
     });
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -55,25 +75,34 @@ export function Navbar() {
   }, [mobileOpen]);
 
   const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
     setMobileOpen(false);
-
-    if (href.startsWith("#")) {
-      const el = document.getElementById(href.substring(1));
-      if (el) {
-        const offset = 80;
-        const top = el.getBoundingClientRect().top + window.scrollY - offset;
-        window.scrollTo({ top, behavior: "smooth" });
+    
+    // Only intercept and do smooth scrolling if we are already on the landing page
+    if (pathname === "/") {
+      const targetId = href.split("#")[1];
+      if (targetId) {
+        const el = document.getElementById(targetId);
+        if (el) {
+          e.preventDefault();
+          const offset = 80;
+          const top = el.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: "smooth" });
+          window.history.pushState(null, "", href);
+        }
       }
     }
+    // If not on landing page, let Next.js Link handle the soft navigation naturally
   };
+
+  const isTransparent = mounted && atTop && !mobileOpen;
+  const isDarkTheme = isTransparent && transparentTheme === "dark";
 
   return (
     <>
       <header
         className={cn(
           "fixed top-0 left-0 right-0 z-[60] transition-all duration-500",
-          mounted && !atTop && !mobileOpen
+          !isTransparent
             ? "bg-white border-b border-gray-200"
             : "bg-transparent border-b border-transparent"
         )}
@@ -81,7 +110,10 @@ export function Navbar() {
         <nav className="max-w-9xl mx-auto px-5 sm:px-8 lg:px-10 flex items-center justify-between h-[72px]">
           <Link
             href="/"
-            className="font-serif text-[22px] font-semibold tracking-tight text-gray-900 flex items-center relative z-[60]"
+            className={cn(
+              "font-serif text-[22px] font-semibold tracking-tight flex items-center relative z-[60] transition-colors",
+              isDarkTheme ? "text-white" : "text-gray-900"
+            )}
           >
             <span className="italic">Beethoval</span>
             <span className="not-italic text-indigo-600">.dev</span>
@@ -89,41 +121,50 @@ export function Navbar() {
 
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.key}
                 href={link.href}
                 onClick={(e) => scrollTo(e, link.href)}
                 className={cn(
                   "relative px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.15em] transition-all duration-300 rounded-full",
                   activeSection === link.key
-                    ? "text-gray-900 bg-gray-100/80"
-                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                    ? isDarkTheme ? "text-white bg-white/20" : "text-gray-900 bg-gray-100/80"
+                    : isDarkTheme ? "text-white/70 hover:text-white hover:bg-white/10" : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                 )}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
           </div>
 
           <div className="flex items-center gap-3">
-            <a
-              href="#about"
-              onClick={(e) => scrollTo(e, "#about")}
-              className="hidden md:inline-flex items-center gap-2 h-10 px-6 text-[11px] font-bold uppercase tracking-[0.12em] text-white bg-gray-900 hover:bg-gray-800 transition-all duration-300 hover:shadow-lg hover:shadow-gray-900/20 hover:scale-[1.02] active:scale-[0.98] group"
+            <Link
+              href="/#footer"
+              onClick={(e) => scrollTo(e, "/#footer")}
+              className={cn(
+                "hidden md:inline-flex items-center gap-2 h-10 px-6 text-[11px] font-bold uppercase tracking-[0.12em] transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] group",
+                isDarkTheme 
+                  ? "bg-white text-gray-900 hover:bg-gray-100 hover:shadow-white/20" 
+                  : "bg-gray-900 text-white hover:bg-gray-800 hover:shadow-gray-900/20"
+              )}
             >
               <span>Let&apos;s Talk</span>
               <ArrowUpRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
+            </Link>
 
             <button
-              className="md:hidden relative z-[60] flex items-center justify-center size-10 rounded-full text-gray-900 transition-all active:scale-95 hover:bg-gray-100/80"
+              className={cn(
+                "md:hidden relative z-[60] flex items-center justify-center size-10 rounded-full transition-all active:scale-95",
+                isDarkTheme ? "text-white hover:bg-white/10" : "text-gray-900 hover:bg-gray-100/80"
+              )}
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
             >
               <div className="relative size-5">
                 <span
                   className={cn(
-                    "absolute left-0 h-[1.5px] w-5 bg-gray-900 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    "absolute left-0 h-[1.5px] w-5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    isDarkTheme && !mobileOpen ? "bg-white" : "bg-gray-900",
                     mobileOpen
                       ? "top-[9px] rotate-45"
                       : "top-[4px] rotate-0"
@@ -131,7 +172,8 @@ export function Navbar() {
                 />
                 <span
                   className={cn(
-                    "absolute left-0 top-[9px] h-[1.5px] bg-gray-900 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    "absolute left-0 top-[9px] h-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    isDarkTheme && !mobileOpen ? "bg-white" : "bg-gray-900",
                     mobileOpen
                       ? "w-5 -rotate-45"
                       : "w-3.5 rotate-0"
@@ -139,7 +181,8 @@ export function Navbar() {
                 />
                 <span
                   className={cn(
-                    "absolute left-0 h-[1.5px] bg-gray-900 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    "absolute left-0 h-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    isDarkTheme && !mobileOpen ? "bg-white" : "bg-gray-900",
                     mobileOpen
                       ? "top-[9px] w-0 opacity-0"
                       : "top-[14px] w-5 opacity-100"
@@ -162,7 +205,7 @@ export function Navbar() {
         <div className="flex-1 flex flex-col justify-center px-8 pt-20">
           <nav className="flex flex-col">
             {navLinks.map((link, i) => (
-              <a
+              <Link
                 key={link.key}
                 href={link.href}
                 onClick={(e) => scrollTo(e, link.href)}
@@ -201,7 +244,7 @@ export function Navbar() {
                     )}
                   />
                 </div>
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -218,14 +261,14 @@ export function Navbar() {
                 : "0ms",
             }}
           >
-            <a
-              href="#about"
-              onClick={(e) => scrollTo(e, "#about")}
+            <Link
+              href="/#footer"
+              onClick={(e) => scrollTo(e, "/#footer")}
               className="inline-flex items-center gap-3 h-14 px-10 text-[12px] font-bold uppercase tracking-[0.15em] text-white bg-gray-900 rounded-full group"
             >
               <span>Let&apos;s Talk</span>
               <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
+            </Link>
           </div>
         </div>
 

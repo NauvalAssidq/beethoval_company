@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Calendar, Layers } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Navbar } from "@/components/layout/Navbar";
 
 interface ProjectNav {
   title: string;
@@ -84,40 +85,7 @@ export function ProjectDetailClient({
 
   return (
     <main className="min-h-screen bg-[#fafafa]">
-      <header
-        className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-          scrolled
-            ? "bg-white/85 backdrop-blur-xs border-b border-gray-200/60"
-            : "bg-transparent"
-        )}
-      >
-        <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
-          <Link
-            href="/#projects"
-            className={cn(
-              "inline-flex items-center gap-2 text-[13px] font-medium transition-colors duration-300",
-              scrolled
-                ? "text-gray-600 hover:text-gray-900"
-                : "text-white/70 hover:text-white"
-            )}
-          >
-            <ArrowLeft className="size-4" />
-            <span>Back to Projects</span>
-          </Link>
-
-          <Link
-            href="/"
-            className={cn(
-              "font-serif text-xl font-bold tracking-tight transition-colors duration-300",
-              scrolled ? "text-gray-900" : "text-white"
-            )}
-          >
-            <span className="italic">Beethoval</span>
-            <span className="not-italic text-indigo-600">.dev</span>
-          </Link>
-        </div>
-      </header>
+      <Navbar transparentTheme="dark" />
 
       <div className="relative h-[100vh] w-full overflow-hidden">
         {project.coverImage ? (

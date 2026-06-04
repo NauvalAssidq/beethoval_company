@@ -65,7 +65,7 @@ export function Footer({ footerData: initialData }: FooterProps) {
   ];
 
   return (
-    <footer ref={footerRef} className="w-full bg-white text-gray-900 border-t border-gray-200 font-sans">
+    <footer id="footer" ref={footerRef} className="w-full bg-white text-gray-900 border-t border-gray-200 font-sans">
 
       <div
         data-footer="heading"
@@ -102,7 +102,7 @@ export function Footer({ footerData: initialData }: FooterProps) {
                 <a href={`mailto:${footerData.contact?.email}`} className="block text-xl md:text-2xl font-medium mb-3 hover:font-serif hover:italic hover:text-indigo-600 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
                   {footerData.contact?.email}
                 </a>
-                <a href={`tel:${footerData.contact?.phone?.replace(/\s+/g, "")}`} className="block text-xl md:text-2xl font-medium hover:font-serif hover:italic hover:text-indigo-600 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
+                <a href={`https://wa.me/${footerData.contact?.phone?.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="block text-xl md:text-2xl font-medium hover:font-serif hover:italic hover:text-indigo-600 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
                   {footerData.contact?.phone}
                 </a>
               </div>
