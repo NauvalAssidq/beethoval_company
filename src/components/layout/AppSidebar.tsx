@@ -19,7 +19,6 @@ import { NavUser } from "@/components/layout/NavUser";
 
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
-  { title: "Profile", url: "/dashboard/profile", icon: User },
   { title: "Projects", url: "/dashboard/projects", icon: FolderKanban },
   { title: "Services", url: "/dashboard/services", icon: Briefcase },
   { title: "Gallery", url: "/dashboard/gallery", icon: Images },

@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import LoginForm from "@/components/features/auth/LoginForm";
 
 export const metadata: Metadata = {
-  title: "Login | Nauval Assidq",
+  title: "Login",
   description: "Sign in to manage your stunning apps & websites.",
 };
 

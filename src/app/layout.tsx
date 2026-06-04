@@ -24,7 +24,7 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://beethoval.dev"),
   title: {
-    template: "%s | Beethoval.dev",
+    template: "Beethoval.dev | %s",
     default: "Beethoval.dev - Top Web Developer & Software House in Banda Aceh",
   },
   description: "High-performance web applications and professional grade interfaces. Beethoval is the premier software house and freelance web developer based in Banda Aceh, Aceh.",

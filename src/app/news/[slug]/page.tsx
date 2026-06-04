@@ -30,14 +30,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: article.title,
     description: article.excerpt || `${article.title} — Beethoval.dev`,
     openGraph: {
-      title: `${article.title} | Beethoval.dev`,
+      title: `Beethoval.dev | ${article.title}`,
       description: article.excerpt || `${article.title} — Beethoval.dev`,
       images: article.coverImage ? [{ url: article.coverImage }] : [],
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${article.title} | Beethoval.dev`,
+      title: `Beethoval.dev | ${article.title}`,
       description: article.excerpt || `${article.title} — Beethoval.dev`,
       images: article.coverImage ? [article.coverImage] : [],
     },
