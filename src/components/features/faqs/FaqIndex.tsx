@@ -90,7 +90,10 @@ export function FaqIndex() {
   const [deleteTarget, setDeleteTarget] = useState<Faq | null>(null);
   const [deleting, setDeleting] = useState(false);
 
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
     fetchFaqs();
   }, []);
 
@@ -202,7 +205,7 @@ export function FaqIndex() {
             <span>Create your first FAQ</span>
           </Link>
         </div>
-      ) : (
+      ) : !mounted ? null : (
         <div className="max-w-3xl">
           <DndContext 
             sensors={sensors}

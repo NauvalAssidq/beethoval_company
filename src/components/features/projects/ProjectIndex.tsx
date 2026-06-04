@@ -94,7 +94,7 @@ export function ProjectIndex() {
     }
   };
 
-  const formatDate = (dateStr: string) => {
+  const formatDate = (dateStr: string | Date) => {
     return new Date(dateStr).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
