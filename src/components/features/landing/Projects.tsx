@@ -3,15 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface ProjectCard {
-  _id: string;
-  title: string;
-  slug: string;
-  description: string;
-  coverImage: string;
-  techStack: string[];
-}
+import type { ProjectCard } from "@/lib/landing-data";
 
 function ProjectItem({
   project,
@@ -108,11 +100,15 @@ function ProjectItem({
   );
 }
 
-export function Projects() {
+interface ProjectsProps {
+  initialProjects?: ProjectCard[];
+}
+
+export function Projects({ initialProjects }: ProjectsProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
-  const [projects, setProjects] = useState<ProjectCard[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  const projects = initialProjects ?? [];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -129,23 +125,6 @@ export function Projects() {
     return () => {
       if (el) observer.unobserve(el);
     };
-  }, []);
-
-  useEffect(() => {
-    async function fetchProjects() {
-      try {
-        const res = await fetch("/api/public/project-cards");
-        if (res.ok) {
-          const data = await res.json();
-          setProjects(data);
-        }
-      } catch (err) {
-        console.error("Failed to load projects:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchProjects();
   }, []);
 
   const leftCol = projects.filter((_, i) => i % 2 === 0);
@@ -176,32 +155,7 @@ export function Projects() {
       <div className="h-px bg-gray-200 w-full mb-16 md:mb-24" />
 
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            <div className="flex flex-col gap-12">
-              {[1, 2].map((i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="bg-gray-200 aspect-square w-full" />
-                  <div className="mt-5 space-y-2">
-                    <div className="h-6 bg-gray-200 w-48" />
-                    <div className="h-4 bg-gray-100 w-72" />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-col gap-12 md:mt-[calc(50%+6rem)]">
-              {[3, 4].map((i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="bg-gray-200 aspect-square w-full" />
-                  <div className="mt-5 space-y-2">
-                    <div className="h-6 bg-gray-200 w-48" />
-                    <div className="h-4 bg-gray-100 w-64" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : projects.length === 0 ? (
+        {projects.length === 0 ? (
           <div
             className={cn(
               "flex flex-col items-center justify-center py-24 text-center transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]",

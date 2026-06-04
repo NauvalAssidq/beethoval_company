@@ -1,37 +1,24 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from 'react';
-import Link from 'next/link';
-import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
+import React, { useEffect, useState, useRef } from "react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import type { FooterData } from "@/lib/landing-data";
 
-export function Footer() {
-  const [footerData, setFooterData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+interface FooterProps {
+  footerData?: FooterData;
+}
+
+export function Footer({ footerData: initialData }: FooterProps) {
   const footerRef = useRef<HTMLElement>(null);
   const [headingVisible, setHeadingVisible] = useState(false);
   const [gridVisible, setGridVisible] = useState(false);
   const [bottomVisible, setBottomVisible] = useState(false);
 
-  useEffect(() => {
-    async function fetchFooter() {
-      try {
-        const res = await fetch("/api/public/footer");
-        if (res.ok) {
-          const data = await res.json();
-          setFooterData(data);
-        }
-      } catch (err) {
-        console.error("Failed to load footer data", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchFooter();
-  }, []);
+  const footerData = initialData ?? null;
 
   useEffect(() => {
-    if (loading || !footerData) return;
+    if (!footerData) return;
 
     const headingEl = footerRef.current?.querySelector('[data-footer="heading"]');
     const gridEl = footerRef.current?.querySelector('[data-footer="grid"]');
@@ -67,39 +54,13 @@ export function Footer() {
     }
 
     return () => { observers.forEach((obs) => obs.disconnect()); };
-  }, [loading, footerData]);
-
-  if (loading) {
-    return (
-      <footer className="w-full bg-white border-t border-gray-200">
-        <div className="w-full border-b border-gray-200 px-6 py-24 md:py-32 flex flex-col items-center justify-center bg-[#fafafa]">
-          <Skeleton className="h-16 md:h-24 lg:h-32 w-3/4 max-w-4xl" />
-        </div>
-        <div className="w-full grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-gray-200 border-b border-gray-200">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="p-6 sm:p-10 md:col-span-1 min-h-[250px]">
-              <Skeleton className="h-3 w-16 mb-6" />
-              <div className="space-y-4">
-                <Skeleton className="h-6 w-3/4" />
-                <Skeleton className="h-6 w-1/2" />
-                <Skeleton className="h-6 w-2/3" />
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="w-full px-6 sm:px-10 py-6 flex flex-col md:flex-row justify-between items-center">
-          <Skeleton className="h-4 w-48" />
-          <Skeleton className="h-4 w-32 mt-2 md:mt-0" />
-        </div>
-      </footer>
-    );
-  }
+  }, [footerData]);
 
   if (!footerData) return null;
 
   const allColumns = [
     { type: "contact" as const },
-    ...(footerData.links || []).map((g: any) => ({ type: "links" as const, data: g })),
+    ...(footerData.links || []).map((g) => ({ type: "links" as const, data: g })),
     { type: "socials" as const },
   ];
 
@@ -114,7 +75,7 @@ export function Footer() {
         )}
       >
         <h2 className="text-6xl md:text-8xl lg:text-9xl font-regular uppercase tracking-tighter leading-none">
-          {footerData.heading?.primary}{' '}
+          {footerData.heading?.primary}{" "}
           <span className="font-serif italic font-normal normal-case tracking-normal text-indigo-600">
             {footerData.heading?.secondary}
           </span>
@@ -141,7 +102,7 @@ export function Footer() {
                 <a href={`mailto:${footerData.contact?.email}`} className="block text-xl md:text-2xl font-medium mb-3 hover:font-serif hover:italic hover:text-indigo-600 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
                   {footerData.contact?.email}
                 </a>
-                <a href={`tel:${footerData.contact?.phone?.replace(/\s+/g, '')}`} className="block text-xl md:text-2xl font-medium hover:font-serif hover:italic hover:text-indigo-600 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
+                <a href={`tel:${footerData.contact?.phone?.replace(/\s+/g, "")}`} className="block text-xl md:text-2xl font-medium hover:font-serif hover:italic hover:text-indigo-600 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
                   {footerData.contact?.phone}
                 </a>
               </div>
@@ -151,7 +112,7 @@ export function Footer() {
               <>
                 <h3 className="text-[11px] uppercase font-bold mb-6 tracking-widest text-gray-500">{col.data.title}</h3>
                 <ul className="space-y-4">
-                  {col.data.items?.map((item: any, itemIdx: number) => (
+                  {col.data.items?.map((item, itemIdx) => (
                     <li key={itemIdx}>
                       <Link href={item.href} className="text-lg font-medium hover:italic hover:font-serif hover:text-indigo-600 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
                         {item.label}
@@ -166,7 +127,7 @@ export function Footer() {
               <>
                 <h3 className="text-[11px] uppercase font-bold mb-6 tracking-widest text-gray-500">Socials</h3>
                 <ul className="space-y-4">
-                  {footerData.socials?.map((social: any, idx: number) => (
+                  {footerData.socials?.map((social, idx) => (
                     <li key={idx}>
                       <a href={social.href} target="_blank" rel="noopener noreferrer" className="text-lg font-medium hover:italic hover:font-serif hover:text-indigo-600 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
                         {social.label}

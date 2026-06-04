@@ -1,8 +1,10 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
+
 
 export async function GET(
   _req: Request,
@@ -83,6 +85,8 @@ export async function PUT(
       return NextResponse.json({ error: "News article not found" }, { status: 404 });
     }
 
+    revalidatePath("/", "page");
+
     return NextResponse.json({ success: true });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -113,6 +117,8 @@ export async function DELETE(
     if (result.deletedCount === 0) {
       return NextResponse.json({ error: "News article not found" }, { status: 404 });
     }
+
+    revalidatePath("/", "page");
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

@@ -43,13 +43,20 @@ const FALLBACK_SERVICES: Service[] = [
   },
 ];
 
-export function Services() {
+interface ServicesProps {
+  initialServices?: Service[];
+}
+
+export function Services({ initialServices }: ServicesProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [isInView, setIsInView] = useState(false);
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  const services =
+    initialServices && initialServices.length > 0
+      ? initialServices
+      : FALLBACK_SERVICES;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -69,28 +76,6 @@ export function Services() {
   }, []);
 
   useEffect(() => {
-    async function fetchServices() {
-      try {
-        const res = await fetch("/api/public/services");
-        if (res.ok) {
-          const data = await res.json();
-          const servicesData = data.services || data;
-          setServices(servicesData.length > 0 ? servicesData : FALLBACK_SERVICES);
-        } else {
-          setServices(FALLBACK_SERVICES);
-        }
-      } catch (err) {
-        setServices(FALLBACK_SERVICES);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchServices();
-  }, []);
-
-  useEffect(() => {
-    if (loading || services.length === 0) return;
-
     const observers: IntersectionObserver[] = [];
 
     cardRefs.current.forEach((ref, index) => {
@@ -111,7 +96,7 @@ export function Services() {
     return () => {
       observers.forEach((obs) => obs.disconnect());
     };
-  }, [loading, services]);
+  }, [services]);
 
   useEffect(() => {
     const isDesktop = () => window.innerWidth >= 768;
@@ -122,7 +107,7 @@ export function Services() {
         wrappers.forEach((wrapper) => {
           if (!wrapper) return;
           const card = wrapper.firstElementChild as HTMLElement;
-          if (card) card.style.transform = '';
+          if (card) card.style.transform = "";
         });
         return;
       }
@@ -133,7 +118,7 @@ export function Services() {
         if (!card) return;
 
         if (index === wrappers.length - 1) {
-          card.style.transform = 'scale(1)';
+          card.style.transform = "scale(1)";
           return;
         }
 
@@ -151,17 +136,17 @@ export function Services() {
             card.style.transform = `scale(${scale})`;
           }
         } else {
-          card.style.transform = 'scale(1)';
+          card.style.transform = "scale(1)";
         }
       });
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
     handleScroll();
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
   }, [services]);
 
@@ -187,13 +172,7 @@ export function Services() {
         </div>
       </div>
 
-      {loading ? (
-        <div className="flex flex-col">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="w-full h-[50vh] md:h-[70vh] border-t border-gray-200 animate-pulse bg-gray-50" />
-          ))}
-        </div>
-      ) : services.length === 0 ? (
+      {services.length === 0 ? (
         <div
           className={cn(
             "flex flex-col items-center justify-center py-24 text-center transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]",

@@ -1,8 +1,10 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
+
 
 export async function DELETE(
   req: Request,
@@ -14,7 +16,6 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Await params per Next.js 15 routing rules
     const params = await context.params;
 
     const client = await clientPromise;
@@ -27,6 +28,8 @@ export async function DELETE(
     if (result.deletedCount === 0) {
       return NextResponse.json({ error: "Image not found" }, { status: 404 });
     }
+
+    revalidatePath("/", "page");
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

@@ -1,9 +1,11 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { validateCSRF } from "@/lib/security";
+
 
 export async function PUT(req: Request) {
   try {
@@ -34,6 +36,8 @@ export async function PUT(req: Request) {
     if (bulkOps.length > 0) {
       await db.collection("services").bulkWrite(bulkOps);
     }
+
+    revalidatePath("/", "page");
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

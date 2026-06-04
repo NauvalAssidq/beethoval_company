@@ -4,21 +4,17 @@ import React, { useState, useEffect, useRef } from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import type { NewsArticle } from "@/lib/landing-data";
 
-interface NewsArticle {
-  _id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  coverImage: string;
-  createdAt: string;
+interface NewsProps {
+  initialNews?: NewsArticle[];
 }
 
-export function News() {
+export function News({ initialNews }: NewsProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
-  const [news, setNews] = useState<NewsArticle[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  const news = initialNews ?? [];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,27 +33,12 @@ export function News() {
     };
   }, []);
 
-  useEffect(() => {
-    async function fetchNews() {
-      try {
-        const res = await fetch("/api/public/news?limit=4");
-        if (res.ok) {
-          const data = await res.json();
-          setNews(data);
-        }
-      } catch (err) {
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchNews();
-  }, []);
-
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
+      timeZone: "UTC",
     });
   };
 
@@ -76,7 +57,7 @@ export function News() {
         >
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-gray-700 tracking-tight leading-[1.05]">
-              News & Articles
+              News &amp; Articles
             </h2>
             <Link
               href="/#news"
@@ -90,20 +71,7 @@ export function News() {
       </div>
 
       <div className="w-full max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="animate-pulse">
-                <div className="bg-gray-100 aspect-[16/10] w-full mb-6" />
-                <div className="h-4 bg-gray-100 w-24 mb-4" />
-                <div className="h-7 bg-gray-200 w-full mb-3" />
-                <div className="h-7 bg-gray-200 w-3/4 mb-4" />
-                <div className="h-4 bg-gray-100 w-full mb-2" />
-                <div className="h-4 bg-gray-100 w-2/3" />
-              </div>
-            ))}
-          </div>
-        ) : news.length === 0 ? (
+        {news.length === 0 ? (
           <div
             className={cn(
               "flex flex-col items-center justify-center py-24 text-center transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]",
@@ -144,9 +112,9 @@ export function News() {
                       </span>
                     </div>
                   )}
-                  
+
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500" />
-                  
+
                   <div className="absolute top-5 right-5 size-10 bg-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0 shadow-lg">
                     <ArrowUpRight className="size-4 text-gray-900" />
                   </div>

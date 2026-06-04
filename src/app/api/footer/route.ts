@@ -1,8 +1,10 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import clientPromise from "@/lib/mongodb";
 import { validateCSRF, sanitizeInput } from "@/lib/security";
+
 
 const defaultFooterData = {
   type: "footer",
@@ -83,6 +85,8 @@ export async function PUT(request: Request) {
       { $set: updateData },
       { upsert: true }
     );
+
+    revalidatePath("/", "page");
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
