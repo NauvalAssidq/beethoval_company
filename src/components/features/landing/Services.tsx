@@ -208,22 +208,22 @@ export function Services() {
         </div>
       ) : (
         <div className="w-full max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative flex flex-col gap-4 md:gap-0">
+          <div className="relative flex flex-col gap-8 md:gap-0">
             {services.map((service, index) => (
               <div
                 key={service._id}
                 ref={(el) => { cardRefs.current[index] = el; }}
                 className={cn(
-                  "relative md:sticky w-full md:pb-4 transition-all duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+                  "relative md:sticky w-full md:pb-4 transition-all duration-[1000ms] ease-[cubic-bezier(0.22,1,0.36,1)] md:top-[var(--sticky-top)]",
                   visibleCards.has(index)
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-12"
                 )}
                 style={{
-                  top: `${80 + index * 14}px`,
+                  "--sticky-top": `${80 + index * 14}px`,
                   zIndex: index + 1,
                   transitionDelay: visibleCards.has(index) ? `${index * 120}ms` : "0ms",
-                }}
+                } as React.CSSProperties}
               >
                 <div className="h-auto md:h-[55vh] lg:h-[60vh] w-full bg-white border border-gray-300 overflow-hidden transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] origin-center will-change-transform">
                   <div className="grid grid-cols-1 md:grid-cols-2 h-full w-full">
