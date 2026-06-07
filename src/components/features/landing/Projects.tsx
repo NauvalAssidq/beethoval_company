@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ProjectCard } from "@/lib/landing-data";
+import { useReveal } from "@/hooks/useReveal";
+import Image from "next/image";
 
 function ProjectItem({
   project,
@@ -14,25 +16,7 @@ function ProjectItem({
   index: number;
   className?: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isInView, setIsInView] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    const el = ref.current;
-    if (el) observer.observe(el);
-    return () => {
-      if (el) observer.unobserve(el);
-    };
-  }, []);
+  const { ref, visible: isInView } = useReveal(0.1) as { ref: React.RefObject<HTMLDivElement>, visible: boolean };
 
   return (
     <div
@@ -49,10 +33,12 @@ function ProjectItem({
         className="block relative overflow-hidden bg-white cursor-pointer"
       >
         {project.coverImage ? (
-          <img
+          <Image
             src={project.coverImage}
             alt={project.title}
-            className="w-full h-full object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-200 flex items-center justify-center">
@@ -105,27 +91,9 @@ interface ProjectsProps {
 }
 
 export function Projects({ initialProjects }: ProjectsProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isInView, setIsInView] = useState(false);
+  const { ref: sectionRef, visible: isInView } = useReveal(0.05) as { ref: React.RefObject<HTMLElement | null>, visible: boolean };
 
   const projects = initialProjects ?? [];
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.05 }
-    );
-    const el = sectionRef.current;
-    if (el) observer.observe(el);
-    return () => {
-      if (el) observer.unobserve(el);
-    };
-  }, []);
 
   const leftCol = projects.filter((_, i) => i % 2 === 0);
   const rightCol = projects.filter((_, i) => i % 2 === 1);

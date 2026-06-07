@@ -5,6 +5,9 @@ import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Calendar, Layers } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/Navbar";
+import DOMPurify from "isomorphic-dompurify";
+import { useReveal } from "@/hooks/useReveal";
+import Image from "next/image";
 
 interface ProjectNav {
   title: string;
@@ -31,30 +34,7 @@ interface ProjectDetailClientProps {
   nextProject: ProjectNav | null;
 }
 
-function useReveal(threshold = 0.15) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          obs.unobserve(entry.target);
-        }
-      },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => {
-      obs.unobserve(el);
-    };
-  }, [threshold]);
-
-  return { ref, visible };
-}
+// removed local useReveal
 
 export function ProjectDetailClient({
   project,
@@ -89,10 +69,12 @@ export function ProjectDetailClient({
 
       <div className="relative h-[100vh] w-full overflow-hidden">
         {project.coverImage ? (
-          <img
+          <Image
             src={project.coverImage}
             alt={project.title}
-            className="absolute inset-0 w-full h-full object-cover blur-xs scale-100"
+            fill
+            sizes="100vw"
+            className="object-cover blur-xs scale-100"
           />
         ) : (
           <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-800 to-gray-950" />
@@ -227,7 +209,7 @@ export function ProjectDetailClient({
               "prose-table:border-collapse prose-table:w-full",
               "prose-sub:text-xs prose-sup:text-xs"
             )}
-            dangerouslySetInnerHTML={{ __html: project.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(project.content) }}
           />
         </article>
       </div>
@@ -249,10 +231,12 @@ export function ProjectDetailClient({
                 className="group relative flex flex-col justify-end overflow-hidden h-[50vh] md:h-[60vh] p-8 md:p-12 border-b md:border-b-0 md:border-r border-gray-200"
               >
                 {prevProject.coverImage ? (
-                  <img
+                  <Image
                     src={prevProject.coverImage}
                     alt={prevProject.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200" />
@@ -278,10 +262,12 @@ export function ProjectDetailClient({
                 className="group relative flex flex-col justify-end overflow-hidden h-[50vh] md:h-[60vh] p-8 md:p-12"
               >
                 {nextProject.coverImage ? (
-                  <img
+                  <Image
                     src={nextProject.coverImage}
                     alt={nextProject.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200" />

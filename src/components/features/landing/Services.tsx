@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { type Service } from "@/types/service";
+import { useReveal } from "@/hooks/useReveal";
+import Image from "next/image";
 
 const FALLBACK_SERVICES: Service[] = [
   {
@@ -48,32 +50,14 @@ interface ServicesProps {
 }
 
 export function Services({ initialServices }: ServicesProps) {
-  const sectionRef = useRef<HTMLElement>(null);
+  const { ref: sectionRef, visible: isInView } = useReveal(0.05) as { ref: React.RefObject<HTMLElement | null>, visible: boolean };
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [isInView, setIsInView] = useState(false);
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
 
   const services =
     initialServices && initialServices.length > 0
       ? initialServices
       : FALLBACK_SERVICES;
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.05 }
-    );
-    const el = sectionRef.current;
-    if (el) observer.observe(el);
-    return () => {
-      if (el) observer.unobserve(el);
-    };
-  }, []);
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -232,10 +216,12 @@ export function Services({ initialServices }: ServicesProps) {
 
                     <div className="group relative order-1 md:order-2 h-[200px] sm:h-[250px] md:h-full border-b">
                       <div className="relative w-full h-full overflow-hidden">
-                        <img
+                        <Image
                           src={service.image || "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600&q=80"}
                           alt={service.title}
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+                          fill
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
                         />
                       </div>
                     </div>

@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { Highlighter } from "@/components/ui/highlighter";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { MarqueeItem } from "@/lib/landing-data";
+import { useReveal } from "@/hooks/useReveal";
+import Image from "next/image";
 
 interface HeroProps {
   marqueeItems?: MarqueeItem[];
@@ -19,30 +21,12 @@ const FALLBACK_IMAGES = [
 ];
 
 export function Hero({ marqueeItems }: HeroProps) {
-  const sectionRef = useRef<HTMLElement | null>(null);
-  const [isInView, setIsInView] = useState(false);
+  const { ref: sectionRef, visible: isInView } = useReveal(0.1) as { ref: React.RefObject<HTMLElement | null>, visible: boolean };
 
   const resolvedUrls =
     marqueeItems && marqueeItems.length > 0
       ? marqueeItems.map((m) => m.url)
       : FALLBACK_IMAGES;
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    const currentRef = sectionRef.current;
-    if (currentRef) observer.observe(currentRef);
-    return () => {
-      if (currentRef) observer.unobserve(currentRef);
-    };
-  }, []);
 
   const animateIn = cn(
     "transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
@@ -84,8 +68,8 @@ export function Hero({ marqueeItems }: HeroProps) {
           {Array.from({ length: Math.max(2, Math.ceil(8 / resolvedUrls.length)) })
             .flatMap(() => resolvedUrls)
             .map((src, i) => (
-              <div key={i} className="w-[320px] h-[320px] md:w-[380px] md:h-[380px] shrink-0 overflow-hidden">
-                <img src={src} className="w-full h-full object-contain object-bottom" alt="Portfolio showcase" />
+              <div key={i} className="relative w-[320px] h-[320px] md:w-[380px] md:h-[380px] shrink-0 overflow-hidden">
+                <Image src={src} fill sizes="(max-width: 768px) 320px, 380px" className="object-contain object-bottom" alt="Portfolio showcase" />
               </div>
             ))}
         </div>

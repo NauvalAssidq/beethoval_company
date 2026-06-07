@@ -5,33 +5,17 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { NewsArticle } from "@/lib/landing-data";
+import { useReveal } from "@/hooks/useReveal";
+import Image from "next/image";
 
 interface NewsProps {
   initialNews?: NewsArticle[];
 }
 
 export function News({ initialNews }: NewsProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isInView, setIsInView] = useState(false);
+  const { ref: sectionRef, visible: isInView } = useReveal(0.1) as { ref: React.RefObject<HTMLElement | null>, visible: boolean };
 
   const news = initialNews ?? [];
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    const el = sectionRef.current;
-    if (el) observer.observe(el);
-    return () => {
-      if (el) observer.unobserve(el);
-    };
-  }, []);
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {
@@ -100,10 +84,12 @@ export function News({ initialNews }: NewsProps) {
               >
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-50 mb-8 transition-shadow duration-700">
                   {item.coverImage ? (
-                    <img
+                    <Image
                       src={item.coverImage}
                       alt={item.title}
-                      className="w-full h-full object-cover grayscale opacity-90 transition-all duration-[1.5s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-100"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      className="object-cover grayscale opacity-90 transition-all duration-[1.5s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-100"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-indigo-50 to-indigo-100/50 flex items-center justify-center">

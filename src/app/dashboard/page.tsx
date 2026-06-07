@@ -5,6 +5,7 @@ import clientPromise from "@/lib/mongodb";
 import Link from "next/link";
 import { ChevronDown, BarChart3, FolderKanban, FileText, Images, HelpCircle } from "lucide-react";
 import { VisitorChart } from "@/components/features/dashboard/VisitorChart";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -212,10 +213,12 @@ export default async function DashboardPage() {
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
               {recentGalleries.map((img, i) => (
                 <Link href="/dashboard/gallery" key={`g-${img._id}`} className="group relative aspect-square rounded-xl overflow-hidden border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900">
-                  <img 
+                  <Image 
                     src={img.url} 
                     alt="Gallery image" 
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    fill
+                    sizes="(max-width: 768px) 50vw, 16vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
                 </Link>

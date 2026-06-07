@@ -4,6 +4,7 @@ import React, { useCallback, useState } from "react";
 import { UploadCloud, X, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import Image from "next/image";
 
 interface ImageUploaderProps {
   value: string | string[];
@@ -137,10 +138,12 @@ export function ImageUploader({ value, onChange, multiple = false, className }: 
         <div className={cn("grid gap-4", multiple ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4" : "grid-cols-1 sm:grid-cols-2")}>
           {images.map((url, index) => (
             <div key={`${url}-${index}`} className="relative group rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-800 aspect-video">
-              <img
+              <Image
                 src={url}
                 alt="Uploaded preview"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
+                className="object-cover"
               />
               <button
                 type="button"

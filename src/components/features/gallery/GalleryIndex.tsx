@@ -8,6 +8,7 @@ import { ImageUploader } from "@/components/ui/image-uploader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2, Trash2, GripVertical, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
+import Image from "next/image";
 
 interface GalleryItem {
   id: string;
@@ -31,7 +32,7 @@ function SortableItem({ item, onDelete }: { item: GalleryItem, onDelete: (id: st
       className="relative group rounded-[10px] overflow-hidden border border-gray-200 bg-white aspect-[4/3] shadow-none flex flex-col"
     >
       <div {...attributes} {...listeners} className="flex-1 w-full relative cursor-grab active:cursor-grabbing">
-        <img src={item.url} className="w-full h-full object-cover" alt="Gallery item" />
+        <Image src={item.url} fill sizes="(max-width: 768px) 50vw, 33vw" className="object-cover" alt="Gallery item" />
         <div className="absolute top-2 left-2 px-2 py-1 bg-black/60 text-white text-[10px] font-medium rounded-md uppercase tracking-wider backdrop-blur-sm">
           {item.type}
         </div>
