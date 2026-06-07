@@ -54,7 +54,7 @@ export function Hero({ marqueeItems }: HeroProps) {
       ref={sectionRef}
       className="relative h-dvh flex flex-col bg-white overflow-hidden border-b border-gray-100"
     >
-      <div className="flex-1 w-full max-w-9xl mx-auto z-10 relative flex flex-col justify-end px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+      <div className="flex-1 w-full max-w-9xl mx-auto mb-4 sm:mb-4 md:mb-6 lg:mb-8 z-10 relative flex flex-col justify-end px-4 sm:px-6 lg:px-8 pt-20 pb-12">
         <div className="text-left flex flex-col items-start">
           <h1 className={cn(animateIn, "delay-300 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>
             <span className="font-sans font-regular">Crafting Digital</span>
@@ -73,7 +73,7 @@ export function Hero({ marqueeItems }: HeroProps) {
             <span className="font-sans font-regular">For Your Business</span>
           </h1>
 
-          <p className={cn(animateIn, "delay-700 text-sm sm:text-sm md:text-md lg:text-lg text-gray-400 mb-0 max-w-3xl text-left leading-relaxed font-medium")}>
+          <p className={cn(animateIn, "delay-700 text-sm sm:text-sm md:text-md lg:text-lg text-gray-500 underline mb-0 max-w-3xl text-left leading-relaxed font-medium")}>
             High-performance web applications on hand, with professional grade interface
           </p>
         </div>

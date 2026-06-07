@@ -16,12 +16,43 @@ export default async function DashboardPage() {
   const client = await clientPromise;
   const db = client.db("portfolio");
 
-  const [projectCount, newsCount, faqCount, galleryCount] = await Promise.all([
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  const [projectCount, newsCount, faqCount, galleryCount, totalVisits, visitsDataRaw] = await Promise.all([
     db.collection("projects").countDocuments(),
     db.collection("news").countDocuments(),
     db.collection("faqs").countDocuments(),
     db.collection("galleries").countDocuments(),
+    db.collection("visits").countDocuments(),
+    db.collection("visits").aggregate([
+      { $match: { createdAt: { $gte: thirtyDaysAgo } } },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]).toArray()
   ]);
+
+  const chartData = [];
+  for (let i = 0; i <= 30; i++) {
+    const d = new Date(thirtyDaysAgo);
+    d.setDate(d.getDate() + i);
+    const dateStr = d.toISOString().split("T")[0];
+    const match = visitsDataRaw.find((v: any) => v._id === dateStr);
+    
+    const month = d.toLocaleString('default', { month: 'short' });
+    const day = d.getDate();
+    
+    chartData.push({
+      date: `${month} ${day}`,
+      fullDate: `${month} ${day}, ${d.getFullYear()}`,
+      visitors: match ? match.count : 0
+    });
+  }
 
   const [recentProjects, recentNews, recentGalleries] = await Promise.all([
     db.collection("projects").find({}, { projection: { title: 1, coverImage: 1, createdAt: 1, _id: 1 } }).sort({ createdAt: -1 }).limit(4).toArray(),
@@ -72,8 +103,8 @@ export default async function DashboardPage() {
                 <BarChart3 className="size-3" />
                 Visitor Analytics
               </span>
-              <span className="font-serif text-5xl text-zinc-900 dark:text-white mt-2 tracking-tighter">24,592</span>
-              <span className="text-sm text-emerald-600 dark:text-emerald-400 font-medium mt-1">+14.2% from last period</span>
+              <span className="font-serif text-5xl text-zinc-900 dark:text-white mt-2 tracking-tighter">{totalVisits.toLocaleString()}</span>
+              <span className="text-sm text-emerald-600 dark:text-emerald-400 font-medium mt-1">Live data tracking</span>
             </div>
             
             <div className="relative group cursor-pointer">
@@ -88,7 +119,7 @@ export default async function DashboardPage() {
           </div>
 
           <div className="flex-1 w-full relative min-h-[220px] mt-4 z-0 px-2">
-            <VisitorChart />
+            <VisitorChart data={chartData} />
           </div>
         </div>
 

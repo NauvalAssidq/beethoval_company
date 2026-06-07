@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Footer } from "@/components/layout/Footer";
 import { ClientToaster } from "@/components/providers/ClientToaster";
+import { CookiesBanner } from "@/components/ui/cookies-banner";
 
 
 const sans = Plus_Jakarta_Sans({
@@ -72,6 +73,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
+        <CookiesBanner />
         <ClientToaster />
         <script
           type="application/ld+json"

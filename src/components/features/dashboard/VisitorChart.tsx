@@ -9,44 +9,31 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-const generateData = () => {
-  const data = [];
-  const startDate = new Date("2024-04-01");
-  for (let i = 0; i < 91; i++) {
-    const currentDate = new Date(startDate);
-    currentDate.setDate(startDate.getDate() + i);
-    
-
-    const month = currentDate.toLocaleString('default', { month: 'short' });
-    const day = currentDate.getDate();
-    const dateStr = `${month} ${day}`;
-    
-
-    const baseValue = 30 + Math.random() * 40;
-    const peak = Math.random() > 0.8 ? Math.random() * 40 : 0;
-    
-    data.push({
-      date: dateStr,
-      fullDate: `${month} ${day}, 2024`,
-      visitors: Math.floor(baseValue + peak),
-    });
-  }
-  return data;
-};
-
-const chartData = generateData();
+export interface VisitData {
+  date: string;
+  fullDate: string;
+  visitors: number;
+}
 
 const chartConfig = {
   visitors: {
     label: "Page Views",
-    color: "#3b82f6",
+    color: "#4f46e5", // using indigo-600
   },
 } satisfies ChartConfig
 
-export function VisitorChart() {
+export function VisitorChart({ data }: { data: VisitData[] }) {
+  if (!data || data.length === 0) {
+    return (
+      <div className="min-h-[160px] w-full flex items-center justify-center text-sm text-zinc-500">
+        No visitor data available
+      </div>
+    );
+  }
+
   return (
     <ChartContainer config={chartConfig} className="min-h-[160px] w-full">
-      <BarChart accessibilityLayer data={chartData} margin={{ top: 12, right: 24, left: 24, bottom: 24 }}>
+      <BarChart accessibilityLayer data={data} margin={{ top: 12, right: 24, left: 24, bottom: 24 }}>
         <CartesianGrid vertical={false} horizontal={true} strokeDasharray="0" className="stroke-zinc-800 dark:stroke-zinc-800/60" />
         
         <XAxis
@@ -74,3 +61,4 @@ export function VisitorChart() {
     </ChartContainer>
   )
 }
+
