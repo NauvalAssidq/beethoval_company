@@ -86,6 +86,8 @@ export async function PUT(
     }
 
     revalidatePath("/", "page");
+    revalidatePath("/news");
+    revalidatePath(`/news/${slug}`);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
@@ -119,6 +121,8 @@ export async function DELETE(
     }
 
     revalidatePath("/", "page");
+    revalidatePath("/news");
+    revalidatePath("/news/[slug]", "page");
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import clientPromise from "@/lib/mongodb";
+import { validateCSRF, sanitizeInput } from "@/lib/security";
+
+const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 
 export async function GET(req: Request) {
@@ -25,8 +28,8 @@ export async function GET(req: Request) {
     const filter: Record<string, unknown> = {};
     if (search) {
       filter.$or = [
-        { title: { $regex: search, $options: "i" } },
-        { excerpt: { $regex: search, $options: "i" } },
+        { title: { $regex: escapeRegex(search), $options: "i" } },
+        { excerpt: { $regex: escapeRegex(search), $options: "i" } },
       ];
     }
 
@@ -60,12 +63,17 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
+    if (!validateCSRF(req)) {
+      return NextResponse.json({ error: "Invalid CSRF Origin" }, { status: 403 });
+    }
+
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await req.json();
+    let body = await req.json();
+    body = sanitizeInput(body);
     const { title, slug, excerpt, content, coverImage, tags } = body;
 
     const client = await clientPromise;
@@ -90,6 +98,8 @@ export async function POST(req: Request) {
     const result = await db.collection("news").insertOne(newArticle);
 
     revalidatePath("/", "page");
+    revalidatePath("/news");
+    revalidatePath(`/news/${slug}`);
 
     return NextResponse.json({ success: true, id: result.insertedId.toString() }, { status: 201 });
   } catch (error: any) {
