@@ -216,7 +216,7 @@ export function NewsDetailClient({
               "prose-headings:font-serif prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-gray-900",
               "prose-p:font-sans prose-p:text-gray-600 prose-p:leading-[1.8] prose-p:text-[17px]",
               "prose-a:text-indigo-600 prose-a:underline prose-a:underline-offset-[3px] hover:prose-a:text-indigo-800 prose-a:font-medium prose-a:decoration-indigo-300",
-              "prose-img:rounded-none prose-img:shadow-none prose-img:my-12 prose-img:w-[100vw] prose-img:max-w-[100vw] prose-img:relative prose-img:-left-1/2 prose-img:translate-x-[-50%] prose-img:ml-[50%]",
+              "prose-img:rounded-xl prose-img:shadow-sm prose-img:my-12 prose-img:w-[100vw] sm:prose-img:w-[768px] prose-img:max-w-none prose-img:relative prose-img:left-[50%] prose-img:-translate-x-1/2",
               "prose-blockquote:border-l-2 prose-blockquote:border-indigo-500 prose-blockquote:font-serif prose-blockquote:italic prose-blockquote:text-gray-500 prose-blockquote:pl-6 prose-blockquote:not-italic",
               "prose-code:font-mono prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none",
               "prose-pre:bg-[#1e1e2e] prose-pre:rounded-xl prose-pre:text-sm",

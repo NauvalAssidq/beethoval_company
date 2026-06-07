@@ -13,9 +13,12 @@ import {
 import { SidebarMenuItem } from "@/components/ui/sidebar";
 import { User, LogOut, ChevronsUpDown } from "lucide-react";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
+import { signOut, useSession, SessionProvider } from "next-auth/react";
 
-export function NavUser({ user }: { user?: { name?: string | null, email?: string | null, image?: string | null } }) {
+function NavUserContent({ user: propUser }: { user?: { name?: string | null, email?: string | null, image?: string | null } }) {
+  const { data: session } = useSession();
+  const user = session?.user || propUser;
+
   return (
     <SidebarMenuItem>
       <DropdownMenu>
@@ -48,3 +51,12 @@ export function NavUser({ user }: { user?: { name?: string | null, email?: strin
     </SidebarMenuItem>
   );
 }
+
+export function NavUser({ user }: { user?: { name?: string | null, email?: string | null, image?: string | null } }) {
+  return (
+    <SessionProvider>
+      <NavUserContent user={user} />
+    </SessionProvider>
+  );
+}
+
