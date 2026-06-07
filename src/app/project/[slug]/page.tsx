@@ -2,12 +2,13 @@ import { notFound } from "next/navigation";
 import { ProjectDetailClient } from "@/components/features/projects/ProjectDetailClient";
 import clientPromise from "@/lib/mongodb";
 import type { Metadata } from "next";
+import { cache } from "react";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-async function getProject(slug: string) {
+const getProject = cache(async (slug: string) => {
   const client = await clientPromise;
   const db = client.db("portfolio");
 
@@ -15,33 +16,32 @@ async function getProject(slug: string) {
 
   if (!project) return null;
 
-  const allProjects = await db
-    .collection("projects")
-    .find({}, { projection: { title: 1, slug: 1, coverImage: 1, createdAt: 1 } })
-    .sort({ createdAt: -1 })
-    .toArray();
+  const [prevRecord, nextRecord] = await Promise.all([
+    db.collection("projects").findOne(
+      { createdAt: { $gt: project.createdAt } },
+      { sort: { createdAt: 1 }, projection: { title: 1, slug: 1, coverImage: 1 } }
+    ),
+    db.collection("projects").findOne(
+      { createdAt: { $lt: project.createdAt } },
+      { sort: { createdAt: -1 }, projection: { title: 1, slug: 1, coverImage: 1 } }
+    )
+  ]);
 
-  const currentIndex = allProjects.findIndex(
-    (p) => p._id.toString() === project._id.toString()
-  );
+  const prevProject = prevRecord
+    ? {
+        title: prevRecord.title,
+        slug: prevRecord.slug,
+        coverImage: prevRecord.coverImage || "",
+      }
+    : null;
 
-  const prevProject =
-    currentIndex > 0
-      ? {
-          title: allProjects[currentIndex - 1].title,
-          slug: allProjects[currentIndex - 1].slug,
-          coverImage: allProjects[currentIndex - 1].coverImage || "",
-        }
-      : null;
-
-  const nextProject =
-    currentIndex < allProjects.length - 1
-      ? {
-          title: allProjects[currentIndex + 1].title,
-          slug: allProjects[currentIndex + 1].slug,
-          coverImage: allProjects[currentIndex + 1].coverImage || "",
-        }
-      : null;
+  const nextProject = nextRecord
+    ? {
+        title: nextRecord.title,
+        slug: nextRecord.slug,
+        coverImage: nextRecord.coverImage || "",
+      }
+    : null;
 
   return {
     project: {
@@ -59,6 +59,16 @@ async function getProject(slug: string) {
     prevProject,
     nextProject,
   };
+});
+
+export async function generateStaticParams() {
+  const client = await clientPromise;
+  const db = client.db("portfolio");
+  const projects = await db.collection("projects").find({}, { projection: { slug: 1 } }).toArray();
+  
+  return projects.map((project) => ({
+    slug: project.slug,
+  }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

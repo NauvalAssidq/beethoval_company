@@ -2,12 +2,13 @@ import { notFound } from "next/navigation";
 import { NewsDetailClient } from "@/components/features/news/NewsDetailClient";
 import clientPromise from "@/lib/mongodb";
 import type { Metadata } from "next";
+import { cache } from "react";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-async function getArticle(slug: string) {
+const getArticle = cache(async (slug: string) => {
   const client = await clientPromise;
   const db = client.db("portfolio");
 
@@ -15,33 +16,32 @@ async function getArticle(slug: string) {
 
   if (!article) return null;
 
-  const allNews = await db
-    .collection("news")
-    .find({}, { projection: { title: 1, slug: 1, coverImage: 1, createdAt: 1 } })
-    .sort({ createdAt: -1 })
-    .toArray();
+  const [prevRecord, nextRecord] = await Promise.all([
+    db.collection("news").findOne(
+      { createdAt: { $gt: article.createdAt } },
+      { sort: { createdAt: 1 }, projection: { title: 1, slug: 1, coverImage: 1 } }
+    ),
+    db.collection("news").findOne(
+      { createdAt: { $lt: article.createdAt } },
+      { sort: { createdAt: -1 }, projection: { title: 1, slug: 1, coverImage: 1 } }
+    )
+  ]);
 
-  const currentIndex = allNews.findIndex(
-    (n) => n._id.toString() === article._id.toString()
-  );
+  const prevArticle = prevRecord
+    ? {
+        title: prevRecord.title,
+        slug: prevRecord.slug,
+        coverImage: prevRecord.coverImage || "",
+      }
+    : null;
 
-  const prevArticle =
-    currentIndex > 0
-      ? {
-          title: allNews[currentIndex - 1].title,
-          slug: allNews[currentIndex - 1].slug,
-          coverImage: allNews[currentIndex - 1].coverImage || "",
-        }
-      : null;
-
-  const nextArticle =
-    currentIndex < allNews.length - 1
-      ? {
-          title: allNews[currentIndex + 1].title,
-          slug: allNews[currentIndex + 1].slug,
-          coverImage: allNews[currentIndex + 1].coverImage || "",
-        }
-      : null;
+  const nextArticle = nextRecord
+    ? {
+        title: nextRecord.title,
+        slug: nextRecord.slug,
+        coverImage: nextRecord.coverImage || "",
+      }
+    : null;
 
   return {
     article: {
@@ -58,6 +58,16 @@ async function getArticle(slug: string) {
     prevArticle,
     nextArticle,
   };
+});
+
+export async function generateStaticParams() {
+  const client = await clientPromise;
+  const db = client.db("portfolio");
+  const articles = await db.collection("news").find({}, { projection: { slug: 1 } }).toArray();
+  
+  return articles.map((article) => ({
+    slug: article.slug,
+  }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
