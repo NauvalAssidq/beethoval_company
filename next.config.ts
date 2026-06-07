@@ -2,12 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "pub-84a45895bc264cc1acb8591e0ff4d1b4.r2.dev",
-      },
-    ],
+    loader: "custom",
+    loaderFile: "./src/lib/image-loader.ts",
   },
   async headers() {
     return [
