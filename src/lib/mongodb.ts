@@ -13,16 +13,31 @@ declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
+async function initDb(client: MongoClient) {
+  try {
+    const db = client.db("portfolio");
+    await db.collection("visits").createIndex({ createdAt: -1 });
+  } catch (err) {
+    console.error("Failed to initialize database indexes:", err);
+  }
+}
+
 if (process.env.NODE_ENV === "development") {
   if (!global._mongoClientPromise) {
-    client = new MongoClient(uri);
-    global._mongoClientPromise = client.connect();
+    client = new MongoClient(uri, { maxPoolSize: 5 });
+    global._mongoClientPromise = client.connect().then(async (c) => {
+      await initDb(c);
+      return c;
+    });
   }
 
   clientPromise = global._mongoClientPromise;
 } else {
-  client = new MongoClient(uri);
-  clientPromise = client.connect();
+  client = new MongoClient(uri, { maxPoolSize: 5 });
+  clientPromise = client.connect().then(async (c) => {
+    await initDb(c);
+    return c;
+  });
 }
 
 export default clientPromise;

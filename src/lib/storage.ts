@@ -38,6 +38,7 @@ export async function uploadFile(
         Key: key,
         Body: buffer,
         ContentType: contentType,
+        CacheControl: "public, max-age=31536000, immutable",
       })
     );
 
