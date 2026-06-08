@@ -12,13 +12,14 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { LayoutDashboard, FolderKanban, FileText, Settings, Images, User, HelpCircle, Briefcase, PanelBottom } from "lucide-react";
+import { LayoutDashboard, FolderKanban, FileText, Settings, Images, User, HelpCircle, Briefcase, PanelBottom, Type } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NavUser } from "@/components/layout/NavUser";
 
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+  { title: "Hero", url: "/dashboard/hero", icon: Type },
   { title: "Projects", url: "/dashboard/projects", icon: FolderKanban },
   { title: "Services", url: "/dashboard/services", icon: Briefcase },
   { title: "Gallery", url: "/dashboard/gallery", icon: Images },
