@@ -38,12 +38,18 @@ export interface FooterData {
 export interface HeroData {
   line1: string;
   highlightWord1: string;
-  highlightAction1: string;
+  highlightAction1: "circle" | "highlight" | "none";
   separator: string;
   highlightWord2: string;
-  highlightAction2: string;
+  highlightAction2: "circle" | "highlight" | "none";
   line3: string;
   subtitle: string;
+}
+
+export interface AboutData {
+  heading: string;
+  description: string;
+  location: string;
 }
 
 const defaultHeroData: HeroData = {
@@ -195,6 +201,18 @@ async function fetchHero(): Promise<HeroData> {
   };
 }
 
+const getAbout = async (): Promise<AboutData | null> => {
+  const client = await clientPromise;
+  const db = client.db("portfolio");
+  const about = await db.collection("about").findOne({});
+  if (!about) return null;
+  return {
+    heading: about.heading,
+    description: about.description,
+    location: about.location,
+  };
+};
+
 export const getCachedMarqueeItems = unstable_cache(
   fetchMarqueeItems,
   ["marquee-items"],
@@ -211,6 +229,12 @@ export const getCachedServices = unstable_cache(
   fetchServices,
   ["services"],
   { revalidate: 300 }
+);
+
+export const getCachedAbout = unstable_cache(
+  async () => getAbout(),
+  ['landing-about'],
+  { tags: ['about'] }
 );
 
 export const getCachedNews = unstable_cache(

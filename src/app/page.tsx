@@ -5,6 +5,7 @@ import {
   getCachedNews,
   getCachedFooter,
   getCachedHero,
+  getCachedAbout,
 } from "@/lib/landing-data";
 import { Hero } from "@/components/features/landing/Hero";
 import { Projects } from "@/components/features/landing/Projects";
@@ -15,7 +16,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Services } from "@/components/features/landing/Services";
 
 export default async function Home() {
-  const [marqueeItems, projectCards, services, news, footerData, heroData] =
+  const [marqueeItems, projectCards, services, news, footerData, heroData, aboutData] =
     await Promise.all([
       getCachedMarqueeItems(),
       getCachedProjectCards(),
@@ -23,6 +24,7 @@ export default async function Home() {
       getCachedNews(),
       getCachedFooter(),
       getCachedHero(),
+      getCachedAbout(),
     ]);
 
   return (
@@ -31,7 +33,7 @@ export default async function Home() {
       <div id="home">
         <Hero marqueeItems={marqueeItems} heroData={heroData} />
       </div>
-      <About />
+      <About aboutData={aboutData} />
       <Projects initialProjects={projectCards} />
       <Services initialServices={services} />
       <News initialNews={news} />

@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import type { AboutData } from "@/lib/landing-data";
 
-export function About() {
+export function About({ aboutData }: { aboutData?: AboutData | null }) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -41,17 +42,13 @@ export function About() {
 
         <h2
           className={cn(
-            "text-[1.75rem] sm:text-[2.25rem] md:text-[2.75rem] lg:text-[3.25rem] text-gray-900 tracking-tight leading-[1.35] mb-16 md:mb-20 transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] delay-200",
+            "text-[1.75rem] sm:text-[2.25rem] md:text-[2.75rem] lg:text-[3.25rem] text-gray-900 tracking-tight leading-[1.35] mb-16 md:mb-20 transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] delay-200 font-sans [&_em]:font-serif [&_em]:italic [&_em]:text-indigo-600 [&_i]:font-serif [&_i]:italic [&_i]:text-indigo-600",
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}
-        >
-          <span className="font-sans">Technology shouldn&apos;t be a barrier; it should be an</span>{" "}
-          <span className="font-serif italic text-indigo-600">equalizer</span><span className="font-sans">.</span><br className="hidden md:block"/>
-          <span className="font-sans">Great digital products are no longer just about complex code, but about</span>{" "}
-          <span className="font-serif italic">clarity</span><span className="font-sans">,</span>{" "}
-          <span className="font-serif italic">purpose</span><span className="font-sans">, and</span>{" "}
-          <span className="font-serif italic">seamless experiences</span><span className="font-sans">.</span>
-        </h2>
+          dangerouslySetInnerHTML={{
+            __html: aboutData?.heading || "Technology shouldn't be a barrier; it should be an <em>equalizer</em>.<br class=\"hidden md:block\"/>Great digital products are no longer just about complex code, but about <em>clarity</em>, <em>purpose</em>, and <em>seamless experiences</em>."
+          }}
+        />
 
         <div
           className={cn(
@@ -59,14 +56,8 @@ export function About() {
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}
         >
-          <p className="text-[15px] sm:text-base md:text-[17px] text-gray-500 leading-[1.9]">
-            In a cluttered digital landscape filled with bloated software and
-            unnecessary noise, Beethoval helps startups and small industries
-            penetrate the tech world with clean, purposeful design and solid
-            engineering. We build digital experiences stripped of the
-            excess—delivering intuitive, flat interfaces and robust full-stack
-            solutions that don&apos;t just function, but genuinely empower your
-            business to stand out and thrive.
+          <p className="text-[15px] sm:text-base md:text-[17px] text-gray-500 leading-[1.9] whitespace-pre-wrap">
+            {aboutData?.description || "In a cluttered digital landscape filled with bloated software and unnecessary noise, Beethoval helps startups and small industries penetrate the tech world with clean, purposeful design and solid engineering. We build digital experiences stripped of the excess—delivering intuitive, flat interfaces and robust full-stack solutions that don't just function, but genuinely empower your business to stand out and thrive."}
           </p>
 
           <div
@@ -76,7 +67,7 @@ export function About() {
             )}
           >
             <span className="text-[11px] font-medium text-gray-400 uppercase tracking-[0.15em]">
-              Banda Aceh, Indonesia
+              {aboutData?.location || "Banda Aceh, Indonesia"}
             </span>
           </div>
         </div>

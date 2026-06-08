@@ -229,9 +229,9 @@ export function HeroIndex() {
             className="shadow-none rounded-full bg-indigo-600 hover:bg-indigo-700 text-white min-w-[120px]"
           >
             {saving ? (
-              <Loader2 className="size-4 animate-spin mr-1" />
+              <Loader2 className="size-4 animate-spin mr-2" />
             ) : (
-              <Save className="size-4 mr-1" />
+              <Save className="size-4 mr-2" />
             )}
             Save Changes
           </Button>
