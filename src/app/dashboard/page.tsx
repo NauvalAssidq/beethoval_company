@@ -20,7 +20,7 @@ export default async function DashboardPage() {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  const [projectCount, newsCount, faqCount, galleryCount, totalVisits, visitsDataRaw] = await Promise.all([
+  const [projectCount, newsCount, faqCount, galleryCount, totalVisits, visitsDataRaw, recentProjects, recentNews, recentGalleries] = await Promise.all([
     db.collection("projects").countDocuments(),
     db.collection("news").countDocuments(),
     db.collection("faqs").countDocuments(),
@@ -35,7 +35,10 @@ export default async function DashboardPage() {
         }
       },
       { $sort: { _id: 1 } }
-    ]).toArray()
+    ]).toArray(),
+    db.collection("projects").find({}, { projection: { title: 1, coverImage: 1, createdAt: 1, _id: 1 } }).sort({ createdAt: -1 }).limit(4).toArray(),
+    db.collection("news").find({}, { projection: { title: 1, coverImage: 1, createdAt: 1, _id: 1 } }).sort({ createdAt: -1 }).limit(4).toArray(),
+    db.collection("galleries").find({}, { projection: { url: 1 } }).sort({ createdAt: -1 }).limit(12).toArray(),
   ]);
 
   const chartData = [];
@@ -54,12 +57,6 @@ export default async function DashboardPage() {
       visitors: match ? match.count : 0
     });
   }
-
-  const [recentProjects, recentNews, recentGalleries] = await Promise.all([
-    db.collection("projects").find({}, { projection: { title: 1, coverImage: 1, createdAt: 1, _id: 1 } }).sort({ createdAt: -1 }).limit(4).toArray(),
-    db.collection("news").find({}, { projection: { title: 1, coverImage: 1, createdAt: 1, _id: 1 } }).sort({ createdAt: -1 }).limit(4).toArray(),
-    db.collection("galleries").find({}, { projection: { url: 1 } }).sort({ createdAt: -1 }).limit(12).toArray(),
-  ]);
 
   const formatDate = (date: any) => {
     if (!date) return 'Recently';

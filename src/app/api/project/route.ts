@@ -5,9 +5,6 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import clientPromise from "@/lib/mongodb";
 import { validateCSRF, sanitizeInput } from "@/lib/security";
 
-const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-
 export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -27,23 +24,22 @@ export async function GET(req: Request) {
 
     const filter: Record<string, unknown> = {};
     if (search) {
-      filter.$or = [
-        { title: { $regex: escapeRegex(search), $options: "i" } },
-        { description: { $regex: escapeRegex(search), $options: "i" } },
-      ];
+      filter.$text = { $search: search };
     }
 
-    const total = await db.collection("projects").countDocuments(filter);
-    const totalPages = Math.ceil(total / limit);
     const skip = (page - 1) * limit;
 
-    const projects = await db
-      .collection("projects")
-      .find(filter)
-      .sort({ [sort]: order === "asc" ? 1 : -1 })
-      .skip(skip)
-      .limit(limit)
-      .toArray();
+    const [total, projects] = await Promise.all([
+      db.collection("projects").countDocuments(filter),
+      db.collection("projects")
+        .find(filter)
+        .sort({ [sort]: order === "asc" ? 1 : -1 })
+        .skip(skip)
+        .limit(limit)
+        .toArray()
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
 
     const serialized = projects.map((p) => ({
       ...p,

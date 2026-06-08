@@ -1,7 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useTransition } from "react";
+import useSWR from "swr";
+
+const fetcher = (url: string) => fetch(url).then((res) => {
+  if (!res.ok) throw new Error("Failed to fetch");
+  return res.json();
+});
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   Plus,
@@ -30,10 +37,9 @@ const SORT_OPTIONS = [
 
 export function ProjectIndex() {
   const router = useRouter();
-  const [data, setData] = useState<ProjectsResponse | null>(null);
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [isPending, startTransition] = useTransition();
   const [page, setPage] = useState(1);
   const [sortIndex, setSortIndex] = useState(0);
   const [sortOpen, setSortOpen] = useState(false);
@@ -42,38 +48,28 @@ export function ProjectIndex() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-      setPage(1);
+      startTransition(() => {
+        setDebouncedSearch(search);
+        setPage(1);
+      });
     }, 400);
     return () => clearTimeout(timer);
   }, [search]);
 
-  const fetchProjects = useCallback(async () => {
-    setLoading(true);
-    try {
-      const sortOption = SORT_OPTIONS[sortIndex];
-      const params = new URLSearchParams({
-        page: String(page),
-        limit: "10",
-        sort: sortOption.value,
-        order: sortOption.order,
-      });
-      if (debouncedSearch) params.set("search", debouncedSearch);
+  const sortOption = SORT_OPTIONS[sortIndex];
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: "10",
+    sort: sortOption.value,
+    order: sortOption.order,
+  });
+  if (debouncedSearch) params.set("search", debouncedSearch);
 
-      const res = await fetch(`/api/project?${params.toString()}`);
-      if (!res.ok) throw new Error("Failed to fetch projects");
-      const json: ProjectsResponse = await res.json();
-      setData(json);
-    } catch {
-      toast.error("Failed to load projects");
-    } finally {
-      setLoading(false);
-    }
-  }, [page, debouncedSearch, sortIndex]);
-
-  useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
+  const { data, isLoading: loading, mutate } = useSWR<ProjectsResponse>(
+    `/api/project?${params.toString()}`,
+    fetcher,
+    { keepPreviousData: true }
+  );
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
@@ -86,7 +82,7 @@ export function ProjectIndex() {
       }
       toast.success(`"${deleteTarget.title}" has been deleted`);
       setDeleteTarget(null);
-      fetchProjects();
+      mutate();
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -193,10 +189,12 @@ export function ProjectIndex() {
               >
                 <div className="relative aspect-video bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-800 overflow-hidden">
                   {project.coverImage || project.marqueeImage ? (
-                    <img 
-                      src={project.coverImage || project.marqueeImage} 
+                    <Image 
+                      src={(project.coverImage || project.marqueeImage) as string} 
                       alt={project.title} 
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-tr from-indigo-100 to-purple-50 dark:from-indigo-900/40 dark:to-purple-900/20">

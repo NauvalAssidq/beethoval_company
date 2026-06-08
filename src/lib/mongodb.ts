@@ -16,7 +16,17 @@ declare global {
 async function initDb(client: MongoClient) {
   try {
     const db = client.db("portfolio");
-    await db.collection("visits").createIndex({ createdAt: -1 });
+    await Promise.all([
+      db.collection("visits").createIndex({ createdAt: -1 }),
+      db.collection("projects").createIndex({ createdAt: -1 }),
+      db.collection("projects").createIndex({ slug: 1 }, { unique: true }),
+      db.collection("projects").createIndex({ title: "text", description: "text" }),
+      db.collection("news").createIndex({ createdAt: -1 }),
+      db.collection("news").createIndex({ slug: 1 }, { unique: true }),
+      db.collection("news").createIndex({ title: "text", excerpt: "text" }),
+      db.collection("galleries").createIndex({ createdAt: -1 }),
+      db.collection("faqs").createIndex({ createdAt: -1 })
+    ]);
   } catch (err) {
     console.error("Failed to initialize database indexes:", err);
   }
@@ -25,8 +35,8 @@ async function initDb(client: MongoClient) {
 if (process.env.NODE_ENV === "development") {
   if (!global._mongoClientPromise) {
     client = new MongoClient(uri, { maxPoolSize: 5 });
-    global._mongoClientPromise = client.connect().then(async (c) => {
-      await initDb(c);
+    global._mongoClientPromise = client.connect().then((c) => {
+      initDb(c).catch(console.error);
       return c;
     });
   }
@@ -34,8 +44,8 @@ if (process.env.NODE_ENV === "development") {
   clientPromise = global._mongoClientPromise;
 } else {
   client = new MongoClient(uri, { maxPoolSize: 5 });
-  clientPromise = client.connect().then(async (c) => {
-    await initDb(c);
+  clientPromise = client.connect().then((c) => {
+    initDb(c).catch(console.error);
     return c;
   });
 }
