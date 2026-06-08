@@ -5,12 +5,13 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Highlighter } from "@/components/ui/highlighter";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { MarqueeItem } from "@/lib/landing-data";
+import type { MarqueeItem, HeroData } from "@/lib/landing-data";
 import { useReveal } from "@/hooks/useReveal";
 import Image from "next/image";
 
 interface HeroProps {
   marqueeItems?: MarqueeItem[];
+  heroData?: HeroData;
 }
 
 const FALLBACK_IMAGES = [
@@ -20,8 +21,19 @@ const FALLBACK_IMAGES = [
   "https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=600&h=350&q=80",
 ];
 
-export function Hero({ marqueeItems }: HeroProps) {
+export function Hero({ marqueeItems, heroData }: HeroProps) {
   const { ref: sectionRef, visible: isInView } = useReveal(0.1) as { ref: React.RefObject<HTMLElement | null>, visible: boolean };
+
+  const data = heroData || {
+    line1: "Crafting Digital",
+    highlightWord1: "Experiences",
+    highlightAction1: "circle",
+    separator: "&",
+    highlightWord2: "Solutions",
+    highlightAction2: "highlight",
+    line3: "For Your Business",
+    subtitle: "High-performance web applications on hand, with professional grade interface"
+  };
 
   const resolvedUrls =
     marqueeItems && marqueeItems.length > 0
@@ -41,24 +53,24 @@ export function Hero({ marqueeItems }: HeroProps) {
       <div className="flex-1 w-full max-w-9xl mx-auto mb-4 sm:mb-4 md:mb-6 lg:mb-8 z-10 relative flex flex-col justify-end px-4 sm:px-6 lg:px-8 pt-20 pb-12">
         <div className="text-left flex flex-col items-start">
           <h1 className={cn(animateIn, "delay-300 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>
-            <span className="font-sans font-regular">Crafting Digital</span>
+            <span className="font-sans font-regular">{data.line1}</span>
           </h1>
           <h1 className={cn(animateIn, "delay-300 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>
             {" "}
-            <Highlighter action="circle" color="#4f46e5" isView={isInView} className="font-serif italic text-indigo-600">
-              Experiences
+            <Highlighter action={data.highlightAction1 as any} color="#4f46e5" isView={isInView} className={cn("font-serif italic", data.highlightAction1 === "circle" ? "text-indigo-600" : "")}>
+              {data.highlightWord1}
             </Highlighter>
-            {" "}<span className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl">&amp;</span>{" "}
-            <Highlighter action="highlight" color="#4f46e5" isView={isInView} className="font-serif italic">
-              Solutions
+            {" "}<span className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl">{data.separator}</span>{" "}
+            <Highlighter action={data.highlightAction2 as any} color="#4f46e5" isView={isInView} className={cn("font-serif italic", data.highlightAction2 === "circle" ? "text-indigo-600" : "")}>
+              {data.highlightWord2}
             </Highlighter>
           </h1>
           <h1 className={cn(animateIn, "delay-300 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>
-            <span className="font-sans font-regular">For Your Business</span>
+            <span className="font-sans font-regular">{data.line3}</span>
           </h1>
 
           <p className={cn(animateIn, "delay-700 text-sm sm:text-sm md:text-md lg:text-lg text-gray-500 underline mb-0 max-w-3xl text-left leading-relaxed font-medium")}>
-            High-performance web applications on hand, with professional grade interface
+            {data.subtitle}
           </p>
         </div>
       </div>

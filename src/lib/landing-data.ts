@@ -35,6 +35,28 @@ export interface FooterData {
   copyright?: string;
 }
 
+export interface HeroData {
+  line1: string;
+  highlightWord1: string;
+  highlightAction1: string;
+  separator: string;
+  highlightWord2: string;
+  highlightAction2: string;
+  line3: string;
+  subtitle: string;
+}
+
+const defaultHeroData: HeroData = {
+  line1: "Crafting Digital",
+  highlightWord1: "Experiences",
+  highlightAction1: "circle",
+  separator: "&",
+  highlightWord2: "Solutions",
+  highlightAction2: "highlight",
+  line3: "For Your Business",
+  subtitle: "High-performance web applications on hand, with professional grade interface"
+};
+
 const defaultFooterData: FooterData = {
   heading: { primary: "LET'S WORK", secondary: "Together" },
   contact: { email: "hello@beethoval.dev", phone: "+62 812 3456 7890" },
@@ -156,6 +178,23 @@ async function fetchFooter(): Promise<FooterData> {
   };
 }
 
+async function fetchHero(): Promise<HeroData> {
+  const client = await clientPromise;
+  const db = client.db("portfolio");
+  const doc = await db.collection("hero").findOne({});
+  if (!doc) return defaultHeroData;
+  return {
+    line1: doc.line1 ?? defaultHeroData.line1,
+    highlightWord1: doc.highlightWord1 ?? defaultHeroData.highlightWord1,
+    highlightAction1: doc.highlightAction1 ?? defaultHeroData.highlightAction1,
+    separator: doc.separator ?? defaultHeroData.separator,
+    highlightWord2: doc.highlightWord2 ?? defaultHeroData.highlightWord2,
+    highlightAction2: doc.highlightAction2 ?? defaultHeroData.highlightAction2,
+    line3: doc.line3 ?? defaultHeroData.line3,
+    subtitle: doc.subtitle ?? defaultHeroData.subtitle,
+  };
+}
+
 export const getCachedMarqueeItems = unstable_cache(
   fetchMarqueeItems,
   ["marquee-items"],
@@ -183,5 +222,11 @@ export const getCachedNews = unstable_cache(
 export const getCachedFooter = unstable_cache(
   fetchFooter,
   ["footer"],
+  { revalidate: 3600 }
+);
+
+export const getCachedHero = unstable_cache(
+  fetchHero,
+  ["hero"],
   { revalidate: 3600 }
 );
