@@ -86,7 +86,6 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
           const offset = 80;
           const top = el.getBoundingClientRect().top + window.scrollY - offset;
           window.scrollTo({ top, behavior: "smooth" });
-          window.history.pushState(null, "", href);
         }
       }
     }
