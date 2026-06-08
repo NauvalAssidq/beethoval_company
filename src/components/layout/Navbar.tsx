@@ -30,6 +30,21 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (pathname === "/" && window.location.hash) {
+      const targetId = window.location.hash.substring(1);
+      setTimeout(() => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          const offset = 80;
+          const top = el.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: "smooth" });
+          window.history.replaceState(null, "", "/");
+        }
+      }, 100);
+    }
+  }, [pathname]);
+
   const onScroll = useCallback(() => {
     requestAnimationFrame(() => {
       setAtTop(window.scrollY < 40);
@@ -122,6 +137,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
               <Link
                 key={link.key}
                 href={link.href}
+                scroll={false}
                 onClick={(e) => scrollTo(e, link.href)}
                 className={cn(
                   "relative px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.15em] transition-all duration-300 rounded-full",
@@ -138,6 +154,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
           <div className="flex items-center gap-3">
             <Link
               href="/#footer"
+              scroll={false}
               onClick={(e) => scrollTo(e, "/#footer")}
               className={cn(
                 "hidden md:inline-flex items-center gap-2 h-10 px-6 text-[11px] font-bold uppercase tracking-[0.12em] transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] group",
@@ -206,6 +223,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
               <Link
                 key={link.key}
                 href={link.href}
+                scroll={false}
                 onClick={(e) => scrollTo(e, link.href)}
                 className={cn(
                   "group block py-5 border-b border-gray-100 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
@@ -261,6 +279,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
           >
             <Link
               href="/#footer"
+              scroll={false}
               onClick={(e) => scrollTo(e, "/#footer")}
               className="inline-flex items-center gap-3 h-14 px-10 text-[12px] font-bold uppercase tracking-[0.15em] text-white bg-gray-900 rounded-full group"
             >
