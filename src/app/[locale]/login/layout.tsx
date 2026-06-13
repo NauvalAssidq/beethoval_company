@@ -9,12 +9,13 @@ export default async function LoginLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const resolvedParams = await params;
   const session = await getServerSession(authOptions);
 
   if (session) {
-    redirect({ href: "/dashboard", locale: params.locale });
+    redirect({ href: "/dashboard", locale: resolvedParams.locale });
   }
 
   return <>{children}</>;
