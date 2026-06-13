@@ -1,12 +1,13 @@
 import clientPromise from "@/lib/mongodb";
 import { unstable_cache } from "next/cache";
 import type { Service } from "@/types/service";
+import type { LocalizedString } from "@/types/i18n";
 
 export interface ProjectCard {
   _id: string;
-  title: string;
-  slug: string;
-  description: string;
+  title: LocalizedString;
+  slug: LocalizedString;
+  description: LocalizedString;
   coverImage: string;
   techStack: string[];
 }
@@ -20,68 +21,71 @@ export interface MarqueeItem {
 
 export interface NewsArticle {
   _id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
+  title: LocalizedString;
+  slug: LocalizedString;
+  excerpt: LocalizedString;
   coverImage: string;
   createdAt: string;
 }
 
 export interface FooterData {
-  heading?: { primary: string; secondary: string };
+  heading?: { primary: LocalizedString; secondary: LocalizedString };
   contact?: { email: string; phone: string };
-  links?: { title: string; items: { label: string; href: string }[] }[];
+  links?: { title: LocalizedString; items: { label: LocalizedString; href: string }[] }[];
   socials?: { label: string; href: string }[];
-  copyright?: string;
+  copyright?: LocalizedString;
 }
 
 export interface HeroData {
-  line1: string;
-  highlightWord1: string;
+  line1: LocalizedString;
+  highlightWord1: LocalizedString;
   highlightAction1: "circle" | "highlight" | "none";
-  separator: string;
-  highlightWord2: string;
+  separator: LocalizedString;
+  highlightWord2: LocalizedString;
   highlightAction2: "circle" | "highlight" | "none";
-  line3: string;
-  subtitle: string;
+  line3: LocalizedString;
+  subtitle: LocalizedString;
 }
 
 export interface AboutData {
-  heading: string;
-  description: string;
-  location: string;
+  heading: LocalizedString;
+  description: LocalizedString;
+  location: LocalizedString;
 }
 
 const defaultHeroData: HeroData = {
-  line1: "Crafting Digital",
-  highlightWord1: "Experiences",
+  line1: { en: "Crafting Digital", id: "Merancang Digital" },
+  highlightWord1: { en: "Experiences", id: "Pengalaman" },
   highlightAction1: "circle",
-  separator: "&",
-  highlightWord2: "Solutions",
+  separator: { en: "&", id: "&" },
+  highlightWord2: { en: "Solutions", id: "Solusi" },
   highlightAction2: "highlight",
-  line3: "For Your Business",
-  subtitle: "High-performance web applications on hand, with professional grade interface"
+  line3: { en: "For Your Business", id: "Untuk Bisnis Anda" },
+  subtitle: { en: "High-performance web applications on hand, with professional grade interface", id: "Aplikasi web berkinerja tinggi, dengan antarmuka profesional" }
 };
 
 const defaultFooterData: FooterData = {
-  heading: { primary: "LET'S WORK", secondary: "Together" },
+  heading: { 
+    primary: { en: "LET'S WORK", id: "MARI BEKERJA" }, 
+    secondary: { en: "Together", id: "Bersama" } 
+  },
   contact: { email: "hello@beethoval.dev", phone: "+62 812 3456 7890" },
   links: [
     {
-      title: "Services",
+      title: { en: "Services", id: "Layanan" },
       items: [
-        { label: "Web Development", href: "/#services" },
-        { label: "UI/UX Design", href: "/#services" },
-        { label: "Mobile Apps", href: "/#services" },
+        { label: { en: "Web Development", id: "Pengembangan Web" }, href: "/#services" },
+        { label: { en: "UI/UX Design", id: "Desain UI/UX" }, href: "/#services" },
+        { label: { en: "Mobile Apps", id: "Aplikasi Seluler" }, href: "/#services" },
       ],
     },
     {
-      title: "Company",
+      title: { en: "Company", id: "Perusahaan" },
       items: [
-        { label: "About", href: "/#about" },
-        { label: "Projects", href: "/#projects" },
-        { label: "News", href: "/#news" },
-        { label: "FAQs", href: "/#faqs" },
+        { label: { en: "About", id: "Tentang" }, href: "/#about" },
+        { label: { en: "Projects", id: "Proyek" }, href: "/#projects" },
+        { label: { en: "News", id: "Berita" }, href: "/#news" },
+        { label: { en: "FAQs", id: "FAQ" }, href: "/#faqs" },
       ],
     },
   ],
@@ -91,7 +95,7 @@ const defaultFooterData: FooterData = {
     { label: "LinkedIn", href: "https://linkedin.com" },
     { label: "GitHub", href: "https://github.com" },
   ],
-  copyright: "© 2026 Beethoval. All rights reserved.",
+  copyright: { en: "© 2026 Beethoval. All rights reserved.", id: "© 2026 Beethoval. Hak cipta dilindungi." },
 };
 
 async function fetchMarqueeItems(): Promise<MarqueeItem[]> {
@@ -216,19 +220,19 @@ const getAbout = async (): Promise<AboutData | null> => {
 export const getCachedMarqueeItems = unstable_cache(
   fetchMarqueeItems,
   ["marquee-items"],
-  { revalidate: 300 }
+  { tags: ["marquee-items", "projects", "gallery"], revalidate: 300 }
 );
 
 export const getCachedProjectCards = unstable_cache(
   fetchProjectCards,
   ["project-cards"],
-  { revalidate: 300 }
+  { tags: ["projects"], revalidate: 300 }
 );
 
 export const getCachedServices = unstable_cache(
   fetchServices,
   ["services"],
-  { revalidate: 300 }
+  { tags: ["services"], revalidate: 300 }
 );
 
 export const getCachedAbout = unstable_cache(
@@ -240,17 +244,17 @@ export const getCachedAbout = unstable_cache(
 export const getCachedNews = unstable_cache(
   fetchNews,
   ["news-landing"],
-  { revalidate: 300 }
+  { tags: ["news"], revalidate: 300 }
 );
 
 export const getCachedFooter = unstable_cache(
   fetchFooter,
   ["footer"],
-  { revalidate: 3600 }
+  { tags: ["footer"], revalidate: 3600 }
 );
 
 export const getCachedHero = unstable_cache(
   fetchHero,
   ["hero"],
-  { revalidate: 3600 }
+  { tags: ["hero"], revalidate: 3600 }
 );

@@ -1,0 +1,162 @@
+{
+  "AppHeader": [
+    "Beethoval.dev"
+  ],
+  "AppSidebar": [
+    "Beethoval",
+    ".dev",
+    "Management"
+  ],
+  "Footer": [
+    "Contact",
+    "Socials",
+    "Designed with intent."
+  ],
+  "Navbar": [
+    "Beethoval",
+    ".dev",
+    "Let&apos;s Talk",
+    "Beethoval.dev"
+  ],
+  "NavUser": [
+    "My Account",
+    "Profile",
+    "Log out"
+  ],
+  "AboutIndex": [
+    "About Me",
+    "Manage the content of the About section on the landing page.",
+    "Main Content",
+    "Heading",
+    "Use",
+    "&lt;em&gt;word&lt;/em&gt;",
+    "or",
+    "&lt;i&gt;word&lt;/i&gt;",
+    "to italicize specific words. Use",
+    "&lt;br/&gt;",
+    "for line breaks.",
+    "Description",
+    "Location Settings",
+    "Location Label",
+    "Saving...",
+    "Save Changes"
+  ],
+  "VisitorChart": [
+    "No visitor data available"
+  ],
+  "FaqForm": [
+    "Back to FAQs",
+    "Question",
+    "Answer"
+  ],
+  "FaqIndex": [
+    "FAQs",
+    "Manage frequently asked questions. Drag to reorder.",
+    "Add FAQ",
+    "No FAQs yet",
+    "Create your first FAQ"
+  ],
+  "HeroIndex": [
+    "Hero Settings",
+    "Manage the landing page typography and highlighting actions.",
+    "Main Typography",
+    "Line 1 (Sans-serif)",
+    "Highlighted Word 1",
+    "Action 1",
+    "Circle",
+    "Highlight",
+    "None",
+    "Separator",
+    "Highlighted Word 2",
+    "Action 2",
+    "Line 3 (Sans-serif)",
+    "Subtitle",
+    "Save Changes"
+  ],
+  "NewsDetailClient": [
+    "Scroll",
+    "Published",
+    "Tags",
+    "Slug",
+    "← Previous Article",
+    "Next Article →",
+    "Beethoval",
+    ".dev",
+    "All News"
+  ],
+  "NewsForm": [
+    "Title",
+    "Title is required",
+    "Slug",
+    "Slug is required",
+    "Excerpt",
+    "Content",
+    "Cover Image",
+    "Tags",
+    "Cancel"
+  ],
+  "NewsIndex": [
+    "News",
+    "New Article",
+    "Write your first article",
+    "Page",
+    "of",
+    "Previous",
+    "Next"
+  ],
+  "DeleteDialog": [
+    "Delete Project",
+    "Are you sure you want to delete",
+    "? This action cannot be undone.",
+    "Cancel"
+  ],
+  "ProjectDetailClient": [
+    "Scroll",
+    "Published",
+    "Technology",
+    "Slug",
+    "← Previous Project",
+    "Next Project →",
+    "Beethoval",
+    ".dev",
+    "All Projects"
+  ],
+  "ProjectForm": [
+    "Title",
+    "Title is required",
+    "Slug",
+    "Slug is required",
+    "Description",
+    "Content",
+    "Cover Image",
+    "Marquee Image",
+    "Tech Stack",
+    "Cancel"
+  ],
+  "ProjectIndex": [
+    "Projects",
+    "New Project",
+    "Create your first project",
+    "Page",
+    "of",
+    "Previous",
+    "Next"
+  ],
+  "ServiceForm": [
+    "Back to Services",
+    "Service Title",
+    "Icon Name (lucide-react)",
+    "Find icon names at",
+    "lucide.dev",
+    "Description",
+    "Image",
+    "Language Used"
+  ],
+  "ServiceIndex": [
+    "Services",
+    "Manage the services you offer. Drag to reorder them.",
+    "Add Service",
+    "No Services yet",
+    "Create your first Service"
+  ]
+}

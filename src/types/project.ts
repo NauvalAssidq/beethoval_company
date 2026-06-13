@@ -1,14 +1,17 @@
+import { LocalizedString } from "./i18n";
+
 export interface Project {
   _id?: string;
-  title: string;
-  slug: string;
-  description: string;
-  content: string;
+  title: LocalizedString;
+  slug: LocalizedString;
+  description: LocalizedString;
+  content: LocalizedString;
   coverImage: string;
   marqueeImage?: string;
   techStack: string[];
   createdAt: Date;
   updatedAt: Date;
+  order?: number;
 }
 
 export interface ProjectsResponse {

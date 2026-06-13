@@ -1,0 +1,270 @@
+{
+  "DashboardPage": {
+    "projects": "Projects",
+    "articles": "Articles",
+    "gallery": "Gallery",
+    "faqs": "FAQs",
+    "visitor_analytics": "Visitor Analytics",
+    "live_data_tracking": "Live data tracking",
+    "recent_projects": "Recent Projects",
+    "view_all": "View All",
+    "added": "Added",
+    "no_projects_found": "No projects found.",
+    "recent_articles": "Recent Articles",
+    "published": "Published",
+    "no_articles_found": "No articles found.",
+    "gallery_overview": "Gallery Overview",
+    "manage_gallery": "Manage Gallery",
+    "no_images_in_gallery": "No images in gallery"
+  },
+  "AppHeader": {
+    "beethoval_dev": "Beethoval.dev"
+  },
+  "AppSidebar": {
+    "beethoval": "Beethoval",
+    "dev": ".dev",
+    "management": "Management",
+    "dashboard": "Dashboard",
+    "hero": "Hero",
+    "about": "About",
+    "projects": "Projects",
+    "services": "Services",
+    "gallery": "Gallery",
+    "news": "News",
+    "faqs": "FAQs",
+    "footer": "Footer"
+  },
+  "Footer": {
+    "contact": "Contact",
+    "socials": "Socials",
+    "designed_with_intent": "Designed with intent."
+  },
+  "Navbar": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "services": "Services",
+    "news": "News",
+    "lets_talk": "Let's Talk"
+  },
+  "NavUser": {
+    "my_account": "My Account",
+    "profile": "Profile",
+    "log_out": "Log out"
+  },
+  "AboutIndex": {
+    "about_me": "About Me",
+    "manage_the_content_of_the_about_section_on_the_lan": "Manage the content of the About section on the landing page.",
+    "main_content": "Main Content",
+    "heading": "Heading",
+    "use": "Use",
+    "lt_em_gt_word_lt_em_gt": "&lt;em&gt;word&lt;/em&gt;",
+    "or": "or",
+    "lt_i_gt_word_lt_i_gt": "&lt;i&gt;word&lt;/i&gt;",
+    "to_italicize_specific_words_use": "to italicize specific words. Use",
+    "lt_br_gt": "&lt;br/&gt;",
+    "for_line_breaks": "for line breaks.",
+    "description": "Description",
+    "location_settings": "Location Settings",
+    "location_label": "Location Label",
+    "saving": "Saving...",
+    "save_changes": "Save Changes"
+  },
+  "VisitorChart": {
+    "no_visitor_data_available": "No visitor data available"
+  },
+  "FaqForm": {
+    "back_to_faqs": "Back to FAQs",
+    "question": "Question",
+    "answer": "Answer",
+    "edit_faq": "Edit FAQ",
+    "create_faq": "Create FAQ",
+    "save_changes": "Save Changes"
+  },
+  "FaqIndex": {
+    "faqs": "FAQs",
+    "manage_frequently_asked_questions_drag_to_reorder": "Manage frequently asked questions. Drag to reorder.",
+    "add_faq": "Add FAQ",
+    "no_faqs_yet": "No FAQs yet",
+    "create_your_first_faq": "Create your first FAQ",
+    "this_faq": "this FAQ"
+  },
+  "HeroIndex": {
+    "hero_settings": "Hero Settings",
+    "manage_the_landing_page_typography_and_highlightin": "Manage the landing page typography and highlighting actions.",
+    "main_typography": "Main Typography",
+    "line_1_sans_serif": "Line 1 (Sans-serif)",
+    "highlighted_word_1": "Highlighted Word 1",
+    "action_1": "Action 1",
+    "circle": "Circle",
+    "highlight": "Highlight",
+    "none": "None",
+    "separator": "Separator",
+    "highlighted_word_2": "Highlighted Word 2",
+    "action_2": "Action 2",
+    "line_3_sans_serif": "Line 3 (Sans-serif)",
+    "subtitle": "Subtitle",
+    "save_changes": "Save Changes"
+  },
+  "NewsDetailClient": {
+    "scroll": "Scroll",
+    "published": "Published",
+    "tags": "Tags",
+    "slug": "Slug",
+    "previous_article": "← Previous Article",
+    "next_article": "Next Article →",
+    "beethoval": "Beethoval",
+    "dev": ".dev",
+    "all_news": "All News"
+  },
+  "NewsForm": {
+    "back_to_news": "Back to News",
+    "edit_article": "Edit Article",
+    "new_article": "New Article",
+    "update_your_article_details": "Update your article details",
+    "fill_in_the_details_to_publish_a_new_article": "Fill in the details to publish a new article",
+    "title": "Title",
+    "title_is_required": "Title is required",
+    "slug": "Slug",
+    "slug_is_required": "Slug is required",
+    "excerpt": "Excerpt",
+    "content": "Content",
+    "cover_image": "Cover Image",
+    "tags": "Tags",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "update_article": "Update Article",
+    "publish_article": "Publish Article"
+  },
+  "NewsIndex": {
+    "news": "News",
+    "article_total": "{count, plural, =1 {1 article} other {# articles}} total",
+    "loading": "Loading...",
+    "new_article": "New Article",
+    "search_articles": "Search articles...",
+    "no_excerpt_provided": "No excerpt provided.",
+    "no_articles_match_your_search": "No articles match your search",
+    "no_articles_yet": "No articles yet",
+    "write_your_first_article": "Write your first article",
+    "page_of": "Page {page} of {totalPages}",
+    "previous": "Previous",
+    "next": "Next",
+    "sort_newest": "Newest",
+    "sort_oldest": "Oldest",
+    "sort_title_az": "Title A–Z",
+    "sort_title_za": "Title Z–A"
+  },
+  "DeleteDialog": {
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "delete_project": "Delete Project",
+    "are_you_sure_you_want_to_delete": "Are you sure you want to delete",
+    "this_action_cannot_be_undone": "? This action cannot be undone.",
+    "cancel": "Cancel"
+  },
+  "ProjectDetailClient": {
+    "scroll": "Scroll",
+    "published": "Published",
+    "technology": "Technology",
+    "slug": "Slug",
+    "previous_project": "← Previous Project",
+    "next_project": "Next Project →",
+    "beethoval": "Beethoval",
+    "dev": ".dev",
+    "all_projects": "All Projects"
+  },
+  "ProjectForm": {
+    "title": "Title",
+    "title_is_required": "Title is required",
+    "slug": "Slug",
+    "slug_is_required": "Slug is required",
+    "description": "Description",
+    "content": "Content",
+    "cover_image": "Cover Image",
+    "marquee_image": "Marquee Image",
+    "tech_stack": "Tech Stack",
+    "cancel": "Cancel",
+    "edit_project": "Edit Project",
+    "new_project": "New Project",
+    "update_your_project_details": "Update your project details",
+    "fill_in_the_details_to_create_a_new_project": "Fill in the details to create a new project",
+    "saving": "Saving...",
+    "update_project": "Update Project",
+    "create_project": "Create Project"
+  },
+  "ProjectIndex": {
+    "projects_total": "{count, plural, =1 {1 project} other {# projects}} total",
+    "projects": "Projects",
+    "loading": "Loading...",
+    "new_project": "New Project",
+    "search_projects": "Search projects...",
+    "no_description_provided": "No description provided.",
+    "no_projects_match_your_search": "No projects match your search",
+    "no_projects_yet": "No projects yet",
+    "create_your_first_project": "Create your first project",
+    "page_of": "Page {page} of {totalPages}",
+    "previous": "Previous",
+    "next": "Next",
+    "sort_newest": "Newest",
+    "sort_oldest": "Oldest",
+    "sort_title_az": "Title A–Z",
+    "sort_title_za": "Title Z–A"
+  },
+  "ServiceForm": {
+    "back_to_services": "Back to Services",
+    "service_title": "Service Title",
+    "icon_name_lucide_react": "Icon Name (lucide-react)",
+    "find_icon_names_at": "Find icon names at",
+    "lucide_dev": "lucide.dev",
+    "description": "Description",
+    "image": "Image",
+    "language_used": "Language Used",
+    "edit_service": "Edit Service",
+    "create_service": "Create Service",
+    "save_changes": "Save Changes"
+  },
+  "ServiceIndex": {
+    "services": "Services",
+    "manage_the_services_you_offer_drag_to_reorder_them": "Manage the services you offer. Drag to reorder them.",
+    "add_service": "Add Service",
+    "no_services_yet": "No Services yet",
+    "create_your_first_service": "Create your first Service",
+    "this_service": "this Service"
+  },
+  "GalleryIndex": {
+    "marquee_gallery": "Marquee Gallery",
+    "manage_and_reorder_images_for_your_homepage_marquee_drag_to_reorder": "Manage and reorder images for your homepage marquee. Drag to reorder."
+  },
+  "FooterIndex": {
+    "footer_settings": "Footer Settings",
+    "manage_the_global_footer_content_links_and_contact_information": "Manage the global footer content, links, and contact information."
+  },
+  "News": {
+    "news_articles": "News & Articles",
+    "view_journal": "View Journal",
+    "no_news_yet": "No news yet",
+    "check_back_later": "Check back later for updates and insights."
+  },
+  "Projects": {
+    "projects": "Projects",
+    "past_experiences": "Past Experiences",
+    "projects_description": "A curated selection of the digital products and web experiences we've crafted.",
+    "no_projects_yet": "No projects yet",
+    "projects_will_appear_here": "Projects will appear here once they are published from the dashboard."
+  },
+  "Services": {
+    "expertise": "Expertise",
+    "services": "Services",
+    "services_description": "Clean, purposeful design and solid engineering to genuinely empower your business to stand out.",
+    "no_services_yet": "No services yet",
+    "services_will_appear_here": "Services will appear here once they are published from the dashboard."
+  },
+  "FaqSection": {
+    "frequently_asked": "Frequently Asked",
+    "question": "Question",
+    "faq_description": "Everything you need to know about our process, pricing, and how we deliver award-winning digital experiences."
+  },
+  "Hero": {
+    "portfolio_showcase": "Portfolio showcase"
+  }
+}

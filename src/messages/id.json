@@ -1,0 +1,270 @@
+{
+  "DashboardPage": {
+    "projects": "Proyek",
+    "articles": "Artikel",
+    "gallery": "Galeri",
+    "faqs": "FAQ",
+    "visitor_analytics": "Analisis Pengunjung",
+    "live_data_tracking": "Pelacakan data langsung",
+    "recent_projects": "Proyek Terbaru",
+    "view_all": "Lihat Semua",
+    "added": "Ditambahkan",
+    "no_projects_found": "Tidak ada proyek ditemukan.",
+    "recent_articles": "Artikel Terbaru",
+    "published": "Diterbitkan",
+    "no_articles_found": "Tidak ada artikel ditemukan.",
+    "gallery_overview": "Ikhtisar Galeri",
+    "manage_gallery": "Kelola Galeri",
+    "no_images_in_gallery": "Tidak ada gambar di galeri"
+  },
+  "AppHeader": {
+    "beethoval_dev": "Beethoval.dev"
+  },
+  "AppSidebar": {
+    "beethoval": "Beethoval",
+    "dev": ".dev",
+    "management": "Manajemen",
+    "dashboard": "Dasbor",
+    "hero": "Hero",
+    "about": "Tentang",
+    "projects": "Proyek",
+    "services": "Layanan",
+    "gallery": "Galeri",
+    "news": "Berita",
+    "faqs": "FAQ",
+    "footer": "Footer"
+  },
+  "Footer": {
+    "contact": "Contact",
+    "socials": "Socials",
+    "designed_with_intent": "Designed with intent."
+  },
+  "Navbar": {
+    "home": "Beranda",
+    "about": "Tentang",
+    "projects": "Proyek",
+    "services": "Layanan",
+    "news": "Berita",
+    "lets_talk": "Mari Bicara"
+  },
+  "NavUser": {
+    "my_account": "Akun Saya",
+    "profile": "Profil",
+    "log_out": "Keluar"
+  },
+  "AboutIndex": {
+    "about_me": "Tentang Saya",
+    "manage_the_content_of_the_about_section_on_the_lan": "Kelola konten bagian Tentang di halaman landing.",
+    "main_content": "Konten Utama",
+    "heading": "Heading",
+    "use": "Use",
+    "lt_em_gt_word_lt_em_gt": "&lt;em&gt;word&lt;/em&gt;",
+    "or": "or",
+    "lt_i_gt_word_lt_i_gt": "&lt;i&gt;word&lt;/i&gt;",
+    "to_italicize_specific_words_use": "to italicize specific words. Use",
+    "lt_br_gt": "&lt;br/&gt;",
+    "for_line_breaks": "for line breaks.",
+    "description": "Deskripsi",
+    "location_settings": "Location Settings",
+    "location_label": "Location Label",
+    "saving": "Menyimpan...",
+    "save_changes": "Simpan Perubahan"
+  },
+  "VisitorChart": {
+    "no_visitor_data_available": "No visitor data available"
+  },
+  "FaqForm": {
+    "back_to_faqs": "Kembali ke FAQ",
+    "question": "Pertanyaan",
+    "answer": "Jawaban",
+    "edit_faq": "Edit FAQ",
+    "create_faq": "Buat FAQ",
+    "save_changes": "Simpan Perubahan"
+  },
+  "FaqIndex": {
+    "faqs": "FAQ",
+    "manage_frequently_asked_questions_drag_to_reorder": "Kelola pertanyaan yang sering diajukan. Seret untuk mengurutkan.",
+    "add_faq": "Tambah FAQ",
+    "no_faqs_yet": "Belum ada FAQ",
+    "create_your_first_faq": "Buat FAQ pertama Anda",
+    "this_faq": "FAQ ini"
+  },
+  "HeroIndex": {
+    "hero_settings": "Pengaturan Hero",
+    "manage_the_landing_page_typography_and_highlightin": "Kelola tipografi halaman landing dan tindakan penyorotan.",
+    "main_typography": "Tipografi Utama",
+    "line_1_sans_serif": "Line 1 (Sans-serif)",
+    "highlighted_word_1": "Highlighted Word 1",
+    "action_1": "Action 1",
+    "circle": "Circle",
+    "highlight": "Highlight",
+    "none": "None",
+    "separator": "Separator",
+    "highlighted_word_2": "Highlighted Word 2",
+    "action_2": "Action 2",
+    "line_3_sans_serif": "Line 3 (Sans-serif)",
+    "subtitle": "Subtitle",
+    "save_changes": "Simpan Perubahan"
+  },
+  "NewsDetailClient": {
+    "scroll": "Scroll",
+    "published": "Diterbitkan",
+    "tags": "Tag",
+    "slug": "Slug",
+    "previous_article": "← Artikel Sebelumnya",
+    "next_article": "Artikel Berikutnya →",
+    "beethoval": "Beethoval",
+    "dev": ".dev",
+    "all_news": "Semua Berita"
+  },
+  "NewsIndex": {
+    "news": "Berita",
+    "article_total": "Total {count} artikel",
+    "loading": "Memuat...",
+    "new_article": "Artikel Baru",
+    "search_articles": "Cari artikel...",
+    "no_excerpt_provided": "Tidak ada kutipan yang diberikan.",
+    "no_articles_match_your_search": "Tidak ada artikel yang sesuai dengan pencarian Anda",
+    "no_articles_yet": "Belum ada artikel",
+    "write_your_first_article": "Tulis artikel pertama Anda",
+    "page_of": "Halaman {page} dari {totalPages}",
+    "previous": "Sebelumnya",
+    "next": "Selanjutnya",
+    "sort_newest": "Terbaru",
+    "sort_oldest": "Terlama",
+    "sort_title_az": "Judul A–Z",
+    "sort_title_za": "Judul Z–A"
+  },
+  "NewsForm": {
+    "back_to_news": "Kembali ke Berita",
+    "edit_article": "Edit Artikel",
+    "new_article": "Artikel Baru",
+    "update_your_article_details": "Perbarui detail artikel Anda",
+    "fill_in_the_details_to_publish_a_new_article": "Isi detail untuk menerbitkan artikel baru",
+    "title": "Judul",
+    "title_is_required": "Judul wajib diisi",
+    "slug": "Slug",
+    "slug_is_required": "Slug wajib diisi",
+    "excerpt": "Kutipan",
+    "content": "Konten",
+    "cover_image": "Gambar Sampul",
+    "tags": "Tag",
+    "cancel": "Batal",
+    "saving": "Menyimpan...",
+    "update_article": "Perbarui Artikel",
+    "publish_article": "Terbitkan Artikel"
+  },
+  "DeleteDialog": {
+    "delete": "Hapus",
+    "deleting": "Menghapus...",
+    "delete_project": "Hapus Proyek",
+    "are_you_sure_you_want_to_delete": "Apakah Anda yakin ingin menghapus",
+    "this_action_cannot_be_undone": "? Tindakan ini tidak dapat dibatalkan.",
+    "cancel": "Batal"
+  },
+  "ProjectDetailClient": {
+    "scroll": "Scroll",
+    "published": "Diterbitkan",
+    "technology": "Technology",
+    "slug": "Slug",
+    "previous_project": "← Previous Project",
+    "next_project": "Next Project →",
+    "beethoval": "Beethoval",
+    "dev": ".dev",
+    "all_projects": "Semua Proyek"
+  },
+  "ProjectForm": {
+    "title": "Judul",
+    "title_is_required": "Judul wajib diisi",
+    "slug": "Slug",
+    "slug_is_required": "Slug wajib diisi",
+    "description": "Deskripsi",
+    "content": "Konten",
+    "cover_image": "Gambar Sampul",
+    "marquee_image": "Gambar Marquee",
+    "tech_stack": "Tech Stack",
+    "cancel": "Batal",
+    "edit_project": "Edit Proyek",
+    "new_project": "Proyek Baru",
+    "update_your_project_details": "Perbarui detail proyek Anda",
+    "fill_in_the_details_to_create_a_new_project": "Isi detail untuk membuat proyek baru",
+    "saving": "Menyimpan...",
+    "update_project": "Perbarui Proyek",
+    "create_project": "Buat Proyek"
+  },
+  "ProjectIndex": {
+    "projects_total": "Total {count} proyek",
+    "projects": "Proyek",
+    "loading": "Memuat...",
+    "new_project": "Proyek Baru",
+    "search_projects": "Cari proyek...",
+    "no_description_provided": "Tidak ada deskripsi yang diberikan.",
+    "no_projects_match_your_search": "Tidak ada proyek yang sesuai dengan pencarian Anda",
+    "no_projects_yet": "Belum ada proyek",
+    "create_your_first_project": "Buat proyek pertama Anda",
+    "page_of": "Halaman {page} dari {totalPages}",
+    "previous": "Sebelumnya",
+    "next": "Selanjutnya",
+    "sort_newest": "Terbaru",
+    "sort_oldest": "Terlama",
+    "sort_title_az": "Judul A–Z",
+    "sort_title_za": "Judul Z–A"
+  },
+  "ServiceForm": {
+    "back_to_services": "Kembali ke Layanan",
+    "service_title": "Service Title",
+    "icon_name_lucide_react": "Icon Name (lucide-react)",
+    "find_icon_names_at": "Temukan nama ikon di",
+    "lucide_dev": "lucide.dev",
+    "description": "Deskripsi",
+    "image": "Gambar",
+    "language_used": "Bahasa yang Digunakan",
+    "edit_service": "Edit Layanan",
+    "create_service": "Buat Layanan",
+    "save_changes": "Simpan Perubahan"
+  },
+  "ServiceIndex": {
+    "services": "Layanan",
+    "manage_the_services_you_offer_drag_to_reorder_them": "Kelola layanan yang Anda tawarkan. Seret untuk mengurutkan.",
+    "add_service": "Tambah Layanan",
+    "no_services_yet": "Belum ada Layanan",
+    "create_your_first_service": "Buat Layanan pertama Anda",
+    "this_service": "Layanan ini"
+  },
+  "GalleryIndex": {
+    "marquee_gallery": "Galeri Marquee",
+    "manage_and_reorder_images_for_your_homepage_marquee_drag_to_reorder": "Kelola dan urutkan gambar untuk marquee beranda Anda. Seret untuk mengurutkan."
+  },
+  "FooterIndex": {
+    "footer_settings": "Pengaturan Footer",
+    "manage_the_global_footer_content_links_and_contact_information": "Kelola konten footer global, tautan, dan informasi kontak."
+  },
+  "News": {
+    "news_articles": "Berita & Artikel",
+    "view_journal": "Lihat Jurnal",
+    "no_news_yet": "Belum ada berita",
+    "check_back_later": "Periksa kembali nanti untuk pembaruan dan wawasan."
+  },
+  "Projects": {
+    "projects": "Proyek",
+    "past_experiences": "Pengalaman Lalu",
+    "projects_description": "Pilihan kurasi dari produk digital dan pengalaman web yang telah kami buat.",
+    "no_projects_yet": "Belum ada proyek",
+    "projects_will_appear_here": "Proyek akan muncul di sini setelah diterbitkan dari dasbor."
+  },
+  "Services": {
+    "expertise": "Keahlian",
+    "services": "Layanan",
+    "services_description": "Desain yang bersih, bermakna, dan pengembangan yang solid untuk memberdayakan bisnis Anda agar menonjol.",
+    "no_services_yet": "Belum ada layanan",
+    "services_will_appear_here": "Layanan akan muncul di sini setelah diterbitkan dari dasbor."
+  },
+  "FaqSection": {
+    "frequently_asked": "Pertanyaan yang Sering",
+    "question": "Diajukan",
+    "faq_description": "Semua yang perlu Anda ketahui tentang proses, penetapan harga, dan cara kami memberikan pengalaman digital peraih penghargaan."
+  },
+  "Hero": {
+    "portfolio_showcase": "Pameran portofolio"
+  }
+}

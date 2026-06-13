@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
+
+const intlMiddleware = createMiddleware(routing);
 
 export async function middleware(request: NextRequest) {
   const token = await getToken({
@@ -10,23 +14,33 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/dashboard")) {
+  const isMissingLocale = routing.locales.every(
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+  );
+
+  const pathWithoutLocale = isMissingLocale
+    ? pathname
+    : pathname.split("/").slice(2).join("/") === "" 
+      ? "/" 
+      : `/${pathname.split("/").slice(2).join("/")}`;
+
+  if (pathWithoutLocale.startsWith("/dashboard")) {
     if (!token) {
-      const loginUrl = new URL("/login", request.url);
-      return NextResponse.redirect(loginUrl);
+      const locale = isMissingLocale ? routing.defaultLocale : pathname.split("/")[1];
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
     }
   }
 
-  if (pathname === "/login") {
+  if (pathWithoutLocale === "/login" || pathWithoutLocale.startsWith("/login")) {
     if (token) {
-      const dashboardUrl = new URL("/dashboard", request.url);
-      return NextResponse.redirect(dashboardUrl);
+      const locale = isMissingLocale ? routing.defaultLocale : pathname.split("/")[1];
+      return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));
     }
   }
 
-  return NextResponse.next();
+  return intlMiddleware(request);
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login"],
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
 };

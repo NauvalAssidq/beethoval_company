@@ -1,0 +1,41 @@
+src/components/features/landing/About.tsx(49,13): error TS2322: Type 'string | LocalizedString' is not assignable to type 'string | TrustedHTML'.
+  Type 'LocalizedString' is not assignable to type 'string | TrustedHTML'.
+src/components/features/landing/About.tsx(60,13): error TS2322: Type 'string | LocalizedString' is not assignable to type 'ReactNode'.
+  Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/About.tsx(70,15): error TS2322: Type 'string | LocalizedString' is not assignable to type 'ReactNode'.
+  Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/Hero.tsx(56,54): error TS2322: Type 'string | LocalizedString' is not assignable to type 'ReactNode'.
+  Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/Hero.tsx(61,15): error TS2322: Type 'string | LocalizedString' is not assignable to type 'ReactNode'.
+  Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/Hero.tsx(63,91): error TS2322: Type 'string | LocalizedString' is not assignable to type 'ReactNode'.
+  Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/Hero.tsx(65,15): error TS2322: Type 'string | LocalizedString' is not assignable to type 'ReactNode'.
+  Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/Hero.tsx(69,54): error TS2322: Type 'string | LocalizedString' is not assignable to type 'ReactNode'.
+  Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/Hero.tsx(73,13): error TS2322: Type 'string | LocalizedString' is not assignable to type 'ReactNode'.
+  Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/News.tsx(89,23): error TS2322: Type 'LocalizedString' is not assignable to type 'string'.
+src/components/features/landing/News.tsx(97,26): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type 'LocalizedString'.
+  Property '0' does not exist on type 'LocalizedString'.
+src/components/features/landing/News.tsx(114,21): error TS2322: Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/News.tsx(118,23): error TS2322: Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/Projects.tsx(38,13): error TS2322: Type 'LocalizedString' is not assignable to type 'string'.
+src/components/features/landing/Projects.tsx(46,16): error TS7053: Element implicitly has an 'any' type because expression of type '0' can't be used to index type 'LocalizedString'.
+  Property '0' does not exist on type 'LocalizedString'.
+src/components/features/landing/Projects.tsx(65,15): error TS2322: Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/Projects.tsx(69,13): error TS2322: Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/Services.tsx(12,5): error TS2322: Type 'string' is not assignable to type 'LocalizedString'.
+src/components/features/landing/Services.tsx(13,5): error TS2322: Type 'string' is not assignable to type 'LocalizedString'.
+src/components/features/landing/Services.tsx(21,5): error TS2322: Type 'string' is not assignable to type 'LocalizedString'.
+src/components/features/landing/Services.tsx(22,5): error TS2322: Type 'string' is not assignable to type 'LocalizedString'.
+src/components/features/landing/Services.tsx(30,5): error TS2322: Type 'string' is not assignable to type 'LocalizedString'.
+src/components/features/landing/Services.tsx(31,5): error TS2322: Type 'string' is not assignable to type 'LocalizedString'.
+src/components/features/landing/Services.tsx(39,5): error TS2322: Type 'string' is not assignable to type 'LocalizedString'.
+src/components/features/landing/Services.tsx(40,5): error TS2322: Type 'string' is not assignable to type 'LocalizedString'.
+src/components/features/landing/Services.tsx(198,25): error TS2322: Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/Services.tsx(201,25): error TS2322: Type 'LocalizedString' is not assignable to type 'ReactNode'.
+src/components/features/landing/Services.tsx(221,27): error TS2322: Type 'LocalizedString' is not assignable to type 'string'.
+src/components/features/news/NewsIndex.tsx(247,39): error TS2345: Argument of type 'string | Date | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
