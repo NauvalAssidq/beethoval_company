@@ -27,11 +27,11 @@ const getArticle = cache(async (slug: string) => {
   const [prevRecord, nextRecord] = await Promise.all([
     db.collection("news").findOne(
       { createdAt: { $gt: article.createdAt } },
-      { sort: { createdAt: 1 }, projection: { title: 1, slug: 1, coverImage: 1 } }
+      { sort: { createdAt: 1 }, projection: { _id: 0, title: 1, slug: 1, coverImage: 1 } }
     ),
     db.collection("news").findOne(
       { createdAt: { $lt: article.createdAt } },
-      { sort: { createdAt: -1 }, projection: { title: 1, slug: 1, coverImage: 1 } }
+      { sort: { createdAt: -1 }, projection: { _id: 0, title: 1, slug: 1, coverImage: 1 } }
     )
   ]);
 
@@ -51,7 +51,7 @@ const getArticle = cache(async (slug: string) => {
       }
     : null;
 
-  return {
+  const result = {
     article: {
       _id: article._id.toString(),
       title: article.title,
@@ -60,12 +60,14 @@ const getArticle = cache(async (slug: string) => {
       content: article.content || "",
       coverImage: article.coverImage || "",
       tags: article.tags || [],
-      createdAt: article.createdAt?.toISOString?.() ?? article.createdAt ?? "",
-      updatedAt: article.updatedAt?.toISOString?.() ?? article.updatedAt ?? "",
+      createdAt: article.createdAt?.toISOString?.() ?? String(article.createdAt ?? ""),
+      updatedAt: article.updatedAt?.toISOString?.() ?? String(article.updatedAt ?? ""),
     },
     prevArticle,
     nextArticle,
   };
+
+  return JSON.parse(JSON.stringify(result));
 });
 
 export async function generateStaticParams() {

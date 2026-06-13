@@ -27,11 +27,11 @@ const getProject = cache(async (slug: string) => {
   const [prevRecord, nextRecord] = await Promise.all([
     db.collection("projects").findOne(
       { createdAt: { $gt: project.createdAt } },
-      { sort: { createdAt: 1 }, projection: { title: 1, slug: 1, coverImage: 1 } }
+      { sort: { createdAt: 1 }, projection: { _id: 0, title: 1, slug: 1, coverImage: 1 } }
     ),
     db.collection("projects").findOne(
       { createdAt: { $lt: project.createdAt } },
-      { sort: { createdAt: -1 }, projection: { title: 1, slug: 1, coverImage: 1 } }
+      { sort: { createdAt: -1 }, projection: { _id: 0, title: 1, slug: 1, coverImage: 1 } }
     )
   ]);
 
@@ -51,7 +51,7 @@ const getProject = cache(async (slug: string) => {
       }
     : null;
 
-  return {
+  const result = {
     project: {
       _id: project._id.toString(),
       title: project.title,
@@ -61,12 +61,14 @@ const getProject = cache(async (slug: string) => {
       coverImage: project.coverImage || "",
       marqueeImage: project.marqueeImage || "",
       techStack: project.techStack || [],
-      createdAt: project.createdAt?.toISOString?.() ?? project.createdAt ?? "",
-      updatedAt: project.updatedAt?.toISOString?.() ?? project.updatedAt ?? "",
+      createdAt: project.createdAt?.toISOString?.() ?? String(project.createdAt ?? ""),
+      updatedAt: project.updatedAt?.toISOString?.() ?? String(project.updatedAt ?? ""),
     },
     prevProject,
     nextProject,
   };
+
+  return JSON.parse(JSON.stringify(result));
 });
 
 export async function generateStaticParams() {
