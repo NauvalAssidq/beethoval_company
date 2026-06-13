@@ -74,9 +74,18 @@ export async function generateStaticParams() {
   const db = client.db("portfolio");
   const projects = await db.collection("projects").find({}, { projection: { slug: 1 } }).toArray();
   
-  return projects.map((project) => ({
-    slug: project.slug,
-  }));
+  const params: { slug: string }[] = [];
+  for (const project of projects) {
+    if (project.slug) {
+      if (typeof project.slug === "string") {
+        params.push({ slug: project.slug });
+      } else {
+        if (project.slug.en) params.push({ slug: project.slug.en });
+        if (project.slug.id) params.push({ slug: project.slug.id });
+      }
+    }
+  }
+  return params;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

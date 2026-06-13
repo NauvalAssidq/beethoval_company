@@ -73,9 +73,18 @@ export async function generateStaticParams() {
   const db = client.db("portfolio");
   const articles = await db.collection("news").find({}, { projection: { slug: 1 } }).toArray();
   
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
+  const params: { slug: string }[] = [];
+  for (const article of articles) {
+    if (article.slug) {
+      if (typeof article.slug === "string") {
+        params.push({ slug: article.slug });
+      } else {
+        if (article.slug.en) params.push({ slug: article.slug.en });
+        if (article.slug.id) params.push({ slug: article.slug.id });
+      }
+    }
+  }
+  return params;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
