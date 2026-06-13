@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import { X, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface DeleteDialogProps {
   open: boolean;
@@ -14,6 +15,7 @@ interface DeleteDialogProps {
 
 export function DeleteDialog({ open, title, onConfirm, onCancel, loading }: DeleteDialogProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("DeleteDialog");
 
   useEffect(() => {
     if (!open) return;
@@ -45,19 +47,19 @@ export function DeleteDialog({ open, title, onConfirm, onCancel, loading }: Dele
             <AlertTriangle className="size-5 text-red-500" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Delete Project</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t('delete')}</h3>
             <p className="mt-1 text-sm text-gray-500">
-              Are you sure you want to delete <span className="font-medium text-gray-700 dark:text-gray-300">{title}</span>? This action cannot be undone.
+              {t('are_you_sure_you_want_to_delete')} <span className="font-medium text-gray-700 dark:text-gray-300">{title}</span>{t('this_action_cannot_be_undone')}
             </p>
           </div>
         </div>
 
         <div className="flex items-center justify-end gap-3 mt-6">
           <Button variant="ghost" onClick={onCancel} disabled={loading} className="rounded-full px-5">
-            Cancel
+            {t('cancel')}
           </Button>
           <Button variant="destructive" onClick={onConfirm} disabled={loading} className="rounded-full px-5">
-            {loading ? "Deleting..." : "Delete"}
+            {loading ? t('deleting') : t('delete')}
           </Button>
         </div>
       </div>

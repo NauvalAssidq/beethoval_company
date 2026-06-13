@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { ArrowLeft, ArrowUpRight, Calendar, Layers } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/Navbar";
 import DOMPurify from "isomorphic-dompurify";
 import { useReveal } from "@/hooks/useReveal";
 import Image from "next/image";
+import { resolveTranslation } from "@/types/i18n";
+import { useLocale } from "next-intl";
 
 interface ProjectNav {
   title: string;
@@ -41,6 +43,7 @@ export function ProjectDetailClient({
   prevProject,
   nextProject,
 }: ProjectDetailClientProps) {
+  const locale = useLocale() as "en" | "id";
   const [scrolled, setScrolled] = useState(false);
 
   const handleScroll = useCallback(() => {
@@ -71,7 +74,7 @@ export function ProjectDetailClient({
         {project.coverImage ? (
           <Image
             src={project.coverImage}
-            alt={project.title}
+            alt={resolveTranslation(project.title as any, locale)}
             fill
             sizes="100vw"
             className="object-cover blur-xs scale-100"
@@ -106,15 +109,15 @@ export function ProjectDetailClient({
               className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white tracking-tight leading-[1.05] max-w-5xl animate-fade-up"
               style={{ "--delay": "400ms" } as React.CSSProperties}
             >
-              {project.title}
+              {resolveTranslation(project.title as any, locale)}
             </h1>
 
-            {project.description && (
+            {resolveTranslation(project.description as any, locale) && (
               <p
                 className="text-base sm:text-lg text-white/60 font-medium max-w-xl mt-5 leading-relaxed animate-fade-up"
                 style={{ "--delay": "600ms" } as React.CSSProperties}
               >
-                {project.description}
+                {resolveTranslation(project.description as any, locale)}
               </p>
             )}
           </div>
@@ -175,7 +178,7 @@ export function ProjectDetailClient({
                   Slug
                 </span>
                 <span className="text-sm text-gray-700 font-mono font-medium">
-                  /{project.slug}
+                  /{resolveTranslation(project.slug as any, locale)}
                 </span>
               </div>
             </div>
@@ -209,7 +212,7 @@ export function ProjectDetailClient({
               "prose-table:border-collapse prose-table:w-full",
               "prose-sub:text-xs prose-sup:text-xs"
             )}
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(project.content) }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(resolveTranslation(project.content as any, locale)) }}
           />
         </article>
       </div>
@@ -227,13 +230,13 @@ export function ProjectDetailClient({
           <div className="grid grid-cols-1 md:grid-cols-2">
             {prevProject ? (
               <Link
-                href={`/project/${prevProject.slug}`}
+                href={`/project/${resolveTranslation(prevProject.slug as any, locale)}`}
                 className="group relative flex flex-col justify-end overflow-hidden h-[50vh] md:h-[60vh] p-8 md:p-12 border-b md:border-b-0 md:border-r border-gray-200"
               >
                 {prevProject.coverImage ? (
                   <Image
                     src={prevProject.coverImage}
-                    alt={prevProject.title}
+                    alt={resolveTranslation(prevProject.title as any, locale)}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -248,7 +251,7 @@ export function ProjectDetailClient({
                     ← Previous Project
                   </span>
                   <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-white tracking-tight leading-tight">
-                    {prevProject.title}
+                    {resolveTranslation(prevProject.title as any, locale)}
                   </h3>
                 </div>
               </Link>
@@ -258,13 +261,13 @@ export function ProjectDetailClient({
 
             {nextProject ? (
               <Link
-                href={`/project/${nextProject.slug}`}
+                href={`/project/${resolveTranslation(nextProject.slug as any, locale)}`}
                 className="group relative flex flex-col justify-end overflow-hidden h-[50vh] md:h-[60vh] p-8 md:p-12"
               >
                 {nextProject.coverImage ? (
                   <Image
                     src={nextProject.coverImage}
-                    alt={nextProject.title}
+                    alt={resolveTranslation(nextProject.title as any, locale)}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -279,7 +282,7 @@ export function ProjectDetailClient({
                     Next Project →
                   </span>
                   <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-white tracking-tight leading-tight">
-                    {nextProject.title}
+                    {resolveTranslation(nextProject.title as any, locale)}
                   </h3>
                 </div>
               </Link>

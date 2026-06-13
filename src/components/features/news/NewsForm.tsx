@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { ArrowLeft, Loader2, Save } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,8 @@ import { TiptapEditor } from "@/components/features/editor/TiptapEditor";
 import { TagInput } from "@/components/ui/tag-input";
 import { ImageUploader } from "@/components/ui/image-uploader";
 import { toast } from "sonner";
+import { useTranslations, useLocale } from "next-intl";
+import type { LocalizedString } from "@/types/i18n";
 
 interface NewsFormProps {
   articleId?: string;
@@ -35,15 +37,17 @@ export function NewsForm({ articleId }: NewsFormProps) {
 
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(isEdit);
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
+  const locale = useLocale() as "en" | "id";
+  const [title, setTitle] = useState<LocalizedString>({ en: "", id: "" });
+  const [slug, setSlug] = useState<LocalizedString>({ en: "", id: "" });
   const [slugManual, setSlugManual] = useState(false);
-  const [excerpt, setExcerpt] = useState("");
-  const [content, setContent] = useState("");
+  const [excerpt, setExcerpt] = useState<LocalizedString>({ en: "", id: "" });
+  const [content, setContent] = useState<LocalizedString>({ en: "", id: "" });
   const [coverImage, setCoverImage] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [touched, setTouched] = useState({ title: false, slug: false });
   const [isDirty, setIsDirty] = useState(false);
+  const t = useTranslations("NewsForm");
 
   useEffect(() => {
     if (!isEdit || !articleId) return;
@@ -52,11 +56,11 @@ export function NewsForm({ articleId }: NewsFormProps) {
         const res = await fetch(`/api/news/${articleId}`);
         if (!res.ok) throw new Error("Article not found");
         const data = await res.json();
-        setTitle(data.title || "");
-        setSlug(data.slug || "");
+        setTitle(data.title || { en: "", id: "" });
+        setSlug(data.slug || { en: "", id: "" });
         setSlugManual(true);
-        setExcerpt(data.excerpt || "");
-        setContent(data.content || "");
+        setExcerpt(data.excerpt || { en: "", id: "" });
+        setContent(data.content || { en: "", id: "" });
         setCoverImage(data.coverImage || "");
         setTags(data.tags || []);
       } catch {
@@ -71,13 +75,13 @@ export function NewsForm({ articleId }: NewsFormProps) {
 
   useEffect(() => {
     if (!slugManual) {
-      setSlug(slugify(title));
+      setSlug((prev) => ({ ...prev, [locale]: slugify(title[locale]) }));
     }
-  }, [title, slugManual]);
+  }, [title, slugManual, locale]);
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (isDirty && (title || content)) {
+      if (isDirty && (title.en || title.id || content.en || content.id)) {
         e.preventDefault();
         e.returnValue = "";
       }
@@ -90,18 +94,23 @@ export function NewsForm({ articleId }: NewsFormProps) {
     e.preventDefault();
     setTouched({ title: true, slug: true });
 
-    if (!title.trim() || !slug.trim()) {
-      toast.error("Please fill in the required fields");
+    if ((!title.en.trim() && !title.id.trim()) || (!slug.en.trim() && !slug.id.trim())) {
+      toast.error("Please fill in the required fields in at least one language");
       return;
     }
 
     setLoading(true);
     try {
+      const fallbackStr = (str: LocalizedString) => ({
+        en: str.en || str.id,
+        id: str.id || str.en,
+      });
+
       const body = {
-        title: title.trim(),
-        slug: slug.trim(),
-        excerpt: excerpt.trim(),
-        content,
+        title: fallbackStr(title),
+        slug: fallbackStr(slug),
+        excerpt: fallbackStr(excerpt),
+        content: fallbackStr(content),
         coverImage: coverImage.trim(),
         tags,
       };
@@ -150,10 +159,10 @@ export function NewsForm({ articleId }: NewsFormProps) {
         </Link>
         <div>
           <h1 className="font-serif text-3xl text-gray-900 dark:text-gray-100">
-            {isEdit ? "Edit Article" : "New Article"}
+            {isEdit ? t('edit_article') : t('new_article')}
           </h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            {isEdit ? "Update your article details" : "Fill in the details to publish a new article"}
+            {isEdit ? t('update_your_article_details') : t('fill_in_the_details_to_publish_a_new_article')}
           </p>
         </div>
       </div>
@@ -163,52 +172,52 @@ export function NewsForm({ articleId }: NewsFormProps) {
         <div className="lg:col-span-2 flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Label htmlFor="title" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Title <span className="text-red-500">*</span>
+              {t('title')} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="title"
               placeholder="Breaking: Something Amazing Happened"
-              value={title}
+              value={title[locale]}
               onBlur={() => setTouched(t => ({ ...t, title: true }))}
-              onChange={(e) => setTitle(e.target.value)}
-              className={cn(INPUT_STYLE, touched.title && !title.trim() && "border-red-500 focus-visible:ring-red-500")}
+              onChange={(e) => setTitle(prev => ({ ...prev, [locale]: e.target.value }))}
+              className={cn(INPUT_STYLE, touched.title && !title[locale].trim() && "border-red-500 focus-visible:ring-red-500")}
             />
-            {touched.title && !title.trim() && <span className="text-xs text-red-500">Title is required</span>}
+            {touched.title && !title[locale].trim() && <span className="text-xs text-red-500">{t('title_is_required')}</span>}
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="slug" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Slug <span className="text-red-500">*</span>
+              {t('slug')} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="slug"
               placeholder="breaking-something-amazing"
-              value={slug}
+              value={slug[locale]}
               onBlur={() => setTouched(t => ({ ...t, slug: true }))}
               onChange={(e) => {
                 setSlugManual(true);
-                setSlug(e.target.value);
+                setSlug(prev => ({ ...prev, [locale]: e.target.value }));
               }}
-              className={cn(INPUT_STYLE, "font-mono text-sm", touched.slug && !slug.trim() && "border-red-500 focus-visible:ring-red-500")}
+              className={cn(INPUT_STYLE, "font-mono text-sm", touched.slug && !slug[locale].trim() && "border-red-500 focus-visible:ring-red-500")}
             />
-            {touched.slug && !slug.trim() && <span className="text-xs text-red-500">Slug is required</span>}
+            {touched.slug && !slug[locale].trim() && <span className="text-xs text-red-500">{t('slug_is_required')}</span>}
           </div>
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="excerpt" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Excerpt
+              {t('excerpt')}
             </Label>
             <Input
               id="excerpt"
               placeholder="A brief summary of the article"
-              value={excerpt}
-              onChange={(e) => setExcerpt(e.target.value)}
+              value={excerpt[locale]}
+              onChange={(e) => setExcerpt(prev => ({ ...prev, [locale]: e.target.value }))}
               className={INPUT_STYLE}
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Content</Label>
-            <TiptapEditor content={content} onChange={(html) => { setContent(html); setIsDirty(true); }} />
+            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('content')}</Label>
+            <TiptapEditor content={content[locale]} onChange={(html) => { setContent(prev => ({ ...prev, [locale]: html })); setIsDirty(true); }} />
           </div>
         </div>
 
@@ -216,14 +225,14 @@ export function NewsForm({ articleId }: NewsFormProps) {
           <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 dark:bg-gray-900/50 dark:border-gray-800 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <Label htmlFor="coverImage" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Cover Image
+                {t('cover_image')}
               </Label>
               <ImageUploader value={coverImage} onChange={(url) => setCoverImage(url as string)} multiple={false} />
             </div>
 
             <div className="flex flex-col gap-2">
               <Label htmlFor="tags" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Tags
+                {t('tags')}
               </Label>
               <TagInput tags={tags} onChange={(t) => { setTags(t); setIsDirty(true); }} placeholder="Add tag..." />
             </div>
@@ -236,7 +245,7 @@ export function NewsForm({ articleId }: NewsFormProps) {
               className="rounded-full px-5"
               onClick={() => router.push("/dashboard/news")}
             >
-              Cancel
+              {t('cancel')}
             </Button>
             <Button
               type="submit"
@@ -248,7 +257,7 @@ export function NewsForm({ articleId }: NewsFormProps) {
               ) : (
                 <Save className="size-4" />
               )}
-              <span>{loading ? "Saving..." : isEdit ? "Update Article" : "Publish Article"}</span>
+              <span>{loading ? t('saving') : isEdit ? t('update_article') : t('publish_article')}</span>
             </Button>
           </div>
         </div>

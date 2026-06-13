@@ -3,8 +3,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import type { AboutData } from "@/lib/landing-data";
+import { useLocale } from "next-intl";
+import { resolveTranslation } from "@/types/i18n";
 
 export function About({ aboutData }: { aboutData?: AboutData | null }) {
+  const locale = useLocale() as "en" | "id";
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
 
@@ -46,7 +49,7 @@ export function About({ aboutData }: { aboutData?: AboutData | null }) {
             isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           )}
           dangerouslySetInnerHTML={{
-            __html: aboutData?.heading || "Technology shouldn't be a barrier; it should be an <em>equalizer</em>.<br class=\"hidden md:block\"/>Great digital products are no longer just about complex code, but about <em>clarity</em>, <em>purpose</em>, and <em>seamless experiences</em>."
+            __html: resolveTranslation(aboutData?.heading, locale) || "Technology shouldn't be a barrier; it should be an <em>equalizer</em>.<br class=\"hidden md:block\"/>Great digital products are no longer just about complex code, but about <em>clarity</em>, <em>purpose</em>, and <em>seamless experiences</em>."
           }}
         />
 
@@ -57,7 +60,7 @@ export function About({ aboutData }: { aboutData?: AboutData | null }) {
           )}
         >
           <p className="text-[15px] sm:text-base md:text-[17px] text-gray-500 leading-[1.9] whitespace-pre-wrap">
-            {aboutData?.description || "In a cluttered digital landscape filled with bloated software and unnecessary noise, Beethoval helps startups and small industries penetrate the tech world with clean, purposeful design and solid engineering. We build digital experiences stripped of the excess—delivering intuitive, flat interfaces and robust full-stack solutions that don't just function, but genuinely empower your business to stand out and thrive."}
+            {resolveTranslation(aboutData?.description, locale) || "In a cluttered digital landscape filled with bloated software and unnecessary noise, Beethoval helps startups and small industries penetrate the tech world with clean, purposeful design and solid engineering. We build digital experiences stripped of the excess—delivering intuitive, flat interfaces and robust full-stack solutions that don't just function, but genuinely empower your business to stand out and thrive."}
           </p>
 
           <div
@@ -67,7 +70,7 @@ export function About({ aboutData }: { aboutData?: AboutData | null }) {
             )}
           >
             <span className="text-[11px] font-medium text-gray-400 uppercase tracking-[0.15em]">
-              {aboutData?.location || "Banda Aceh, Indonesia"}
+              {resolveTranslation(aboutData?.location, locale) || "Banda Aceh, Indonesia"}
             </span>
           </div>
         </div>

@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import type { ProjectCard } from "@/lib/landing-data";
 import { useReveal } from "@/hooks/useReveal";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
+import { resolveTranslation } from "@/types/i18n";
 
 function ProjectItem({
   project,
@@ -17,6 +19,7 @@ function ProjectItem({
   className?: string;
 }) {
   const { ref, visible: isInView } = useReveal(0.1) as { ref: React.RefObject<HTMLDivElement>, visible: boolean };
+  const locale = useLocale() as "en" | "id";
 
   return (
     <div
@@ -29,13 +32,13 @@ function ProjectItem({
       style={{ transitionDelay: `${index * 150}ms` }}
     >
       <a
-        href={`/project/${project.slug}`}
+        href={`/project/${resolveTranslation(project.slug as any, locale)}`}
         className="block relative overflow-hidden bg-white cursor-pointer"
       >
         {project.coverImage ? (
           <Image
             src={project.coverImage}
-            alt={project.title}
+            alt={resolveTranslation(project.title, locale)}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover transition-transform duration-[1.5s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
@@ -43,7 +46,7 @@ function ProjectItem({
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-200 flex items-center justify-center">
             <span className="text-gray-200 font-serif italic text-6xl md:text-8xl select-none">
-              {project.title[0]}
+              {resolveTranslation(project.title, locale)[0]}
             </span>
           </div>
         )}
@@ -62,11 +65,11 @@ function ProjectItem({
               {String(index + 1).padStart(2, "0")}
             </span>
             <h3 className="font-serif text-xl md:text-2xl text-gray-900 tracking-tight leading-tight">
-              {project.title}
+              {resolveTranslation(project.title, locale)}
             </h3>
           </div>
           <p className="text-[13px] text-gray-400 font-medium mt-2 line-clamp-2 leading-relaxed ml-9">
-            {project.description}
+            {resolveTranslation(project.description, locale)}
           </p>
           {project.techStack.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-3 ml-9">
@@ -92,6 +95,7 @@ interface ProjectsProps {
 
 export function Projects({ initialProjects }: ProjectsProps) {
   const { ref: sectionRef, visible: isInView } = useReveal(0.05) as { ref: React.RefObject<HTMLElement | null>, visible: boolean };
+  const t = useTranslations("Projects");
 
   const projects = initialProjects ?? [];
 
@@ -112,10 +116,10 @@ export function Projects({ initialProjects }: ProjectsProps) {
           )}
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 tracking-tight leading-[1.05] mb-6">
-            <span className="font-sans font-regular">Projects</span> <span className="font-sans">&amp;</span> <span className="font-serif italic text-indigo-600">Past Experiences</span>
+            <span className="font-sans font-regular">{t("projects")}</span> <span className="font-sans">&amp;</span> <span className="font-serif italic text-indigo-600">{t("past_experiences")}</span>
           </h2>
           <p className="text-[14px] text-gray-400 font-medium max-w-lg leading-relaxed pb-2">
-            A curated selection of the digital products and web experiences we&rsquo;ve crafted.
+            {t("projects_description")}
           </p>
         </div>
       </div>
@@ -131,9 +135,9 @@ export function Projects({ initialProjects }: ProjectsProps) {
             )}
           >
             <span className="text-6xl text-gray-200 font-serif italic mb-6 select-none">P</span>
-            <h3 className="font-serif text-2xl text-gray-900 mb-2">No projects yet</h3>
+            <h3 className="font-serif text-2xl text-gray-900 mb-2">{t("no_projects_yet")}</h3>
             <p className="text-[14px] text-gray-400 font-medium max-w-sm">
-              Projects will appear here once they are published from the dashboard.
+              {t("projects_will_appear_here")}
             </p>
           </div>
         ) : (

@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import Link from "next/link";
+import { Link, usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import type { FooterData } from "@/lib/landing-data";
+import { useLocale } from "next-intl";
+import { resolveTranslation } from "@/types/i18n";
 
 interface FooterProps {
   footerData?: FooterData;
@@ -14,6 +16,8 @@ export function Footer({ footerData: initialData }: FooterProps) {
   const [headingVisible, setHeadingVisible] = useState(false);
   const [gridVisible, setGridVisible] = useState(false);
   const [bottomVisible, setBottomVisible] = useState(false);
+  const locale = useLocale() as "en" | "id";
+  const pathname = usePathname();
 
   const footerData = initialData ?? null;
 
@@ -56,6 +60,21 @@ export function Footer({ footerData: initialData }: FooterProps) {
     return () => { observers.forEach((obs) => obs.disconnect()); };
   }, [footerData]);
 
+  const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathname === "/") {
+      const targetId = href.split("#")[1];
+      if (targetId) {
+        const el = document.getElementById(targetId);
+        if (el) {
+          e.preventDefault();
+          const offset = 80;
+          const top = el.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: "smooth" });
+        }
+      }
+    }
+  };
+
   if (!footerData) return null;
 
   const allColumns = [
@@ -75,9 +94,9 @@ export function Footer({ footerData: initialData }: FooterProps) {
         )}
       >
         <h2 className="text-6xl md:text-8xl lg:text-9xl font-regular uppercase tracking-tighter leading-none">
-          {footerData.heading?.primary}{" "}
+          {footerData.heading ? resolveTranslation(footerData.heading.primary, locale) : ""}{" "}
           <span className="font-serif italic font-normal normal-case tracking-normal text-indigo-600">
-            {footerData.heading?.secondary}
+            {footerData.heading ? resolveTranslation(footerData.heading.secondary, locale) : ""}
           </span>
         </h2>
       </div>
@@ -109,18 +128,23 @@ export function Footer({ footerData: initialData }: FooterProps) {
             )}
 
             {col.type === "links" && (
-              <>
-                <h3 className="text-[11px] uppercase font-bold mb-6 tracking-widest text-gray-500">{col.data.title}</h3>
+              <div className="flex flex-col">
+                <h3 className="text-[11px] uppercase font-bold mb-6 tracking-widest text-gray-500">{resolveTranslation(col.data.title, locale)}</h3>
                 <ul className="space-y-4">
                   {col.data.items?.map((item, itemIdx) => (
                     <li key={itemIdx}>
-                      <Link href={item.href} className="text-lg font-medium hover:italic hover:font-serif hover:text-indigo-600 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
-                        {item.label}
+                      <Link 
+                        href={item.href}
+                        scroll={false}
+                        onClick={(e) => scrollTo(e, item.href)}
+                        className="text-gray-900 font-medium hover:text-indigo-600 transition-colors inline-block text-[15px]"
+                      >
+                        {resolveTranslation(item.label, locale)}
                       </Link>
                     </li>
                   ))}
                 </ul>
-              </>
+              </div>
             )}
 
             {col.type === "socials" && (
@@ -148,7 +172,7 @@ export function Footer({ footerData: initialData }: FooterProps) {
           bottomVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         )}
       >
-        <p>{footerData.copyright}</p>
+        <p>{resolveTranslation(footerData.copyright, locale)}</p>
         <p className="mt-2 md:mt-0 font-serif italic normal-case tracking-normal text-[15px] text-gray-500">Designed with intent.</p>
       </div>
     </footer>

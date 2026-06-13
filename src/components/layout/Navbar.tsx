@@ -1,17 +1,19 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { Link } from "@/i18n/routing";
+import { useRouter, usePathname } from "@/i18n/routing";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
+import { PublicLanguageSwitcher } from "@/components/layout/PublicLanguageSwitcher";
 
 const navLinks = [
-  { key: "home", name: "Home", href: "/#home" },
-  { key: "about", name: "About", href: "/#about" },
-  { key: "projects", name: "Projects", href: "/#projects" },
-  { key: "services", name: "Services", href: "/#services"},
-  { key: "news", name: "News", href: "/#news"},
+  { key: "home", href: "/#home" },
+  { key: "about", href: "/#about" },
+  { key: "projects", href: "/#projects" },
+  { key: "services", href: "/#services"},
+  { key: "news", href: "/#news"},
 ];
 
 interface NavbarProps {
@@ -25,6 +27,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations("Navbar");
 
   useEffect(() => {
     setMounted(true);
@@ -146,12 +149,16 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
                     : isDarkTheme ? "text-white/70 hover:text-white hover:bg-white/10" : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                 )}
               >
-                {link.name}
+                {t(link.key as any)}
               </Link>
             ))}
           </div>
 
           <div className="flex items-center gap-3">
+            <div className="hidden md:block">
+              <PublicLanguageSwitcher isDarkTheme={isDarkTheme} />
+            </div>
+
             <Link
               href="/#footer"
               scroll={false}
@@ -163,7 +170,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
                   : "bg-gray-900 text-white hover:bg-gray-800 hover:shadow-gray-900/20"
               )}
             >
-              <span>Let&apos;s Talk</span>
+              <span>{t('lets_talk')}</span>
               <ArrowUpRight className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
 
@@ -248,7 +255,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
                           : "text-gray-400 group-hover:text-gray-900 group-hover:italic"
                       )}
                     >
-                      {link.name}
+                      {t(link.key as any)}
                     </span>
                   </div>
                   <ArrowUpRight
@@ -266,7 +273,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
 
           <div
             className={cn(
-              "mt-12 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+              "mt-12 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col sm:flex-row items-start sm:items-center gap-6",
               mobileOpen
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-8"
@@ -281,11 +288,15 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
               href="/#footer"
               scroll={false}
               onClick={(e) => scrollTo(e, "/#footer")}
-              className="inline-flex items-center gap-3 h-14 px-10 text-[12px] font-bold uppercase tracking-[0.15em] text-white bg-gray-900 rounded-full group"
+              className="inline-flex items-center justify-center gap-3 h-14 px-10 text-[12px] font-bold uppercase tracking-[0.15em] text-white bg-gray-900 rounded-full group hover:bg-gray-800 transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
             >
-              <span>Let&apos;s Talk</span>
+              <span>{t('lets_talk')}</span>
               <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
+            
+            <div className="relative z-[70]">
+              <PublicLanguageSwitcher align="left" />
+            </div>
           </div>
         </div>
 

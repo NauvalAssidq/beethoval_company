@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Link } from "@/i18n/routing";
+import { useRouter } from "@/i18n/routing";
 import { 
   DndContext, 
   closestCenter, 
@@ -25,6 +25,8 @@ import { toast } from "sonner";
 import { DeleteDialog } from "@/components/features/projects/DeleteDialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { type Service } from "@/types/service";
+import { useTranslations, useLocale } from "next-intl";
+import { resolveTranslation } from "@/types/i18n";
 
 function SortableServiceItem({ 
   service, 
@@ -36,6 +38,7 @@ function SortableServiceItem({
   onDelete: (service: Service) => void; 
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: service._id });
+  const locale = useLocale() as "en" | "id";
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -73,7 +76,7 @@ function SortableServiceItem({
 
       <div className="aspect-video w-full relative bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
         {service.image ? (
-          <img src={service.image} alt={service.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          <img src={service.image} alt={resolveTranslation(service.title, locale)} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         ) : (
           <div className="flex items-center justify-center w-full h-full text-zinc-300 dark:text-zinc-700">
             <Layers className="size-8" />
@@ -83,10 +86,10 @@ function SortableServiceItem({
 
       <div className="p-4 flex flex-col flex-1">
         <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 line-clamp-1 mb-1">
-          {service.title}
+          {resolveTranslation(service.title, locale)}
         </h4>
         <p className="text-xs text-zinc-500 line-clamp-2 mb-3">
-          {service.description}
+          {resolveTranslation(service.description, locale)}
         </p>
         
         {service.languages && service.languages.length > 0 && (
@@ -114,6 +117,7 @@ export function ServiceIndex() {
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState<Service | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const t = useTranslations("ServiceIndex");
 
   useEffect(() => {
     fetchServices();
@@ -211,9 +215,9 @@ export function ServiceIndex() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-serif text-3xl text-zinc-900 dark:text-zinc-100 tracking-tight">Services</h1>
+          <h1 className="font-serif text-3xl text-zinc-900 dark:text-zinc-100 tracking-tight">{t('services')}</h1>
           <p className="text-sm text-zinc-500 mt-1">
-            Manage the services you offer. Drag to reorder them.
+            {t('manage_the_services_you_offer_drag_to_reorder_them')}
           </p>
         </div>
         <Link
@@ -221,7 +225,7 @@ export function ServiceIndex() {
           className="inline-flex items-center justify-center gap-2 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-4 py-2 text-sm font-medium rounded-full hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
         >
           <Plus className="size-4" />
-          Add Service
+          {t('add_service')}
         </Link>
       </div>
 
@@ -229,14 +233,14 @@ export function ServiceIndex() {
         <div className="flex flex-col items-center justify-center h-64 gap-3 border border-zinc-200 rounded-xl bg-white dark:bg-zinc-950 dark:border-zinc-800">
           <Layers className="size-10 text-zinc-300 dark:text-zinc-700" />
           <p className="text-zinc-500">
-            No Services yet
+            {t('no_services_yet')}
           </p>
           <Link
             href="/dashboard/services/create"
             className="inline-flex items-center justify-center rounded-full px-5 gap-2 h-9 text-sm font-medium bg-zinc-900 text-white hover:bg-zinc-800 border border-zinc-200 mt-2 transition-colors dark:bg-indigo-600 dark:hover:bg-indigo-700"
           >
             <Plus className="size-4" />
-            <span>Create your first Service</span>
+            <span>{t('create_your_first_service')}</span>
           </Link>
         </div>
       ) : (
@@ -267,7 +271,7 @@ export function ServiceIndex() {
 
       <DeleteDialog
         open={!!deleteTarget}
-        title="this Service"
+        title={t('this_service')}
         onConfirm={handleDelete}
         onCancel={() => setDeleteTarget(null)}
         loading={deleting}

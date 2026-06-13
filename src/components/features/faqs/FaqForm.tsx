@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslations, useLocale } from "next-intl";
+import type { LocalizedString } from "@/types/i18n";
 
 interface FaqFormProps {
   faqId?: string;
@@ -17,9 +19,17 @@ export function FaqForm({ faqId }: FaqFormProps) {
 
   const [loading, setLoading] = useState(isEditing);
   const [saving, setSaving] = useState(false);
-  const [formData, setFormData] = useState({
-    question: "",
-    answer: "",
+  const locale = useLocale() as "en" | "id";
+  const t = useTranslations("FaqForm");
+  
+  interface FaqFormData {
+    question: LocalizedString;
+    answer: LocalizedString;
+  }
+  
+  const [formData, setFormData] = useState<FaqFormData>({
+    question: { en: "", id: "" },
+    answer: { en: "", id: "" },
   });
 
   useEffect(() => {
@@ -34,8 +44,8 @@ export function FaqForm({ faqId }: FaqFormProps) {
       if (!res.ok) throw new Error("Failed to load FAQ");
       const data = await res.json();
       setFormData({
-        question: data.question || "",
-        answer: data.answer || "",
+        question: data.question || { en: "", id: "" },
+        answer: data.answer || { en: "", id: "" },
       });
     } catch (err) {
       toast.error("Failed to load FAQ");
@@ -53,10 +63,20 @@ export function FaqForm({ faqId }: FaqFormProps) {
       const url = isEditing ? `/api/faqs/${faqId}` : "/api/faqs";
       const method = isEditing ? "PUT" : "POST";
 
+      const fallbackStr = (str: LocalizedString) => ({
+        en: str.en || str.id,
+        id: str.id || str.en,
+      });
+
+      const body = {
+        question: fallbackStr(formData.question),
+        answer: fallbackStr(formData.answer),
+      };
+
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(body),
       });
 
       if (!res.ok) {
@@ -103,26 +123,26 @@ export function FaqForm({ faqId }: FaqFormProps) {
         className="inline-flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors w-fit"
       >
         <ArrowLeft className="size-4" />
-        Back to FAQs
+        {t('back_to_faqs')}
       </Link>
 
       <div className="flex items-center justify-between">
         <h1 className="font-serif text-3xl text-zinc-900 dark:text-zinc-100 tracking-tight">
-          {isEditing ? "Edit FAQ" : "Create FAQ"}
+          {isEditing ? t('edit_faq') : t('create_faq')}
         </h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-zinc-950 p-6 rounded-xl border border-zinc-200 dark:border-zinc-800">
         <div className="space-y-2">
           <label htmlFor="question" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            Question
+            {t('question')}
           </label>
           <input
             id="question"
             type="text"
             required
-            value={formData.question}
-            onChange={(e) => setFormData({ ...formData, question: e.target.value })}
+            value={formData.question[locale]}
+            onChange={(e) => setFormData({ ...formData, question: { ...formData.question, [locale]: e.target.value } })}
             className="w-full px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
             placeholder="e.g. How long does a typical project take?"
           />
@@ -130,14 +150,14 @@ export function FaqForm({ faqId }: FaqFormProps) {
 
         <div className="space-y-2">
           <label htmlFor="answer" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            Answer
+            {t('answer')}
           </label>
           <textarea
             id="answer"
             required
             rows={5}
-            value={formData.answer}
-            onChange={(e) => setFormData({ ...formData, answer: e.target.value })}
+            value={formData.answer[locale]}
+            onChange={(e) => setFormData({ ...formData, answer: { ...formData.answer, [locale]: e.target.value } })}
             className="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all resize-y"
             placeholder="Provide a clear and concise answer..."
           />
@@ -154,7 +174,7 @@ export function FaqForm({ faqId }: FaqFormProps) {
             ) : (
               <Save className="size-4" />
             )}
-            {isEditing ? "Save Changes" : "Create FAQ"}
+            {isEditing ? t('save_changes') : t('create_faq')}
           </button>
         </div>
       </form>

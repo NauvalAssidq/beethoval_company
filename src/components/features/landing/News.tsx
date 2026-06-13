@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import type { NewsArticle } from "@/lib/landing-data";
 import { useReveal } from "@/hooks/useReveal";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
+import { resolveTranslation } from "@/types/i18n";
 
 interface NewsProps {
   initialNews?: NewsArticle[];
@@ -14,6 +16,8 @@ interface NewsProps {
 
 export function News({ initialNews }: NewsProps) {
   const { ref: sectionRef, visible: isInView } = useReveal(0.1) as { ref: React.RefObject<HTMLElement | null>, visible: boolean };
+  const locale = useLocale() as "en" | "id";
+  const t = useTranslations("News");
 
   const news = initialNews ?? [];
 
@@ -41,13 +45,13 @@ export function News({ initialNews }: NewsProps) {
         >
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-gray-700 tracking-tight leading-[1.05]">
-              News &amp; Articles
+              {t("news_articles")}
             </h2>
             <Link
               href="/#news"
               className="text-[11px] font-semibold text-gray-900 hover:text-indigo-600 uppercase tracking-widest flex items-center gap-1.5 group transition-colors"
             >
-              View Journal
+              {t("view_journal")}
               <ArrowRight className="size-3 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
@@ -65,9 +69,9 @@ export function News({ initialNews }: NewsProps) {
             <span className="text-6xl text-gray-200 font-serif italic mb-6 select-none">
               N
             </span>
-            <h3 className="font-serif text-2xl text-gray-900 mb-2">No news yet</h3>
+            <h3 className="font-serif text-2xl text-gray-900 mb-2">{t("no_news_yet")}</h3>
             <p className="text-[14px] text-gray-400 font-medium max-w-sm">
-              Check back later for updates and insights.
+              {t("check_back_later")}
             </p>
           </div>
         ) : (
@@ -75,7 +79,7 @@ export function News({ initialNews }: NewsProps) {
             {news.map((item, index) => (
               <Link
                 key={item._id}
-                href={`/news/${item.slug}`}
+                href={`/news/${resolveTranslation(item.slug, locale)}`}
                 className={cn(
                   "group flex flex-col transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
                   isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-16"
@@ -86,7 +90,7 @@ export function News({ initialNews }: NewsProps) {
                   {item.coverImage ? (
                     <Image
                       src={item.coverImage}
-                      alt={item.title}
+                      alt={resolveTranslation(item.title, locale)}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                       className="object-cover grayscale opacity-90 transition-all duration-[1.5s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 group-hover:grayscale-0 group-hover:opacity-100"
@@ -94,7 +98,7 @@ export function News({ initialNews }: NewsProps) {
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-indigo-50 to-indigo-100/50 flex items-center justify-center">
                       <span className="text-indigo-200 font-serif italic text-4xl select-none">
-                        {item.title[0]}
+                        {resolveTranslation(item.title, locale)[0]}
                       </span>
                     </div>
                   )}
@@ -111,11 +115,11 @@ export function News({ initialNews }: NewsProps) {
                     {formatDate(item.createdAt)}
                   </span>
                   <h3 className="font-serif text-lg lg:text-xl text-gray-900 leading-[1.15] mb-3 group-hover:text-indigo-600 transition-colors line-clamp-3">
-                    {item.title}
+                    {resolveTranslation(item.title, locale)}
                   </h3>
                   {item.excerpt && (
                     <p className="text-[15px] text-gray-500 leading-relaxed font-medium line-clamp-2">
-                      {item.excerpt}
+                      {resolveTranslation(item.excerpt, locale)}
                     </p>
                   )}
                 </div>

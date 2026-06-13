@@ -5,12 +5,14 @@ import { cn } from "@/lib/utils";
 import { type Service } from "@/types/service";
 import { useReveal } from "@/hooks/useReveal";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
+import { resolveTranslation } from "@/types/i18n";
 
 const FALLBACK_SERVICES: Service[] = [
   {
     _id: "1",
-    title: "Pengembangan Web",
-    description: "Membangun website yang cepat, skalabel, dan aman menggunakan teknologi modern. Saya berfokus pada performa dan optimasi SEO.",
+    title: { en: "Web Development", id: "Pengembangan Web" },
+    description: { en: "Building fast, scalable, and secure websites.", id: "Membangun website yang cepat, skalabel, dan aman." },
     icon: "Code",
     image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80",
     languages: ["React", "Laravel", "TypeScript", "TailwindCSS"],
@@ -18,8 +20,8 @@ const FALLBACK_SERVICES: Service[] = [
   },
   {
     _id: "2",
-    title: "Desain UI/UX",
-    description: "Merancang antarmuka yang intuitif dan pengalaman pengguna yang luar biasa untuk produk digital Anda.",
+    title: { en: "UI/UX Design", id: "Desain UI/UX" },
+    description: { en: "Designing intuitive interfaces.", id: "Merancang antarmuka yang intuitif." },
     icon: "Palette",
     image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=1600&q=80",
     languages: ["Figma", "Prototyping", "Wireframing"],
@@ -27,8 +29,8 @@ const FALLBACK_SERVICES: Service[] = [
   },
   {
     _id: "3",
-    title: "Aplikasi Mobile",
-    description: "Membawa bisnis Anda ke genggaman pengguna dengan aplikasi mobile native atau cross-platform yang responsif.",
+    title: { en: "Mobile Apps", id: "Aplikasi Mobile" },
+    description: { en: "Bringing your business to users' hands.", id: "Membawa bisnis Anda ke genggaman pengguna." },
     icon: "Smartphone",
     image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1600&q=80",
     languages: ["React Native", "Flutter", "iOS", "Android"],
@@ -36,8 +38,8 @@ const FALLBACK_SERVICES: Service[] = [
   },
   {
     _id: "4",
-    title: "Digital Strategi",
-    description: "Roadmap berbasis data untuk membantu startup Anda menembus pasar dan berkembang di ekosistem yang kompetitif.",
+    title: { en: "Digital Strategy", id: "Digital Strategi" },
+    description: { en: "Data-driven roadmap for startups.", id: "Roadmap berbasis data untuk membantu startup Anda." },
     icon: "Rocket",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80",
     languages: ["Analytics", "SEO", "Growth"],
@@ -53,6 +55,8 @@ export function Services({ initialServices }: ServicesProps) {
   const { ref: sectionRef, visible: isInView } = useReveal(0.05) as { ref: React.RefObject<HTMLElement | null>, visible: boolean };
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
+  const locale = useLocale() as "en" | "id";
+  const t = useTranslations("Services");
 
   const services =
     initialServices && initialServices.length > 0
@@ -148,10 +152,10 @@ export function Services({ initialServices }: ServicesProps) {
           )}
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 tracking-tight leading-[1.05] mb-6">
-            <span className="font-sans font-regular">Expertise</span> <span className="font-sans">&amp;</span> <span className="font-serif italic text-indigo-600">Services</span>
+            <span className="font-sans font-regular">{t("expertise")}</span> <span className="font-sans">&amp;</span> <span className="font-serif italic text-indigo-600">{t("services")}</span>
           </h2>
           <p className="text-[14px] text-gray-400 font-medium max-w-lg leading-relaxed pb-2">
-            Clean, purposeful design and solid engineering to genuinely empower your business to stand out.
+            {t("services_description")}
           </p>
         </div>
       </div>
@@ -164,9 +168,9 @@ export function Services({ initialServices }: ServicesProps) {
           )}
         >
           <span className="text-6xl text-gray-200 font-serif italic mb-6 select-none">S</span>
-          <h3 className="font-serif text-2xl text-gray-900 mb-2">No services yet</h3>
+          <h3 className="font-serif text-2xl text-gray-900 mb-2">{t("no_services_yet")}</h3>
           <p className="text-[14px] text-gray-400 font-medium max-w-sm">
-            Services will appear here once they are published from the dashboard.
+            {t("services_will_appear_here")}
           </p>
         </div>
       ) : (
@@ -195,10 +199,10 @@ export function Services({ initialServices }: ServicesProps) {
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <h3 className="font-serif text-2xl md:text-4xl lg:text-5xl xl:text-6xl text-gray-900 tracking-tight leading-[1.05] mb-3 md:mb-6">
-                        {service.title}
+                        {resolveTranslation(service.title, locale)}
                       </h3>
                       <p className="text-[13px] md:text-[15px] text-gray-500 font-medium leading-relaxed mb-4 md:mb-8 max-w-md">
-                        {service.description}
+                        {resolveTranslation(service.description, locale)}
                       </p>
                       {service.languages && service.languages.length > 0 && (
                         <div className="flex flex-wrap gap-1.5">
@@ -218,7 +222,7 @@ export function Services({ initialServices }: ServicesProps) {
                       <div className="relative w-full h-full overflow-hidden">
                         <Image
                           src={service.image || "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600&q=80"}
-                          alt={service.title}
+                          alt={resolveTranslation(service.title, locale)}
                           fill
                           sizes="(max-width: 768px) 100vw, 50vw"
                           className="object-cover transition-transform duration-[2s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"

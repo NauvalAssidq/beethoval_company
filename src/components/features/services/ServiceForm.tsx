@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ImageUploader } from "@/components/ui/image-uploader";
 import { TagInput } from "@/components/ui/tag-input";
 import { ArrowLeft, Loader2, Save } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import type { LocalizedString } from "@/types/i18n";
 
 interface ServiceFormProps {
   serviceId?: string;
@@ -19,12 +21,23 @@ export function ServiceForm({ serviceId }: ServiceFormProps) {
 
   const [loading, setLoading] = useState(isEditing);
   const [saving, setSaving] = useState(false);
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
+  const locale = useLocale() as "en" | "id";
+  const t = useTranslations("ServiceForm");
+  
+  interface ServiceFormData {
+    title: LocalizedString;
+    description: LocalizedString;
+    icon: string;
+    image: string;
+    languages: string[];
+  }
+  
+  const [formData, setFormData] = useState<ServiceFormData>({
+    title: { en: "", id: "" },
+    description: { en: "", id: "" },
     icon: "",
     image: "",
-    languages: [] as string[],
+    languages: [],
   });
 
   useEffect(() => {
@@ -39,8 +52,8 @@ export function ServiceForm({ serviceId }: ServiceFormProps) {
       if (!res.ok) throw new Error("Failed to load Service");
       const data = await res.json();
       setFormData({
-        title: data.title || "",
-        description: data.description || "",
+        title: data.title || { en: "", id: "" },
+        description: data.description || { en: "", id: "" },
         icon: data.icon || "",
         image: data.image || "",
         languages: data.languages || [],
@@ -61,10 +74,21 @@ export function ServiceForm({ serviceId }: ServiceFormProps) {
       const url = isEditing ? `/api/services/${serviceId}` : "/api/services";
       const method = isEditing ? "PUT" : "POST";
 
+      const fallbackStr = (str: LocalizedString) => ({
+        en: str.en || str.id,
+        id: str.id || str.en,
+      });
+
+      const body = {
+        ...formData,
+        title: fallbackStr(formData.title),
+        description: fallbackStr(formData.description),
+      };
+
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(body),
       });
 
       if (!res.ok) {
@@ -115,26 +139,26 @@ export function ServiceForm({ serviceId }: ServiceFormProps) {
         className="inline-flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors w-fit"
       >
         <ArrowLeft className="size-4" />
-        Back to Services
+        {t('back_to_services')}
       </Link>
 
       <div className="flex items-center justify-between">
         <h1 className="font-serif text-3xl text-zinc-900 dark:text-zinc-100 tracking-tight">
-          {isEditing ? "Edit Service" : "Create Service"}
+          {isEditing ? t('edit_service') : t('create_service')}
         </h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-zinc-950 p-6 rounded-xl border border-zinc-200 dark:border-zinc-800">
         <div className="space-y-2">
           <label htmlFor="title" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            Service Title
+            {t('service_title')}
           </label>
           <input
             id="title"
             type="text"
             required
-            value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            value={formData.title[locale]}
+            onChange={(e) => setFormData({ ...formData, title: { ...formData.title, [locale]: e.target.value } })}
             className="w-full px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
             placeholder="e.g. Web Development"
           />
@@ -142,7 +166,7 @@ export function ServiceForm({ serviceId }: ServiceFormProps) {
         
         <div className="space-y-2">
           <label htmlFor="icon" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            Icon Name (lucide-react)
+            {t('icon_name_lucide_react')}
           </label>
           <input
             id="icon"
@@ -153,20 +177,20 @@ export function ServiceForm({ serviceId }: ServiceFormProps) {
             placeholder="e.g. Code, Palette, Smartphone"
           />
           <p className="text-xs text-zinc-500">
-            Find icon names at <a href="https://lucide.dev/icons" target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">lucide.dev</a>.
+            {t('find_icon_names_at')} <a href="https://lucide.dev/icons" target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline">lucide.dev</a>.
           </p>
         </div>
 
         <div className="space-y-2">
           <label htmlFor="description" className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            Description
+            {t('description')}
           </label>
           <textarea
             id="description"
             required
             rows={4}
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            value={formData.description[locale]}
+            onChange={(e) => setFormData({ ...formData, description: { ...formData.description, [locale]: e.target.value } })}
             className="w-full px-4 py-3 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all resize-y"
             placeholder="Describe what the service includes..."
           />
@@ -174,7 +198,7 @@ export function ServiceForm({ serviceId }: ServiceFormProps) {
 
         <div className="space-y-2">
           <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            Image
+            {t('image')}
           </label>
           <ImageUploader 
             value={formData.image} 
@@ -185,7 +209,7 @@ export function ServiceForm({ serviceId }: ServiceFormProps) {
 
         <div className="space-y-2">
           <label className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            Language Used
+            {t('language_used')}
           </label>
           <TagInput 
             tags={formData.languages} 
@@ -205,7 +229,7 @@ export function ServiceForm({ serviceId }: ServiceFormProps) {
             ) : (
               <Save className="size-4" />
             )}
-            {isEditing ? "Save Changes" : "Create Service"}
+            {isEditing ? t('save_changes') : t('create_service')}
           </button>
         </div>
       </form>

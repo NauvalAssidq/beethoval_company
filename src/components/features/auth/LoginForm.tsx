@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FormEvent, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { signIn } from "next-auth/react";
 import { ArrowRight, Loader2, User, Lock, Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";

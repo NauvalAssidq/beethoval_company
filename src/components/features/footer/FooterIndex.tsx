@@ -7,16 +7,23 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslations, useLocale } from "next-intl";
+import type { LocalizedString } from "@/types/i18n";
 
 export function FooterIndex() {
-  const [heading, setHeading] = useState({ primary: "", secondary: "" });
+  const locale = useLocale() as "en" | "id";
+  const [heading, setHeading] = useState<{ primary: LocalizedString, secondary: LocalizedString }>({ 
+    primary: { en: "", id: "" }, 
+    secondary: { en: "", id: "" } 
+  });
   const [contact, setContact] = useState({ email: "", phone: "" });
-  const [copyright, setCopyright] = useState("");
+  const [copyright, setCopyright] = useState<LocalizedString>({ en: "", id: "" });
   const [socials, setSocials] = useState<{ label: string, href: string }[]>([]);
-  const [links, setLinks] = useState<{ title: string, items: { label: string, href: string }[] }[]>([]);
+  const [links, setLinks] = useState<{ title: LocalizedString, items: { label: LocalizedString, href: string }[] }[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const t = useTranslations("FooterIndex");
 
   useEffect(() => {
     async function fetchFooter() {
@@ -24,9 +31,12 @@ export function FooterIndex() {
         const res = await fetch("/api/footer");
         if (res.ok) {
           const data = await res.json();
-          setHeading(data.heading || { primary: "", secondary: "" });
+          setHeading({ 
+            primary: data.heading?.primary || { en: "", id: "" }, 
+            secondary: data.heading?.secondary || { en: "", id: "" } 
+          });
           setContact(data.contact || { email: "", phone: "" });
-          setCopyright(data.copyright || "");
+          setCopyright(data.copyright || { en: "", id: "" });
           setSocials(data.socials || []);
           setLinks(data.links || []);
         } else {
@@ -45,10 +55,32 @@ export function FooterIndex() {
     e.preventDefault();
     setSaving(true);
     try {
+      const fallbackStr = (str: LocalizedString) => ({
+        en: str.en || str.id,
+        id: str.id || str.en,
+      });
+
+      const body = {
+        heading: {
+          primary: fallbackStr(heading.primary),
+          secondary: fallbackStr(heading.secondary),
+        },
+        contact,
+        copyright: fallbackStr(copyright),
+        socials,
+        links: links.map(group => ({
+          title: fallbackStr(group.title),
+          items: group.items.map(item => ({
+            label: fallbackStr(item.label),
+            href: item.href,
+          })),
+        })),
+      };
+
       const res = await fetch("/api/footer", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ heading, contact, copyright, socials, links })
+        body: JSON.stringify(body)
       });
 
       if (!res.ok) {
@@ -84,9 +116,9 @@ export function FooterIndex() {
   return (
     <div className="max-w-4xl mx-auto w-full flex flex-col gap-6 pb-20">
       <div>
-        <h1 className="font-serif text-3xl text-gray-900 dark:text-gray-100 tracking-tight">Footer Settings</h1>
+        <h1 className="font-serif text-3xl text-gray-900 dark:text-gray-100 tracking-tight">{t('footer_settings')}</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Manage the global footer content, links, and contact information.
+          {t('manage_the_global_footer_content_links_and_contact_information')}
         </p>
       </div>
 
@@ -102,8 +134,8 @@ export function FooterIndex() {
               <div className="space-y-2">
                 <Label>Primary Text (Sans-serif)</Label>
                 <Input
-                  value={heading.primary}
-                  onChange={(e) => setHeading({ ...heading, primary: e.target.value })}
+                  value={heading.primary[locale]}
+                  onChange={(e) => setHeading({ ...heading, primary: { ...heading.primary, [locale]: e.target.value } })}
                   placeholder="LET'S WORK"
                   required
                 />
@@ -111,8 +143,8 @@ export function FooterIndex() {
               <div className="space-y-2">
                 <Label>Secondary Text (Italic Serif)</Label>
                 <Input
-                  value={heading.secondary}
-                  onChange={(e) => setHeading({ ...heading, secondary: e.target.value })}
+                  value={heading.secondary[locale]}
+                  onChange={(e) => setHeading({ ...heading, secondary: { ...heading.secondary, [locale]: e.target.value } })}
                   placeholder="Together"
                   required
                 />
@@ -201,10 +233,10 @@ export function FooterIndex() {
                     <div className="space-y-1 flex-1">
                       <Label>Column Title</Label>
                       <Input
-                        value={group.title}
+                        value={group.title[locale]}
                         onChange={(e) => {
                           const newLinks = [...links];
-                          newLinks[groupIdx].title = e.target.value;
+                          newLinks[groupIdx].title = { ...newLinks[groupIdx].title, [locale]: e.target.value };
                           setLinks(newLinks);
                         }}
                         placeholder="e.g. Services"
@@ -220,10 +252,13 @@ export function FooterIndex() {
                     {group.items.map((item, itemIdx) => (
                       <div key={itemIdx} className="flex items-center gap-2">
                         <Input
-                          value={item.label}
+                          value={item.label[locale] || ""}
                           onChange={(e) => {
                             const newLinks = [...links];
-                            newLinks[groupIdx].items[itemIdx].label = e.target.value;
+                            newLinks[groupIdx].items[itemIdx].label = { 
+                              ...(newLinks[groupIdx].items[itemIdx].label || { en: "", id: "" }), 
+                              [locale]: e.target.value 
+                            };
                             setLinks(newLinks);
                           }}
                           placeholder="Link Label"
@@ -252,7 +287,7 @@ export function FooterIndex() {
                     ))}
                     <Button type="button" variant="ghost" size="sm" onClick={() => {
                       const newLinks = [...links];
-                      newLinks[groupIdx].items.push({ label: "", href: "" });
+                      newLinks[groupIdx].items.push({ label: { en: "", id: "" }, href: "" });
                       setLinks(newLinks);
                     }} className="mt-2 text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50">
                       <Plus className="size-4 mr-1" /> Add Link
@@ -260,7 +295,7 @@ export function FooterIndex() {
                   </div>
                 </div>
               ))}
-              <Button type="button" variant="outline" size="sm" onClick={() => setLinks([...links, { title: "", items: [] }])}>
+              <Button type="button" variant="outline" size="sm" onClick={() => setLinks([...links, { title: { en: "", id: "" }, items: [] }])}>
                 <Plus className="size-4 mr-1" /> Add Link Column
               </Button>
             </div>
@@ -270,8 +305,8 @@ export function FooterIndex() {
             <h2 className="text-lg font-serif font-medium text-gray-900 dark:text-gray-100">Copyright Text</h2>
             <div className="space-y-2">
               <Input
-                value={copyright}
-                onChange={(e) => setCopyright(e.target.value)}
+                value={copyright[locale]}
+                onChange={(e) => setCopyright({ ...copyright, [locale]: e.target.value })}
                 placeholder="© 2026 Beethoval. All rights reserved."
                 required
               />

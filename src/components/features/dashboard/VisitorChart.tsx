@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 
 import {
@@ -23,10 +24,12 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export function VisitorChart({ data }: { data: VisitData[] }) {
+  const t = useTranslations("VisitorChart")
+
   if (!data || data.length === 0) {
     return (
       <div className="min-h-[160px] w-full flex items-center justify-center text-sm text-zinc-500">
-        No visitor data available
+        {t('no_visitor_data_available')}
       </div>
     );
   }

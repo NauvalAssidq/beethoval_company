@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { ArrowLeft, ArrowUpRight, Calendar, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/Navbar";
 import DOMPurify from "isomorphic-dompurify";
 import { useReveal } from "@/hooks/useReveal";
 import Image from "next/image";
+import { resolveTranslation } from "@/types/i18n";
+import { useLocale } from "next-intl";
 
 interface ArticleNav {
   title: string;
@@ -40,6 +42,7 @@ export function NewsDetailClient({
   prevArticle,
   nextArticle,
 }: NewsDetailClientProps) {
+  const locale = useLocale() as "en" | "id";
   const [scrolled, setScrolled] = useState(false);
 
   const handleScroll = useCallback(() => {
@@ -70,7 +73,7 @@ export function NewsDetailClient({
         {article.coverImage ? (
           <Image
             src={article.coverImage}
-            alt={article.title}
+            alt={resolveTranslation(article.title as any, locale)}
             fill
             sizes="100vw"
             className="object-cover blur-xs scale-100"
@@ -105,15 +108,15 @@ export function NewsDetailClient({
               className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-white tracking-tight leading-[1.05] max-w-5xl animate-fade-up"
               style={{ "--delay": "400ms" } as React.CSSProperties}
             >
-              {article.title}
+              {resolveTranslation(article.title as any, locale)}
             </h1>
 
-            {article.excerpt && (
+            {resolveTranslation(article.excerpt as any, locale) && (
               <p
                 className="text-base sm:text-lg text-white/60 font-medium max-w-xl mt-5 leading-relaxed animate-fade-up"
                 style={{ "--delay": "600ms" } as React.CSSProperties}
               >
-                {article.excerpt}
+                {resolveTranslation(article.excerpt as any, locale)}
               </p>
             )}
           </div>
@@ -174,7 +177,7 @@ export function NewsDetailClient({
                   Slug
                 </span>
                 <span className="text-sm text-gray-700 font-mono font-medium">
-                  /{article.slug}
+                  /{resolveTranslation(article.slug as any, locale)}
                 </span>
               </div>
             </div>
@@ -208,7 +211,7 @@ export function NewsDetailClient({
               "prose-table:border-collapse prose-table:w-full",
               "prose-sub:text-xs prose-sup:text-xs"
             )}
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.content) }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(resolveTranslation(article.content as any, locale)) }}
           />
         </article>
       </div>
@@ -226,13 +229,13 @@ export function NewsDetailClient({
           <div className="grid grid-cols-1 md:grid-cols-2">
             {prevArticle ? (
               <Link
-                href={`/news/${prevArticle.slug}`}
+                href={`/news/${resolveTranslation(prevArticle.slug as any, locale)}`}
                 className="group relative flex flex-col justify-end overflow-hidden h-[50vh] md:h-[60vh] p-8 md:p-12 border-b md:border-b-0 md:border-r border-gray-200"
               >
                 {prevArticle.coverImage ? (
                   <Image
                     src={prevArticle.coverImage}
-                    alt={prevArticle.title}
+                    alt={resolveTranslation(prevArticle.title as any, locale)}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -247,7 +250,7 @@ export function NewsDetailClient({
                     ← Previous Article
                   </span>
                   <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-white tracking-tight leading-tight">
-                    {prevArticle.title}
+                    {resolveTranslation(prevArticle.title as any, locale)}
                   </h3>
                 </div>
               </Link>
@@ -257,13 +260,13 @@ export function NewsDetailClient({
 
             {nextArticle ? (
               <Link
-                href={`/news/${nextArticle.slug}`}
+                href={`/news/${resolveTranslation(nextArticle.slug as any, locale)}`}
                 className="group relative flex flex-col justify-end overflow-hidden h-[50vh] md:h-[60vh] p-8 md:p-12"
               >
                 {nextArticle.coverImage ? (
                   <Image
                     src={nextArticle.coverImage}
-                    alt={nextArticle.title}
+                    alt={resolveTranslation(nextArticle.title as any, locale)}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -278,7 +281,7 @@ export function NewsDetailClient({
                     Next Article →
                   </span>
                   <h3 className="font-serif text-2xl sm:text-3xl md:text-4xl text-white tracking-tight leading-tight">
-                    {nextArticle.title}
+                    {resolveTranslation(nextArticle.title as any, locale)}
                   </h3>
                 </div>
               </Link>

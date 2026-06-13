@@ -8,6 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { MarqueeItem, HeroData } from "@/lib/landing-data";
 import { useReveal } from "@/hooks/useReveal";
 import Image from "next/image";
+import { useLocale, useTranslations } from "next-intl";
+import { resolveTranslation } from "@/types/i18n";
 
 interface HeroProps {
   marqueeItems?: MarqueeItem[];
@@ -23,6 +25,8 @@ const FALLBACK_IMAGES = [
 
 export function Hero({ marqueeItems, heroData }: HeroProps) {
   const { ref: sectionRef, visible: isInView } = useReveal(0.1) as { ref: React.RefObject<HTMLElement | null>, visible: boolean };
+  const locale = useLocale() as "en" | "id";
+  const t = useTranslations("Hero");
 
   const data = heroData || {
     line1: "Crafting Digital",
@@ -52,25 +56,25 @@ export function Hero({ marqueeItems, heroData }: HeroProps) {
     >
       <div className="flex-1 w-full max-w-9xl mx-auto mb-4 sm:mb-4 md:mb-6 lg:mb-8 z-10 relative flex flex-col justify-end px-4 sm:px-6 lg:px-8 pt-20 pb-12">
         <div className="text-left flex flex-col items-start">
-          <h1 className={cn(animateIn, "delay-300 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>
-            <span className="font-sans font-regular">{data.line1}</span>
-          </h1>
+          <h1 className={cn(animateIn, "delay-300 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>
+            <span className="font-sans font-regular">{resolveTranslation(data.line1, locale) || "Crafting Digital"}</span>
+            {" "}</h1>
           <h1 className={cn(animateIn, "delay-300 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>
             {" "}
             <Highlighter action={data.highlightAction1 as any} color="#4f46e5" isView={isInView} className={cn("font-serif italic", data.highlightAction1 === "circle" ? "text-indigo-600" : "")}>
-              {data.highlightWord1}
+              {resolveTranslation(data.highlightWord1, locale) || "Experiences"}
             </Highlighter>
-            {" "}<span className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl">{data.separator}</span>{" "}
+            {" "}<span className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-6xl">{resolveTranslation(data.separator, locale) || "&"}</span>{" "}
             <Highlighter action={data.highlightAction2 as any} color="#4f46e5" isView={isInView} className={cn("font-serif italic", data.highlightAction2 === "circle" ? "text-indigo-600" : "")}>
-              {data.highlightWord2}
+              {resolveTranslation(data.highlightWord2, locale) || "Solutions"}
             </Highlighter>
           </h1>
           <h1 className={cn(animateIn, "delay-300 text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>
-            <span className="font-sans font-regular">{data.line3}</span>
+            <span className="font-sans font-regular">{resolveTranslation(data.line3, locale) || "For Your Business"}</span>
           </h1>
 
           <p className={cn(animateIn, "delay-700 text-sm sm:text-sm md:text-md lg:text-lg text-gray-500 underline mb-0 max-w-3xl text-left leading-relaxed font-medium")}>
-            {data.subtitle}
+            {resolveTranslation(data.subtitle, locale) || "High-performance web applications on hand, with professional grade interface"}
           </p>
         </div>
       </div>
@@ -81,7 +85,7 @@ export function Hero({ marqueeItems, heroData }: HeroProps) {
             .flatMap(() => resolvedUrls)
             .map((src, i) => (
               <div key={i} className="relative w-[320px] h-[320px] md:w-[380px] md:h-[380px] shrink-0 overflow-hidden">
-                <Image src={src} fill sizes="(max-width: 768px) 320px, 380px" className="object-contain object-bottom" alt="Portfolio showcase" />
+                <Image src={src} fill sizes="(max-width: 768px) 320px, 380px" className="object-contain object-bottom" alt={t("portfolio_showcase")} />
               </div>
             ))}
         </div>

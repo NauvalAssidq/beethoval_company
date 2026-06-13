@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { ArrowLeft, Loader2, Save } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,8 @@ import { TiptapEditor } from "@/components/features/editor/TiptapEditor";
 import { TagInput } from "@/components/ui/tag-input";
 import { ImageUploader } from "@/components/ui/image-uploader";
 import { toast } from "sonner";
+import { useTranslations, useLocale } from "next-intl";
+import type { LocalizedString } from "@/types/i18n";
 
 interface ProjectFormProps {
   projectId?: string;
@@ -35,16 +37,18 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
 
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(isEdit);
-  const [title, setTitle] = useState("");
-  const [slug, setSlug] = useState("");
+  const locale = useLocale() as "en" | "id";
+  const [title, setTitle] = useState<LocalizedString>({ en: "", id: "" });
+  const [slug, setSlug] = useState<LocalizedString>({ en: "", id: "" });
   const [slugManual, setSlugManual] = useState(false);
-  const [description, setDescription] = useState("");
-  const [content, setContent] = useState("");
+  const [description, setDescription] = useState<LocalizedString>({ en: "", id: "" });
+  const [content, setContent] = useState<LocalizedString>({ en: "", id: "" });
   const [coverImage, setCoverImage] = useState("");
   const [techStack, setTechStack] = useState<string[]>([]);
   const [marqueeImage, setMarqueeImage] = useState("");
   const [touched, setTouched] = useState({ title: false, slug: false });
   const [isDirty, setIsDirty] = useState(false);
+  const t = useTranslations("ProjectForm");
 
   useEffect(() => {
     if (!isEdit || !projectId) return;
@@ -53,11 +57,11 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
         const res = await fetch(`/api/project/${projectId}`);
         if (!res.ok) throw new Error("Project not found");
         const data = await res.json();
-        setTitle(data.title || "");
-        setSlug(data.slug || "");
+        setTitle(data.title || { en: "", id: "" });
+        setSlug(data.slug || { en: "", id: "" });
         setSlugManual(true);
-        setDescription(data.description || "");
-        setContent(data.content || "");
+        setDescription(data.description || { en: "", id: "" });
+        setContent(data.content || { en: "", id: "" });
         setCoverImage(data.coverImage || "");
         setTechStack(data.techStack || []);
         setMarqueeImage(data.marqueeImage || "");
@@ -73,13 +77,13 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
 
   useEffect(() => {
     if (!slugManual) {
-      setSlug(slugify(title));
+      setSlug((prev) => ({ ...prev, [locale]: slugify(title[locale]) }));
     }
-  }, [title, slugManual]);
+  }, [title, slugManual, locale]);
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (isDirty && (title || content)) {
+      if (isDirty && (title.en || title.id || content.en || content.id)) {
         e.preventDefault();
         e.returnValue = "";
       }
@@ -92,18 +96,23 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
     e.preventDefault();
     setTouched({ title: true, slug: true });
 
-    if (!title.trim() || !slug.trim()) {
-      toast.error("Please fill in the required fields");
+    if ((!title.en.trim() && !title.id.trim()) || (!slug.en.trim() && !slug.id.trim())) {
+      toast.error("Please fill in the required fields in at least one language");
       return;
     }
 
     setLoading(true);
     try {
+      const fallbackStr = (str: LocalizedString) => ({
+        en: str.en || str.id,
+        id: str.id || str.en,
+      });
+
       const body = {
-        title: title.trim(),
-        slug: slug.trim(),
-        description: description.trim(),
-        content,
+        title: fallbackStr(title),
+        slug: fallbackStr(slug),
+        description: fallbackStr(description),
+        content: fallbackStr(content),
         coverImage: coverImage.trim(),
         techStack: techStack,
         marqueeImage: marqueeImage,
@@ -153,10 +162,10 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
         </Link>
         <div>
           <h1 className="font-serif text-3xl text-gray-900 dark:text-gray-100">
-            {isEdit ? "Edit Project" : "New Project"}
+            {isEdit ? t('edit_project') : t('new_project')}
           </h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            {isEdit ? "Update your project details" : "Fill in the details to create a new project"}
+            {isEdit ? t('update_your_project_details') : t('fill_in_the_details_to_create_a_new_project')}
           </p>
         </div>
       </div>
@@ -167,52 +176,52 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
         <div className="lg:col-span-2 flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <Label htmlFor="title" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Title <span className="text-red-500">*</span>
+              {t('title')} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="title"
               placeholder="My Awesome Project"
-              value={title}
+              value={title[locale]}
               onBlur={() => setTouched(t => ({ ...t, title: true }))}
-              onChange={(e) => setTitle(e.target.value)}
-              className={cn(INPUT_STYLE, touched.title && !title.trim() && "border-red-500 focus-visible:ring-red-500")}
+              onChange={(e) => setTitle(prev => ({ ...prev, [locale]: e.target.value }))}
+              className={cn(INPUT_STYLE, touched.title && !title[locale].trim() && "border-red-500 focus-visible:ring-red-500")}
             />
-            {touched.title && !title.trim() && <span className="text-xs text-red-500">Title is required</span>}
+            {touched.title && !title[locale].trim() && <span className="text-xs text-red-500">{t('title_is_required')}</span>}
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="slug" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Slug <span className="text-red-500">*</span>
+              {t('slug')} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="slug"
               placeholder="my-awesome-project"
-              value={slug}
+              value={slug[locale]}
               onBlur={() => setTouched(t => ({ ...t, slug: true }))}
               onChange={(e) => {
                 setSlugManual(true);
-                setSlug(e.target.value);
+                setSlug(prev => ({ ...prev, [locale]: e.target.value }));
               }}
-              className={cn(INPUT_STYLE, "font-mono text-sm", touched.slug && !slug.trim() && "border-red-500 focus-visible:ring-red-500")}
+              className={cn(INPUT_STYLE, "font-mono text-sm", touched.slug && !slug[locale].trim() && "border-red-500 focus-visible:ring-red-500")}
             />
-            {touched.slug && !slug.trim() && <span className="text-xs text-red-500">Slug is required</span>}
+            {touched.slug && !slug[locale].trim() && <span className="text-xs text-red-500">{t('slug_is_required')}</span>}
           </div>
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="description" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              Description
+              {t('description')}
             </Label>
             <Input
               id="description"
               placeholder="A short summary of the project"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={description[locale]}
+              onChange={(e) => setDescription(prev => ({ ...prev, [locale]: e.target.value }))}
               className={INPUT_STYLE}
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Content</Label>
-            <TiptapEditor content={content} onChange={(html) => { setContent(html); setIsDirty(true); }} />
+            <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t('content')}</Label>
+            <TiptapEditor content={content[locale]} onChange={(html) => { setContent(prev => ({ ...prev, [locale]: html })); setIsDirty(true); }} />
           </div>
         </div>
 
@@ -221,21 +230,21 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
           <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 dark:bg-gray-900/50 dark:border-gray-800 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <Label htmlFor="coverImage" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Cover Image
+                {t('cover_image')}
               </Label>
               <ImageUploader value={coverImage} onChange={(url) => setCoverImage(url as string)} multiple={false} />
             </div>
 
             <div className="flex flex-col gap-2">
               <Label htmlFor="marqueeImage" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Marquee Image
+                {t('marquee_image')}
               </Label>
               <ImageUploader value={marqueeImage} onChange={(url) => { setMarqueeImage(url as string); setIsDirty(true); }} multiple={false} />
             </div>
 
             <div className="flex flex-col gap-2">
               <Label htmlFor="techStack" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Tech Stack
+                {t('tech_stack')}
               </Label>
               <TagInput tags={techStack} onChange={(tags) => { setTechStack(tags); setIsDirty(true); }} placeholder="Add technology..." />
             </div>
@@ -249,7 +258,7 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
               className="rounded-full px-5"
               onClick={() => router.push("/dashboard/projects")}
             >
-              Cancel
+              {t('cancel')}
             </Button>
             <Button
               type="submit"
@@ -261,7 +270,7 @@ export function ProjectForm({ projectId }: ProjectFormProps) {
               ) : (
                 <Save className="size-4" />
               )}
-              <span>{loading ? "Saving..." : isEdit ? "Update Project" : "Create Project"}</span>
+              <span>{loading ? t('saving') : isEdit ? t('update_project') : t('create_project')}</span>
             </Button>
           </div>
         </div>

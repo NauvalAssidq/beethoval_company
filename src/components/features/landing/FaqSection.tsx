@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { resolveTranslation } from "@/types/i18n";
+import { useLocale, useTranslations } from "next-intl";
 
 interface Faq {
   _id: string;
@@ -32,6 +34,8 @@ const DUMMY_FAQS: Faq[] = [
 ];
 
 export function FaqSection() {
+  const locale = useLocale() as "en" | "id";
+  const t = useTranslations("FaqSection");
   const sectionRef = useRef<HTMLElement>(null);
   const [isInView, setIsInView] = useState(false);
   const [faqs, setFaqs] = useState<Faq[]>([]);
@@ -97,11 +101,11 @@ export function FaqSection() {
                 )}
               >
                 <h2 className="text-4xl md:text-5xl lg:text-7xl text-zinc-900 dark:text-zinc-100 tracking-tight leading-[1.05] mb-6">
-                  <span className="font-sans font-regular">Frequently Asked</span><br />
-                  <span className="font-serif italic text-indigo-600">Question</span>
+                  <span className="font-sans font-regular">{t("frequently_asked")}</span><br />
+                  <span className="font-serif italic text-indigo-600">{t("question")}</span>
                 </h2>
                 <p className="text-zinc-500 dark:text-zinc-400 text-sm md:text-base leading-relaxed max-w-sm">
-                  Everything you need to know about our process, pricing, and how we deliver award-winning digital experiences.
+                  {t("faq_description")}
                 </p>
               </div>
             </div>
@@ -138,7 +142,7 @@ export function FaqSection() {
                       </span>
                       
                       <h3 className="flex-1 font-sans font-medium text-lg md:text-2xl text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors tracking-tight">
-                        {faq.question}
+                        {resolveTranslation(faq.question as any, locale)}
                       </h3>
                       
                       <div className="relative size-6 shrink-0 flex items-center justify-center">
@@ -155,7 +159,7 @@ export function FaqSection() {
                         <div className="pb-6 md:pb-10 pl-4 sm:pl-0 md:pl-8 pr-4 md:pr-16 text-sm md:text-base text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-3xl transform transition-transform duration-500 -translate-y-4 data-[state=open]:translate-y-0"
                              data-state={isOpen ? "open" : "closed"}
                         >
-                          {faq.answer}
+                          {resolveTranslation(faq.answer as any, locale)}
                         </div>
                       </div>
                     </div>

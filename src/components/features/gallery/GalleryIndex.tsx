@@ -9,6 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2, Trash2, GripVertical, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface GalleryItem {
   id: string;
@@ -53,6 +54,7 @@ export default function GalleryPage() {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const t = useTranslations("GalleryIndex");
 
   useEffect(() => {
     fetch("/api/public/projects")
@@ -166,9 +168,9 @@ export default function GalleryPage() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-serif text-3xl text-gray-900 dark:text-gray-100 tracking-tight">Marquee Gallery</h1>
+          <h1 className="font-serif text-3xl text-gray-900 dark:text-gray-100 tracking-tight">{t('marquee_gallery')}</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Manage and reorder images for your homepage marquee. Drag to reorder.
+            {t('manage_and_reorder_images_for_your_homepage_marquee_drag_to_reorder')}
           </p>
         </div>
       </div>

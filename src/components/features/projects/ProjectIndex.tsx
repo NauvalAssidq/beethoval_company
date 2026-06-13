@@ -7,9 +7,9 @@ const fetcher = (url: string) => fetch(url).then((res) => {
   if (!res.ok) throw new Error("Failed to fetch");
   return res.json();
 });
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import {
   Plus,
   Search,
@@ -27,12 +27,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { DeleteDialog } from "./DeleteDialog";
 import { toast } from "sonner";
 import { type Project, type ProjectsResponse } from "@/types/project";
+import { useTranslations, useLocale } from "next-intl";
+import { resolveTranslation } from "@/types/i18n";
 
-const SORT_OPTIONS = [
-  { label: "Newest", value: "createdAt", order: "desc" },
-  { label: "Oldest", value: "createdAt", order: "asc" },
-  { label: "Title A–Z", value: "title", order: "asc" },
-  { label: "Title Z–A", value: "title", order: "desc" },
+
+const getSortOptions = (t: any) => [
+  { label: t('sort_newest'), value: "createdAt", order: "desc" },
+  { label: t('sort_oldest'), value: "createdAt", order: "asc" },
+  { label: t('sort_title_az'), value: "title", order: "asc" },
+  { label: t('sort_title_za'), value: "title", order: "desc" },
 ];
 
 export function ProjectIndex() {
@@ -40,11 +43,14 @@ export function ProjectIndex() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isPending, startTransition] = useTransition();
+  const locale = useLocale() as "en" | "id";
   const [page, setPage] = useState(1);
   const [sortIndex, setSortIndex] = useState(0);
   const [sortOpen, setSortOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Project | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const t = useTranslations("ProjectIndex");
+  const SORT_OPTIONS = getSortOptions(t);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -80,7 +86,7 @@ export function ProjectIndex() {
         const json = await res.json();
         throw new Error(json.error || "Failed to delete");
       }
-      toast.success(`"${deleteTarget.title}" has been deleted`);
+      toast.success(`"${resolveTranslation(deleteTarget.title, locale)}" has been deleted`);
       setDeleteTarget(null);
       mutate();
     } catch (error: any) {
@@ -102,9 +108,9 @@ export function ProjectIndex() {
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-serif text-3xl text-gray-900 dark:text-gray-100">Projects</h1>
+          <h1 className="font-serif text-3xl text-gray-900 dark:text-gray-100">{t('projects')}</h1>
           <p className="text-sm text-gray-500 mt-1">
-            {data ? `${data.total} project${data.total !== 1 ? "s" : ""} total` : "Loading..."}
+            {data ? t('projects_total', { count: data.total }) : t('loading')}
           </p>
         </div>
         <Link
@@ -112,7 +118,7 @@ export function ProjectIndex() {
           className="inline-flex items-center justify-center rounded-full px-5 gap-2 h-9 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 shadow-none border-none transition-colors"
         >
           <Plus className="size-4" />
-          <span>New Project</span>
+          <span>{t('new_project')}</span>
         </Link>
       </div>
 
@@ -120,7 +126,7 @@ export function ProjectIndex() {
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none" />
           <Input
-            placeholder="Search projects..."
+            placeholder={t('search_projects')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-11 h-10 rounded-full border-gray-200 bg-white shadow-none focus-visible:border-indigo-500 focus-visible:ring-1 focus-visible:ring-indigo-500 dark:bg-gray-900 dark:border-gray-800"
@@ -191,7 +197,7 @@ export function ProjectIndex() {
                   {project.coverImage || project.marqueeImage ? (
                     <Image 
                       src={(project.coverImage || project.marqueeImage) as string} 
-                      alt={project.title} 
+                      alt={resolveTranslation(project.title, locale)} 
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -221,12 +227,12 @@ export function ProjectIndex() {
                   </div>
                 </div>
                 <div className="flex flex-col flex-1 p-5">
-                  <h3 className="font-serif text-[20px] tracking-tight text-gray-900 dark:text-gray-100 line-clamp-1 mb-1">{project.title}</h3>
+                  <h3 className="font-serif text-[20px] tracking-tight text-gray-900 dark:text-gray-100 line-clamp-1 mb-1">{resolveTranslation(project.title, locale)}</h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-5 flex-1 leading-relaxed">
-                    {project.description || "No description provided."}
+                    {resolveTranslation(project.description, locale) || t('no_description_provided')}
                   </p>
                   <div className="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500 mt-auto pt-4 border-t border-gray-100 dark:border-gray-800/50">
-                    <span className="font-mono">/{project.slug}</span>
+                    <span className="font-mono">/{resolveTranslation(project.slug, locale)}</span>
                     <span>{formatDate(project.createdAt)}</span>
                   </div>
                 </div>
@@ -237,7 +243,7 @@ export function ProjectIndex() {
           <div className="flex flex-col items-center justify-center h-64 gap-3 border border-gray-200 rounded-xl bg-white dark:bg-gray-900 dark:border-gray-800">
             <FolderOpen className="size-10 text-gray-300 dark:text-gray-600" />
             <p className="text-gray-500">
-              {debouncedSearch ? "No projects match your search" : "No projects yet"}
+              {debouncedSearch ? t('no_projects_match_your_search') : t('no_projects_yet')}
             </p>
             {!debouncedSearch && (
               <Link
@@ -245,7 +251,7 @@ export function ProjectIndex() {
                 className="inline-flex items-center justify-center rounded-full px-5 gap-2 h-9 text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 shadow-none border-none mt-2 transition-colors dark:bg-indigo-600 dark:hover:bg-indigo-700"
               >
                 <Plus className="size-4" />
-                <span>Create your first project</span>
+                <span>{t('create_your_first_project')}</span>
               </Link>
             )}
           </div>
@@ -255,7 +261,7 @@ export function ProjectIndex() {
       {data && data.totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-gray-500">
-            Page {data.page} of {data.totalPages}
+            {t('page_of', { page: data.page, totalPages: data.totalPages })}
           </p>
           <div className="flex items-center gap-2">
             <Button
@@ -266,7 +272,7 @@ export function ProjectIndex() {
               onClick={() => setPage((p) => p - 1)}
             >
               <ChevronLeft className="size-3.5" />
-              <span>Previous</span>
+              <span>{t('previous')}</span>
             </Button>
             <div className="flex items-center gap-1">
               {Array.from({ length: data.totalPages }, (_, i) => i + 1).map((p) => (
@@ -291,7 +297,7 @@ export function ProjectIndex() {
               disabled={data.page >= data.totalPages}
               onClick={() => setPage((p) => p + 1)}
             >
-              <span>Next</span>
+              <span>{t('next')}</span>
               <ChevronRight className="size-3.5" />
             </Button>
           </div>
@@ -300,7 +306,7 @@ export function ProjectIndex() {
 
       <DeleteDialog
         open={!!deleteTarget}
-        title={deleteTarget?.title || ""}
+        title={deleteTarget ? resolveTranslation(deleteTarget.title, locale) : ""}
         onConfirm={handleDelete}
         onCancel={() => setDeleteTarget(null)}
         loading={deleting}

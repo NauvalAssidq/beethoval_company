@@ -12,12 +12,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuItem } from "@/components/ui/sidebar";
 import { User, LogOut, ChevronsUpDown } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { signOut, useSession, SessionProvider } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 function NavUserContent({ user: propUser }: { user?: { name?: string | null, email?: string | null, image?: string | null } }) {
   const { data: session } = useSession();
   const user = session?.user || propUser;
+  const t = useTranslations("NavUser");
 
   return (
     <SidebarMenuItem>
@@ -34,17 +36,17 @@ function NavUserContent({ user: propUser }: { user?: { name?: string | null, ema
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56" side="right" sideOffset={8}>
           <DropdownMenuGroup>
-            <DropdownMenuLabel className="font-serif">My Account</DropdownMenuLabel>
+            <DropdownMenuLabel className="font-serif">{t('my_account')}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="cursor-pointer focus:bg-indigo-50 focus:text-indigo-600 transition-colors" render={<Link href="/dashboard/profile" className="w-full" />}>
               <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+              <span>{t('profile')}</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/login" })} className="cursor-pointer focus:bg-red-50 focus:text-red-600 transition-colors">
             <LogOut className="mr-2 h-4 w-4" />
-            <span>Log out</span>
+            <span>{t('log_out')}</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
