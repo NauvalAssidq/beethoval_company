@@ -1,4 +1,4 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -59,7 +59,10 @@ export async function PUT(
     const db = client.db("portfolio");
 
     const existing = await db.collection("projects").findOne({
-      slug,
+      $or: [
+        { "slug.en": slug.en },
+        { "slug.id": slug.id }
+      ],
       _id: { $ne: new ObjectId(id) },
     });
     if (existing) {
@@ -86,8 +89,11 @@ export async function PUT(
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
+    revalidateTag("projects", undefined as any);
     revalidatePath("/", "page");
+    revalidateTag("projects", undefined as any);
     revalidatePath("/project");
+    revalidateTag("projects", undefined as any);
     revalidatePath(`/project/${slug}`);
 
     return NextResponse.json({ success: true });
@@ -121,8 +127,11 @@ export async function DELETE(
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
+    revalidateTag("projects", undefined as any);
     revalidatePath("/", "page");
+    revalidateTag("projects", undefined as any);
     revalidatePath("/project");
+    revalidateTag("projects", undefined as any);
     revalidatePath("/project/[slug]", "page");
 
     return NextResponse.json({ success: true });

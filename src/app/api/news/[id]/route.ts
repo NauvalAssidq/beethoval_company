@@ -1,4 +1,4 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -59,7 +59,10 @@ export async function PUT(
     const db = client.db("portfolio");
 
     const existing = await db.collection("news").findOne({
-      slug,
+      $or: [
+        { "slug.en": slug.en },
+        { "slug.id": slug.id }
+      ],
       _id: { $ne: new ObjectId(id) },
     });
     if (existing) {
@@ -85,8 +88,11 @@ export async function PUT(
       return NextResponse.json({ error: "News article not found" }, { status: 404 });
     }
 
+    revalidateTag("news", undefined as any);
     revalidatePath("/", "page");
+    revalidateTag("news", undefined as any);
     revalidatePath("/news");
+    revalidateTag("news", undefined as any);
     revalidatePath(`/news/${slug}`);
 
     return NextResponse.json({ success: true });
@@ -120,8 +126,11 @@ export async function DELETE(
       return NextResponse.json({ error: "News article not found" }, { status: 404 });
     }
 
+    revalidateTag("news", undefined as any);
     revalidatePath("/", "page");
+    revalidateTag("news", undefined as any);
     revalidatePath("/news");
+    revalidateTag("news", undefined as any);
     revalidatePath("/news/[slug]", "page");
 
     return NextResponse.json({ success: true });

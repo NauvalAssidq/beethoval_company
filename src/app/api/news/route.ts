@@ -1,4 +1,4 @@
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -75,7 +75,12 @@ export async function POST(req: Request) {
     const client = await clientPromise;
     const db = client.db("portfolio");
 
-    const existing = await db.collection("news").findOne({ slug });
+    const existing = await db.collection("news").findOne({
+      $or: [
+        { "slug.en": slug.en },
+        { "slug.id": slug.id }
+      ]
+    });
     if (existing) {
       return NextResponse.json({ error: "A news article with this slug already exists" }, { status: 409 });
     }
@@ -93,8 +98,11 @@ export async function POST(req: Request) {
 
     const result = await db.collection("news").insertOne(newArticle);
 
+    revalidateTag("news", undefined as any);
     revalidatePath("/", "page");
+    revalidateTag("news", undefined as any);
     revalidatePath("/news");
+    revalidateTag("news", undefined as any);
     revalidatePath(`/news/${slug}`);
 
     return NextResponse.json({ success: true, id: result.insertedId.toString() }, { status: 201 });
