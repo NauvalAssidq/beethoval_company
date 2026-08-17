@@ -194,14 +194,14 @@ export function NewsDetailClient({
             : "opacity-0 translate-y-10"
         )}
       >
-        <article className="max-w-2xl mx-auto px-4 sm:px-6 py-16 md:py-24 lg:py-32">
+        <article className="max-w-4xl mx-auto px-4 sm:px-6 py-16 md:py-24 lg:py-32">
           <div
             className={cn(
               "prose prose-lg max-w-none prose-public",
               "prose-headings:font-serif prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-gray-900",
               "prose-p:font-sans prose-p:text-gray-600 prose-p:leading-[1.8] prose-p:text-[17px]",
               "prose-a:text-indigo-600 prose-a:underline prose-a:underline-offset-[3px] hover:prose-a:text-indigo-800 prose-a:font-medium prose-a:decoration-indigo-300",
-              "prose-img:rounded-xl prose-img:shadow-sm prose-img:my-12 prose-img:w-[100vw] sm:prose-img:w-[768px] prose-img:max-w-none prose-img:relative prose-img:left-[50%] prose-img:-translate-x-1/2",
+              "prose-img:w-full prose-img:max-w-4xl prose-img:mx-auto prose-img:h-auto prose-img:rounded-2xl prose-img:border prose-img:border-gray-200/80 prose-img:my-10 prose-img:shadow-md",
               "prose-blockquote:border-l-2 prose-blockquote:border-indigo-500 prose-blockquote:font-serif prose-blockquote:italic prose-blockquote:text-gray-500 prose-blockquote:pl-6 prose-blockquote:not-italic",
               "prose-code:font-mono prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none",
               "prose-pre:bg-[#1e1e2e] prose-pre:rounded-xl prose-pre:text-sm",
