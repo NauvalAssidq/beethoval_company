@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import clientPromise from "@/lib/mongodb";
 import { validateCSRF, sanitizeInput } from "@/lib/security";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateSiteContent } from "@/lib/revalidate";
 
 export async function GET() {
   try {
@@ -77,8 +77,7 @@ export async function PUT(req: Request) {
       { upsert: true }
     );
 
-    revalidateTag("hero", undefined as any);
-    revalidatePath("/", "page");
+    revalidateSiteContent(["hero"], ["/", "/dashboard/hero"]);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

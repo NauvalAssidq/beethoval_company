@@ -1,4 +1,4 @@
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateSiteContent } from "@/lib/revalidate";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -29,8 +29,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Image not found" }, { status: 404 });
     }
 
-    revalidateTag("gallery", undefined as any);
-    revalidatePath("/", "page");
+    revalidateSiteContent(["gallery", "marquee-items"], ["/", "/dashboard/gallery", "/dashboard"]);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

@@ -1,4 +1,4 @@
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateSiteContent } from "@/lib/revalidate";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -80,8 +80,7 @@ export async function PUT(
       return NextResponse.json({ error: "Service not found" }, { status: 404 });
     }
 
-    revalidateTag("services", undefined as any);
-    revalidatePath("/", "page");
+    revalidateSiteContent(["services"], ["/", "/dashboard/services"]);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
@@ -114,8 +113,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Service not found" }, { status: 404 });
     }
 
-    revalidateTag("services", undefined as any);
-    revalidatePath("/", "page");
+    revalidateSiteContent(["services"], ["/", "/dashboard/services"]);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

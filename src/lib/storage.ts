@@ -12,9 +12,17 @@ import { Readable } from "stream";
 const STORAGE_MODE = process.env.STORAGE_MODE || "local";
 
 function getR2Client() {
+  const rawEndpoint = process.env.R2_ENDPOINT || "";
+  let endpoint = rawEndpoint;
+  try {
+    endpoint = new URL(rawEndpoint).origin;
+  } catch {
+    endpoint = rawEndpoint.replace(/\/+$/, "");
+  }
+
   return new S3Client({
     region: "auto",
-    endpoint: process.env.R2_ENDPOINT!,
+    endpoint,
     credentials: {
       accessKeyId: process.env.R2_ACCESS_KEY_ID!,
       secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,

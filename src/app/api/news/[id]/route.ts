@@ -1,4 +1,4 @@
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateSiteContent } from "@/lib/revalidate";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -88,12 +88,7 @@ export async function PUT(
       return NextResponse.json({ error: "News article not found" }, { status: 404 });
     }
 
-    revalidateTag("news", undefined as any);
-    revalidatePath("/", "page");
-    revalidateTag("news", undefined as any);
-    revalidatePath("/news");
-    revalidateTag("news", undefined as any);
-    revalidatePath(`/news/${slug}`);
+    revalidateSiteContent(["news"], ["/", "/news", "/news/[slug]", "/dashboard", "/dashboard/news"]);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
@@ -126,12 +121,7 @@ export async function DELETE(
       return NextResponse.json({ error: "News article not found" }, { status: 404 });
     }
 
-    revalidateTag("news", undefined as any);
-    revalidatePath("/", "page");
-    revalidateTag("news", undefined as any);
-    revalidatePath("/news");
-    revalidateTag("news", undefined as any);
-    revalidatePath("/news/[slug]", "page");
+    revalidateSiteContent(["news"], ["/", "/news", "/news/[slug]", "/dashboard", "/dashboard/news"]);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

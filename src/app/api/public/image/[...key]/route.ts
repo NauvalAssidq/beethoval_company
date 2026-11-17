@@ -9,7 +9,10 @@ export async function GET(
     const { key } = await params;
     const objectKey = key.join("/");
 
-    if (!objectKey.match(/^uploads\/\d+\.webp$/)) {
+    if (
+      objectKey.includes("..") ||
+      !objectKey.match(/^[a-zA-Z0-9/_-]+\.(webp|png|jpe?g|gif|svg|avif)$/i)
+    ) {
       return NextResponse.json({ error: "Invalid path" }, { status: 400 });
     }
 

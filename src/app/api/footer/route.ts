@@ -1,4 +1,4 @@
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateSiteContent } from "@/lib/revalidate";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -86,8 +86,7 @@ export async function PUT(request: Request) {
       { upsert: true }
     );
 
-    revalidateTag("footer", undefined as any);
-    revalidatePath("/", "page");
+    revalidateSiteContent(["footer"], ["/", "/dashboard/footer"]);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

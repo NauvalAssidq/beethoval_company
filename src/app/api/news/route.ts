@@ -1,4 +1,4 @@
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateSiteContent } from "@/lib/revalidate";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -98,12 +98,7 @@ export async function POST(req: Request) {
 
     const result = await db.collection("news").insertOne(newArticle);
 
-    revalidateTag("news", undefined as any);
-    revalidatePath("/", "page");
-    revalidateTag("news", undefined as any);
-    revalidatePath("/news");
-    revalidateTag("news", undefined as any);
-    revalidatePath(`/news/${slug}`);
+    revalidateSiteContent(["news"], ["/", "/news", "/dashboard", "/dashboard/news"]);
 
     return NextResponse.json({ success: true, id: result.insertedId.toString() }, { status: 201 });
   } catch (error: any) {
