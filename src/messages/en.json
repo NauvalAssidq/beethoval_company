@@ -104,6 +104,13 @@
     "action_2": "Action 2",
     "line_3_sans_serif": "Line 3 (Sans-serif)",
     "subtitle": "Subtitle",
+    "project_showcase": "Project Showcase",
+    "project_showcase_hint": "Select up to 3 projects to showcase on the landing page. Leave empty to automatically show the 3 newest projects.",
+    "reset_to_newest": "Use Newest (Default)",
+    "selected_count": "{count}/3 selected",
+    "using_newest_default": "Default: 3 newest projects",
+    "no_projects_available": "No projects available yet.",
+    "max_showcase_reached": "You can select up to 3 showcase projects",
     "save_changes": "Save Changes"
   },
   "NewsDetailClient": {

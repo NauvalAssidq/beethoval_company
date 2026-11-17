@@ -104,6 +104,13 @@
     "action_2": "Action 2",
     "line_3_sans_serif": "Line 3 (Sans-serif)",
     "subtitle": "Subtitle",
+    "project_showcase": "Pilihan Showcase Proyek",
+    "project_showcase_hint": "Pilih hingga 3 proyek untuk ditampilkan di halaman utama. Biarkan kosong untuk menampilkan 3 proyek terbaru secara otomatis.",
+    "reset_to_newest": "Gunakan Terbaru (Default)",
+    "selected_count": "{count}/3 dipilih",
+    "using_newest_default": "Default: 3 proyek terbaru",
+    "no_projects_available": "Belum ada proyek tersedia.",
+    "max_showcase_reached": "Maksimal 3 proyek showcase yang dapat dipilih",
     "save_changes": "Simpan Perubahan"
   },
   "NewsDetailClient": {

@@ -1,4 +1,5 @@
 import clientPromise from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 import { unstable_cache } from "next/cache";
 import type { Service } from "@/types/service";
 import type { LocalizedString } from "@/types/i18n";
@@ -101,8 +102,10 @@ const defaultFooterData: FooterData = {
 async function fetchMarqueeItems(): Promise<MarqueeItem[]> {
   const client = await clientPromise;
   const db = client.db("portfolio");
-  const projects = await db.collection("projects").find({}).toArray();
-  const galleries = await db.collection("galleries").find({}).toArray();
+  const [projects, galleries] = await Promise.all([
+    db.collection("projects").find({}, { projection: { marqueeImage: 1, marqueeImages: 1, order: 1 } }).toArray(),
+    db.collection("galleries").find({}, { projection: { url: 1, order: 1 } }).toArray(),
+  ]);
   const mixed: MarqueeItem[] = [
     ...projects
       .map((p) => ({
@@ -126,11 +129,45 @@ async function fetchMarqueeItems(): Promise<MarqueeItem[]> {
 async function fetchProjectCards(): Promise<ProjectCard[]> {
   const client = await clientPromise;
   const db = client.db("portfolio");
-  const projects = await db
-    .collection("projects")
-    .find({})
-    .sort({ createdAt: -1 })
-    .toArray();
+
+  const hero = await db.collection("hero").findOne({}, { projection: { showcaseProjectIds: 1 } });
+  const selectedIds: string[] = Array.isArray(hero?.showcaseProjectIds)
+    ? hero.showcaseProjectIds.filter((id: unknown): id is string => typeof id === "string" && ObjectId.isValid(id))
+    : [];
+
+  const cardProjection = { title: 1, slug: 1, description: 1, coverImage: 1, techStack: 1 };
+
+  let projects;
+  if (selectedIds.length > 0) {
+    const objectIds = selectedIds.slice(0, 3).map((id) => new ObjectId(id));
+    const matched = await db
+      .collection("projects")
+      .find({ _id: { $in: objectIds } }, { projection: cardProjection })
+      .toArray();
+
+    const byId = new Map(matched.map((p) => [p._id.toString(), p]));
+    projects = selectedIds
+      .slice(0, 3)
+      .map((id) => byId.get(id))
+      .filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+    if (projects.length === 0) {
+      projects = await db
+        .collection("projects")
+        .find({}, { projection: cardProjection })
+        .sort({ createdAt: -1 })
+        .limit(3)
+        .toArray();
+    }
+  } else {
+    projects = await db
+      .collection("projects")
+      .find({}, { projection: cardProjection })
+      .sort({ createdAt: -1 })
+      .limit(3)
+      .toArray();
+  }
+
   return projects.map((p) => ({
     _id: p._id.toString(),
     title: p.title,
@@ -160,7 +197,7 @@ async function fetchNews(): Promise<NewsArticle[]> {
   const db = client.db("portfolio");
   const news = await db
     .collection("news")
-    .find({})
+    .find({}, { projection: { title: 1, slug: 1, excerpt: 1, coverImage: 1, createdAt: 1 } })
     .sort({ createdAt: -1 })
     .limit(4)
     .toArray();
@@ -226,7 +263,7 @@ export const getCachedMarqueeItems = unstable_cache(
 export const getCachedProjectCards = unstable_cache(
   fetchProjectCards,
   ["project-cards"],
-  { tags: ["projects"], revalidate: 300 }
+  { tags: ["projects", "hero"], revalidate: 300 }
 );
 
 export const getCachedServices = unstable_cache(

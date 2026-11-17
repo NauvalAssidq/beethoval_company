@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
-import { Loader2, Save, Type, MessageSquare } from "lucide-react";
+import { Loader2, Save, Type, MessageSquare, FolderKanban, Check, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 import {
   Combobox,
   ComboboxInput,
@@ -15,7 +17,14 @@ import {
   ComboboxItem,
 } from "@/components/ui/combobox";
 import { useTranslations, useLocale } from "next-intl";
-import type { LocalizedString } from "@/types/i18n";
+import { resolveTranslation, type LocalizedString } from "@/types/i18n";
+
+interface ProjectOption {
+  _id: string;
+  title: LocalizedString | string;
+  coverImage?: string;
+  techStack?: string[];
+}
 
 export function HeroIndex() {
   const locale = useLocale() as "en" | "id";
@@ -27,19 +36,25 @@ export function HeroIndex() {
     highlightWord2: { en: "", id: "" } as LocalizedString,
     highlightAction2: "highlight",
     line3: { en: "", id: "" } as LocalizedString,
-    subtitle: { en: "", id: "" } as LocalizedString
+    subtitle: { en: "", id: "" } as LocalizedString,
+    showcaseProjectIds: [] as string[],
   });
 
+  const [projects, setProjects] = useState<ProjectOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const t = useTranslations("HeroIndex");
 
   useEffect(() => {
-    async function fetchHero() {
+    async function fetchHeroAndProjects() {
       try {
-        const res = await fetch("/api/hero");
-        if (res.ok) {
-          const data = await res.json();
+        const [heroRes, projectsRes] = await Promise.all([
+          fetch("/api/hero"),
+          fetch("/api/project?limit=100"),
+        ]);
+
+        if (heroRes.ok) {
+          const data = await heroRes.json();
           setHero({
             line1: data.line1 || { en: "", id: "" },
             highlightWord1: data.highlightWord1 || { en: "", id: "" },
@@ -48,10 +63,16 @@ export function HeroIndex() {
             highlightWord2: data.highlightWord2 || { en: "", id: "" },
             highlightAction2: data.highlightAction2 || "highlight",
             line3: data.line3 || { en: "", id: "" },
-            subtitle: data.subtitle || { en: "", id: "" }
+            subtitle: data.subtitle || { en: "", id: "" },
+            showcaseProjectIds: Array.isArray(data.showcaseProjectIds) ? data.showcaseProjectIds : [],
           });
         } else {
           toast.error("Failed to load hero data.");
+        }
+
+        if (projectsRes.ok) {
+          const pData = await projectsRes.json();
+          setProjects(Array.isArray(pData.projects) ? pData.projects : []);
         }
       } catch (error) {
         toast.error("An error occurred while loading hero data.");
@@ -59,8 +80,28 @@ export function HeroIndex() {
         setLoading(false);
       }
     }
-    fetchHero();
+    fetchHeroAndProjects();
   }, []);
+
+  const toggleShowcaseProject = (projectId: string) => {
+    setHero((prev) => {
+      const exists = prev.showcaseProjectIds.includes(projectId);
+      if (exists) {
+        return {
+          ...prev,
+          showcaseProjectIds: prev.showcaseProjectIds.filter((id) => id !== projectId),
+        };
+      }
+      if (prev.showcaseProjectIds.length >= 3) {
+        toast.info(t("max_showcase_reached"));
+        return prev;
+      }
+      return {
+        ...prev,
+        showcaseProjectIds: [...prev.showcaseProjectIds, projectId],
+      };
+    });
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -237,6 +278,103 @@ export function HeroIndex() {
                 required
               />
             </div>
+          </div>
+
+          <div className="space-y-4 pt-6 border-t border-gray-100 dark:border-gray-800">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-serif font-medium text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                  <FolderKanban className="size-5 text-indigo-500" />
+                  {t('project_showcase')}
+                </h2>
+                <p className="text-xs text-gray-500 mt-1">
+                  {t('project_showcase_hint')}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-xs font-mono px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                  {hero.showcaseProjectIds.length === 0
+                    ? t('using_newest_default')
+                    : t('selected_count', { count: hero.showcaseProjectIds.length })}
+                </span>
+                {hero.showcaseProjectIds.length > 0 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setHero((prev) => ({ ...prev, showcaseProjectIds: [] }))}
+                    className="h-7 px-2.5 text-xs rounded-full gap-1"
+                  >
+                    <RotateCcw className="size-3" />
+                    {t('reset_to_newest')}
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {projects.length === 0 ? (
+              <p className="text-sm text-gray-400 py-4">{t('no_projects_available')}</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {projects.map((project) => {
+                  const selectedIndex = hero.showcaseProjectIds.indexOf(project._id);
+                  const isSelected = selectedIndex !== -1;
+                  const title = resolveTranslation(project.title as any, locale);
+
+                  return (
+                    <button
+                      key={project._id}
+                      type="button"
+                      onClick={() => toggleShowcaseProject(project._id)}
+                      className={cn(
+                        "group relative flex items-center gap-3 p-2.5 rounded-xl border text-left transition-all",
+                        isSelected
+                          ? "border-indigo-500 bg-indigo-50/50 dark:bg-indigo-950/30"
+                          : "border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 bg-white dark:bg-gray-900"
+                      )}
+                    >
+                      <div className="relative size-12 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 shrink-0">
+                        {project.coverImage ? (
+                          <Image
+                            src={project.coverImage}
+                            alt={title}
+                            fill
+                            sizes="48px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-300 font-serif italic text-lg">
+                            {title[0] || "P"}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                          {title}
+                        </p>
+                        {project.techStack && project.techStack.length > 0 && (
+                          <p className="text-[11px] text-gray-400 truncate mt-0.5">
+                            {project.techStack.slice(0, 3).join(" · ")}
+                          </p>
+                        )}
+                      </div>
+
+                      <div
+                        className={cn(
+                          "size-6 rounded-full flex items-center justify-center text-[11px] font-mono font-semibold shrink-0 transition-colors",
+                          isSelected
+                            ? "bg-indigo-600 text-white"
+                            : "border border-gray-200 dark:border-gray-700 text-transparent group-hover:border-gray-300"
+                        )}
+                      >
+                        {isSelected ? String(selectedIndex + 1).padStart(2, "0") : <Check className="size-3" />}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
         </div>

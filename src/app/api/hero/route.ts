@@ -53,8 +53,13 @@ export async function PUT(req: Request) {
       highlightWord2, 
       highlightAction2, 
       line3, 
-      subtitle 
+      subtitle,
+      showcaseProjectIds
     } = body;
+
+    const cleanShowcaseIds = Array.isArray(showcaseProjectIds)
+      ? showcaseProjectIds.filter((id: unknown): id is string => typeof id === "string" && id.trim().length > 0).slice(0, 3)
+      : [];
 
     const client = await clientPromise;
     const db = client.db("portfolio");
@@ -68,6 +73,7 @@ export async function PUT(req: Request) {
       highlightAction2,
       line3,
       subtitle,
+      showcaseProjectIds: cleanShowcaseIds,
       updatedAt: new Date(),
     };
 
@@ -77,7 +83,7 @@ export async function PUT(req: Request) {
       { upsert: true }
     );
 
-    revalidateSiteContent(["hero"], ["/", "/dashboard/hero"]);
+    revalidateSiteContent(["hero", "projects"], ["/", "/dashboard/hero"]);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
