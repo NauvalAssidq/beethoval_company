@@ -250,7 +250,20 @@
     "past_experiences": "Pengalaman Lalu",
     "projects_description": "Pilihan kurasi dari produk digital dan pengalaman web yang telah kami buat.",
     "no_projects_yet": "Belum ada proyek",
-    "projects_will_appear_here": "Proyek akan muncul di sini setelah diterbitkan dari dasbor."
+    "projects_will_appear_here": "Proyek akan muncul di sini setelah diterbitkan dari dasbor.",
+    "view_catalog": "Jelajahi Katalog Lengkap"
+  },
+  "ProjectCatalog": {
+    "eyebrow": "Katalog & Portofolio",
+    "title_primary": "Katalog",
+    "title_accent": "Proyek",
+    "subtitle": "Jelajahi arsip lengkap produk digital, antarmuka, dan karya rekayasa kami.",
+    "search_placeholder": "Cari proyek atau teknologi...",
+    "all_tech": "Semua",
+    "no_projects_found": "Tidak ada proyek yang cocok",
+    "no_projects_hint": "Coba hapus pencarian atau pilih tag teknologi lainnya.",
+    "reset_filters": "Reset Filter",
+    "showing_count": "{count, plural, =1 {1 proyek} other {# proyek}}"
   },
   "Services": {
     "expertise": "Keahlian",

@@ -304,7 +304,7 @@ export function ProjectDetailClient({
           </Link>
 
           <Link
-            href="/#projects"
+            href="/project"
             className="text-[13px] font-medium text-gray-400 hover:text-gray-700 transition-colors inline-flex items-center gap-1.5"
           >
             <span>All Projects</span>

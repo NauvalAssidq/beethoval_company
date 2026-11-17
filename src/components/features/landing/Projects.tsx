@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ProjectCard } from "@/lib/landing-data";
 import { useReveal } from "@/hooks/useReveal";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { resolveTranslation } from "@/types/i18n";
+import { Link } from "@/i18n/routing";
 
 function ProjectItem({
   project,
@@ -97,7 +98,7 @@ export function Projects({ initialProjects }: ProjectsProps) {
   const { ref: sectionRef, visible: isInView } = useReveal(0.05) as { ref: React.RefObject<HTMLElement | null>, visible: boolean };
   const t = useTranslations("Projects");
 
-  const projects = initialProjects ?? [];
+  const projects = (initialProjects ?? []).slice(0, 3);
 
   const leftCol = projects.filter((_, i) => i % 2 === 0);
   const rightCol = projects.filter((_, i) => i % 2 === 1);
@@ -121,6 +122,13 @@ export function Projects({ initialProjects }: ProjectsProps) {
           <p className="text-[14px] text-gray-400 font-medium max-w-lg leading-relaxed pb-2">
             {t("projects_description")}
           </p>
+          <Link
+            href="/project"
+            className="mt-6 inline-flex items-center justify-center gap-3 h-12 px-8 text-[11px] font-bold uppercase tracking-[0.16em] text-white bg-gray-900 rounded-full group hover:bg-indigo-600 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <span>{t("view_catalog")}</span>
+            <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </Link>
         </div>
       </div>
 
@@ -162,6 +170,18 @@ export function Projects({ initialProjects }: ProjectsProps) {
                 />
               ))}
             </div>
+          </div>
+        )}
+
+        {projects.length > 0 && (
+          <div className="mt-16 md:mt-20 flex justify-center">
+            <Link
+              href="/project"
+              className="inline-flex items-center gap-3 font-serif italic text-xl sm:text-2xl text-gray-900 hover:text-indigo-600 transition-colors group"
+            >
+              <span>{t("view_catalog")}</span>
+              <ArrowRight className="size-5 transition-transform duration-300 group-hover:translate-x-1.5" />
+            </Link>
           </div>
         )}
       </div>

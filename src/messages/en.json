@@ -250,7 +250,20 @@
     "past_experiences": "Past Experiences",
     "projects_description": "A curated selection of the digital products and web experiences we've crafted.",
     "no_projects_yet": "No projects yet",
-    "projects_will_appear_here": "Projects will appear here once they are published from the dashboard."
+    "projects_will_appear_here": "Projects will appear here once they are published from the dashboard.",
+    "view_catalog": "Explore Full Catalog"
+  },
+  "ProjectCatalog": {
+    "eyebrow": "Catalog & Showcase",
+    "title_primary": "Project",
+    "title_accent": "Catalog",
+    "subtitle": "Explore our complete archive of digital products, interfaces, and engineering work.",
+    "search_placeholder": "Search projects or technologies...",
+    "all_tech": "All",
+    "no_projects_found": "No projects match your filter",
+    "no_projects_hint": "Try clearing your search or selecting a different technology tag.",
+    "reset_filters": "Reset Filters",
+    "showing_count": "{count, plural, =1 {1 project} other {# projects}}"
   },
   "Services": {
     "expertise": "Expertise",
