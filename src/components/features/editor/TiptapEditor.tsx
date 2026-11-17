@@ -36,6 +36,7 @@ export function TiptapEditor({ content, onChange, className }: TiptapEditorProps
   const [isUploading, setIsUploading] = useState(false);
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         codeBlock: false,
@@ -89,7 +90,7 @@ export function TiptapEditor({ content, onChange, className }: TiptapEditorProps
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose-base lg:prose-lg max-w-none focus:outline-none min-h-[500px] p-8 lg:p-10 " +
+          "prose prose-sm sm:prose-base lg:prose-lg max-w-none focus:outline-none min-h-[420px] p-5 sm:p-6 lg:p-8 " +
           "dark:prose-invert prose-gray " +
           "prose-headings:font-serif prose-headings:font-semibold prose-headings:tracking-tight " +
           "prose-p:font-sans prose-p:leading-relaxed text-gray-800 dark:text-gray-200 " +
@@ -139,11 +140,11 @@ export function TiptapEditor({ content, onChange, className }: TiptapEditorProps
   }
 
   return (
-    <div className={cn("w-full flex flex-col border border-gray-200 rounded-xl overflow-hidden bg-white dark:bg-gray-900 dark:border-gray-800", className)}>
-      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-gray-200 dark:bg-gray-900/90 dark:border-gray-800">
+    <div className={cn("w-full flex flex-col border border-gray-200 rounded-xl bg-white dark:bg-zinc-900 dark:border-zinc-800", className)}>
+      <div className="sticky top-0 z-10 border-b border-gray-200 dark:border-zinc-800 rounded-t-xl">
         <EditorToolbar editor={editor} onImageUpload={handleImageUpload} isUploading={isUploading} />
       </div>
-      <div className="overflow-y-auto max-h-[700px]">
+      <div className="overflow-y-auto max-h-[700px] rounded-b-xl">
         <EditorContent editor={editor} />
       </div>
     </div>

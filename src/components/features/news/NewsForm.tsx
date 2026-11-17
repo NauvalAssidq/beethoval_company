@@ -221,7 +221,7 @@ export function NewsForm({ articleId }: NewsFormProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 lg:sticky lg:top-6 lg:self-start">
           <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 dark:bg-gray-900/50 dark:border-gray-800 flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <Label htmlFor="coverImage" className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -238,7 +238,7 @@ export function NewsForm({ articleId }: NewsFormProps) {
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 lg:mt-auto">
+          <div className="flex items-center justify-end gap-3">
             <Button
               type="button"
               variant="ghost"

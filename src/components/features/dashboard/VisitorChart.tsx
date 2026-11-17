@@ -35,7 +35,7 @@ export function VisitorChart({ data }: { data: VisitData[] }) {
   }
 
   return (
-    <ChartContainer config={chartConfig} className="min-h-[160px] w-full">
+    <ChartContainer config={chartConfig} className="h-full min-h-[140px] w-full aspect-auto">
       <BarChart accessibilityLayer data={data} margin={{ top: 12, right: 24, left: 24, bottom: 24 }}>
         <CartesianGrid vertical={false} horizontal={true} strokeDasharray="0" className="stroke-zinc-800 dark:stroke-zinc-800/60" />
         

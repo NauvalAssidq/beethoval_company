@@ -9,6 +9,8 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { resolveTranslation } from "@/types/i18n";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Dashboard",
 };
@@ -42,7 +44,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     ]).toArray(),
     db.collection("projects").find({}, { projection: { title: 1, coverImage: 1, createdAt: 1, _id: 1 } }).sort({ createdAt: -1 }).limit(4).toArray(),
     db.collection("news").find({}, { projection: { title: 1, coverImage: 1, createdAt: 1, _id: 1 } }).sort({ createdAt: -1 }).limit(4).toArray(),
-    db.collection("galleries").find({}, { projection: { url: 1 } }).sort({ createdAt: -1 }).limit(12).toArray(),
+    db.collection("galleries").find({}, { projection: { url: 1 } }).sort({ createdAt: -1 }).limit(6).toArray(),
   ]);
 
   const chartData = [];
@@ -71,88 +73,90 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
 
 
   return (
-    <div className="flex flex-col gap-6 pb-12 w-full">
+    <div className="flex flex-col gap-4 w-full lg:h-[calc(100dvh-6.5rem)] lg:overflow-hidden">
       
-      <div className="flex flex-wrap items-center gap-3 w-full">
-        <div className="backdrop-blur-md bg-white/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-white/10 rounded-full px-5 py-2.5 flex items-center gap-3">
-          <FolderKanban className="size-4 text-indigo-600 dark:text-indigo-400" />
-          <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">{t('projects')}</span>
-          <span className="text-sm font-bold text-zinc-900 dark:text-white">{projectCount}</span>
+      <div className="flex flex-wrap items-center gap-2.5 w-full shrink-0">
+        <div className="backdrop-blur-md bg-white/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-white/10 rounded-full px-4 py-1.5 flex items-center gap-2.5">
+          <FolderKanban className="size-3.5 text-indigo-600 dark:text-indigo-400" />
+          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">{t('projects')}</span>
+          <span className="text-xs font-bold text-zinc-900 dark:text-white">{projectCount}</span>
         </div>
-        <div className="backdrop-blur-md bg-white/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-white/10 rounded-full px-5 py-2.5 flex items-center gap-3">
-          <FileText className="size-4 text-indigo-600 dark:text-indigo-400" />
-          <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">{t('articles')}</span>
-          <span className="text-sm font-bold text-zinc-900 dark:text-white">{newsCount}</span>
+        <div className="backdrop-blur-md bg-white/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-white/10 rounded-full px-4 py-1.5 flex items-center gap-2.5">
+          <FileText className="size-3.5 text-indigo-600 dark:text-indigo-400" />
+          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">{t('articles')}</span>
+          <span className="text-xs font-bold text-zinc-900 dark:text-white">{newsCount}</span>
         </div>
-        <div className="backdrop-blur-md bg-white/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-white/10 rounded-full px-5 py-2.5 flex items-center gap-3">
-          <Images className="size-4 text-indigo-600 dark:text-indigo-400" />
-          <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">{t('gallery')}</span>
-          <span className="text-sm font-bold text-zinc-900 dark:text-white">{galleryCount}</span>
+        <div className="backdrop-blur-md bg-white/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-white/10 rounded-full px-4 py-1.5 flex items-center gap-2.5">
+          <Images className="size-3.5 text-indigo-600 dark:text-indigo-400" />
+          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">{t('gallery')}</span>
+          <span className="text-xs font-bold text-zinc-900 dark:text-white">{galleryCount}</span>
         </div>
-        <div className="backdrop-blur-md bg-white/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-white/10 rounded-full px-5 py-2.5 flex items-center gap-3">
-          <HelpCircle className="size-4 text-indigo-600 dark:text-indigo-400" />
-          <span className="text-sm font-medium text-zinc-500 dark:text-zinc-400">{t('faqs')}</span>
-          <span className="text-sm font-bold text-zinc-900 dark:text-white">{faqCount}</span>
+        <div className="backdrop-blur-md bg-white/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-white/10 rounded-full px-4 py-1.5 flex items-center gap-2.5">
+          <HelpCircle className="size-3.5 text-indigo-600 dark:text-indigo-400" />
+          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">{t('faqs')}</span>
+          <span className="text-xs font-bold text-zinc-900 dark:text-white">{faqCount}</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-[minmax(0,1.25fr)_minmax(0,0.75fr)] gap-4 flex-1 min-h-0">
         
-        <div className="col-span-1 md:col-span-2 rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden flex flex-col relative">
-          <div className="p-6 pb-0 flex items-center justify-between z-10 relative">
+        <div className="col-span-1 md:col-span-2 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden flex flex-col relative min-h-0">
+          <div className="p-4 pb-0 flex items-center justify-between z-10 relative shrink-0">
             <div className="flex flex-col">
-              <span className="text-xs font-bold tracking-widest text-zinc-500 uppercase flex items-center gap-2">
+              <span className="text-[11px] font-bold tracking-widest text-zinc-500 uppercase flex items-center gap-2">
                 <BarChart3 className="size-3" />
                 {t('visitor_analytics')}
               </span>
-              <span className="font-serif text-5xl text-zinc-900 dark:text-white mt-2 tracking-tighter">{totalVisits.toLocaleString()}</span>
-              <span className="text-sm text-emerald-600 dark:text-emerald-400 font-medium mt-1">{t('live_data_tracking')}</span>
+              <div className="flex items-baseline gap-3 mt-1">
+                <span className="font-serif text-3xl lg:text-4xl text-zinc-900 dark:text-white tracking-tighter">{totalVisits.toLocaleString()}</span>
+                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{t('live_data_tracking')}</span>
+              </div>
             </div>
             
             <div className="relative group cursor-pointer">
-              <select className="appearance-none bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-medium rounded-lg pl-4 pr-10 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+              <select className="appearance-none bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs font-medium rounded-lg pl-3 pr-8 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
                 <option>Last 7 Days</option>
                 <option>Last 30 Days</option>
                 <option>Last Quarter</option>
                 <option>Year to Date</option>
               </select>
-              <ChevronDown className="size-3 absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
+              <ChevronDown className="size-3 absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none" />
             </div>
           </div>
 
-          <div className="flex-1 w-full relative min-h-[220px] mt-4 z-0 px-2">
+          <div className="flex-1 w-full relative min-h-0 mt-2 z-0 px-2">
             <VisitorChart data={chartData} />
           </div>
         </div>
 
-        <div className="col-span-1 rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col overflow-hidden">
-          <div className="p-6 pb-4 border-b border-zinc-100 dark:border-zinc-900 flex items-center justify-between">
-            <span className="text-xs font-bold tracking-widest text-zinc-500 uppercase">{t('recent_projects')}</span>
+        <div className="col-span-1 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col overflow-hidden min-h-0">
+          <div className="px-5 py-3.5 border-b border-zinc-100 dark:border-zinc-900 flex items-center justify-between shrink-0">
+            <span className="text-[11px] font-bold tracking-widest text-zinc-500 uppercase">{t('recent_projects')}</span>
             <Link href="/dashboard/projects" className="text-[10px] text-indigo-600 hover:underline font-bold uppercase">{t('view_all')}</Link>
           </div>
-          <div className="flex flex-col w-full flex-1">
+          <div className="flex flex-col w-full flex-1 min-h-0">
             {recentProjects.map((project, i) => (
               <Link 
                 key={`p-${project._id}`} 
                 href={`/dashboard/projects/${project._id}/edit`}
-                className="group relative flex flex-col justify-center border-b border-zinc-100 dark:border-zinc-900 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] h-16 hover:h-40 overflow-hidden cursor-pointer last:border-b-0"
+                className="group relative flex flex-col justify-center border-b border-zinc-100 dark:border-zinc-900 transition-colors duration-300 flex-1 min-h-[52px] overflow-hidden cursor-pointer last:border-b-0"
               >
                 {project.coverImage && (
                   <>
                     <div 
-                      className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0 group-hover:opacity-100 transition-opacity duration-700 scale-105 group-hover:scale-100 z-0"
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"
                       style={{ backgroundImage: `url(${project.coverImage})` }}
                     />
-                    <div className="absolute inset-0 bg-white/90 dark:bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
+                    <div className="absolute inset-0 bg-white/90 dark:bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
                   </>
                 )}
                 
-                <div className="relative z-20 px-6 flex items-center justify-between w-full">
-                  <div className="flex flex-col">
-                    <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                <div className="relative z-20 px-5 flex items-center justify-between w-full">
+                  <div className="flex flex-col min-w-0">
+                    <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors truncate">
                       {resolveTranslation(project.title as any, locale)}
                     </h4>
-                    <span className="text-[10px] text-zinc-400 font-mono mt-1 opacity-0 group-hover:opacity-100 absolute group-hover:relative transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+                    <span className="text-[10px] text-zinc-400 font-mono mt-0.5">
                       {t('added')} {formatDate(project.createdAt)}
                     </span>
                   </div>
@@ -163,34 +167,34 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           </div>
         </div>
 
-        <div className="col-span-1 rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col overflow-hidden">
-          <div className="p-6 pb-4 border-b border-zinc-100 dark:border-zinc-900 flex items-center justify-between">
-            <span className="text-xs font-bold tracking-widest text-zinc-500 uppercase">{t('recent_articles')}</span>
+        <div className="col-span-1 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col overflow-hidden min-h-0">
+          <div className="px-5 py-3.5 border-b border-zinc-100 dark:border-zinc-900 flex items-center justify-between shrink-0">
+            <span className="text-[11px] font-bold tracking-widest text-zinc-500 uppercase">{t('recent_articles')}</span>
             <Link href="/dashboard/news" className="text-[10px] text-indigo-600 hover:underline font-bold uppercase">{t('view_all')}</Link>
           </div>
-          <div className="flex flex-col w-full flex-1">
+          <div className="flex flex-col w-full flex-1 min-h-0">
             {recentNews.map((news, i) => (
               <Link 
                 key={`n-${news._id}`} 
                 href={`/dashboard/news/${news._id}/edit`}
-                className="group relative flex flex-col justify-center border-b border-zinc-100 dark:border-zinc-900 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] h-16 hover:h-40 overflow-hidden cursor-pointer last:border-b-0"
+                className="group relative flex flex-col justify-center border-b border-zinc-100 dark:border-zinc-900 transition-colors duration-300 flex-1 min-h-[52px] overflow-hidden cursor-pointer last:border-b-0"
               >
                 {news.coverImage && (
                   <>
                     <div 
-                      className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0 group-hover:opacity-100 transition-opacity duration-700 scale-105 group-hover:scale-100 z-0"
+                      className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"
                       style={{ backgroundImage: `url(${news.coverImage})` }}
                     />
-                    <div className="absolute inset-0 bg-white/90 dark:bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
+                    <div className="absolute inset-0 bg-white/90 dark:bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
                   </>
                 )}
                 
-                <div className="relative z-20 px-6 flex items-center justify-between w-full">
-                  <div className="flex flex-col">
-                    <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                <div className="relative z-20 px-5 flex items-center justify-between w-full">
+                  <div className="flex flex-col min-w-0">
+                    <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors truncate">
                       {resolveTranslation(news.title as any, locale)}
                     </h4>
-                    <span className="text-[10px] text-zinc-400 font-mono mt-1 opacity-0 group-hover:opacity-100 absolute group-hover:relative transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+                    <span className="text-[10px] text-zinc-400 font-mono mt-0.5">
                       {t('published')} {formatDate(news.createdAt)}
                     </span>
                   </div>
@@ -201,9 +205,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           </div>
         </div>
 
-        <div className="col-span-1 md:col-span-2 lg:col-span-4 rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-6 flex flex-col">
-          <div className="flex items-center justify-between mb-6">
-            <span className="text-xs font-bold tracking-widest text-zinc-500 uppercase flex items-center gap-2">
+        <div className="col-span-1 md:col-span-2 lg:col-span-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-4 flex flex-col min-h-0">
+          <div className="flex items-center justify-between mb-3 shrink-0">
+            <span className="text-[11px] font-bold tracking-widest text-zinc-500 uppercase flex items-center gap-2">
               <Images className="size-3" />
               {t('gallery_overview')}
             </span>
@@ -211,9 +215,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
           </div>
           
           {recentGalleries.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 flex-1 min-h-0">
               {recentGalleries.map((img, i) => (
-                <Link href="/dashboard/gallery" key={`g-${img._id}`} className="group relative aspect-square rounded-xl overflow-hidden border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900">
+                <Link href="/dashboard/gallery" key={`g-${img._id}`} className="group relative h-full min-h-[110px] rounded-xl overflow-hidden border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900">
                   <Image 
                     src={img.url} 
                     alt="Gallery image" 
@@ -226,8 +230,8 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
               ))}
             </div>
           ) : (
-            <div className="w-full py-12 flex flex-col items-center justify-center border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
-              <Images className="size-8 text-zinc-300 dark:text-zinc-700 mb-3" />
+            <div className="w-full flex-1 min-h-[110px] flex flex-col items-center justify-center border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-900/50">
+              <Images className="size-6 text-zinc-300 dark:text-zinc-700 mb-2" />
               <p className="text-sm text-zinc-500">{t('no_images_in_gallery')}</p>
             </div>
           )}

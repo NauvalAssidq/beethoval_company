@@ -6,10 +6,11 @@ import { useRouter, usePathname } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Check } from "lucide-react";
+import { FlagIcon } from "@/components/ui/flag-icon";
 
 const locales = [
-  { value: "id", label: "Indonesia", flag: "🇮🇩", short: "ID" },
-  { value: "en", label: "English", flag: "🇺🇸", short: "EN" },
+  { value: "id", label: "Indonesia", short: "ID" },
+  { value: "en", label: "English", short: "EN" },
 ];
 
 interface PublicLanguageSwitcherProps {
@@ -59,9 +60,10 @@ export function PublicLanguageSwitcher({ className, isDarkTheme = false, align =
             : "bg-white/70 border-gray-200/60 text-gray-800 hover:bg-white hover:border-gray-300 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.05)]"
         )}
       >
-        <span className="text-lg leading-none filter drop-shadow-sm transition-transform group-hover:scale-110">
-          {selected.flag}
-        </span>
+        <FlagIcon
+          locale={selected.value}
+          className="size-4 transition-transform group-hover:scale-110"
+        />
         <span className="text-[11px] font-bold uppercase tracking-[0.12em]">
           {selected.short}
         </span>
@@ -100,9 +102,10 @@ export function PublicLanguageSwitcher({ className, isDarkTheme = false, align =
               )}
             >
               <div className="flex items-center gap-3 relative z-10">
-                <span className="text-xl leading-none filter drop-shadow-sm transition-transform group-hover:scale-110 duration-300">
-                  {l.flag}
-                </span>
+                <FlagIcon
+                  locale={l.value}
+                  className="size-5 transition-transform group-hover:scale-110 duration-300"
+                />
                 <span className="font-medium tracking-wide text-[13px]">{l.label}</span>
               </div>
               {l.value === locale && (

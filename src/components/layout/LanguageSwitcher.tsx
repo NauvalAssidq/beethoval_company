@@ -12,10 +12,11 @@ import {
   ComboboxList
 } from "@/components/ui/combobox";
 import { cn } from "@/lib/utils";
+import { FlagIcon } from "@/components/ui/flag-icon";
 
 const locales = [
-  { value: "id", label: "Indonesia", flag: "🇮🇩" },
-  { value: "en", label: "English", flag: "🇺🇸" },
+  { value: "id", label: "Indonesia" },
+  { value: "en", label: "English" },
 ];
 
 export function LanguageSwitcher({ triggerClassName }: { triggerClassName?: string } = {}) {
@@ -40,7 +41,7 @@ export function LanguageSwitcher({ triggerClassName }: { triggerClassName?: stri
       onValueChange={handleLanguageChange}
     >
       <ComboboxTrigger className={cn("flex items-center gap-2 border border-gray-200 rounded-lg px-3 py-1.5 text-sm bg-white hover:bg-gray-50 transition-colors dark:bg-zinc-900 dark:border-zinc-800 dark:hover:bg-zinc-800 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500", triggerClassName)}>
-        <span className="text-base leading-none">{selected.flag}</span>
+        <FlagIcon locale={selected.value} />
         <span className="font-medium uppercase text-xs tracking-wider text-gray-700 dark:text-gray-300">
           {selected.value}
         </span>
@@ -49,7 +50,7 @@ export function LanguageSwitcher({ triggerClassName }: { triggerClassName?: stri
         <ComboboxList>
           {locales.map((l) => (
             <ComboboxItem key={l.value} value={l.value} className="flex items-center gap-2 cursor-pointer">
-              <span className="text-base leading-none">{l.flag}</span>
+              <FlagIcon locale={l.value} />
               <span>{l.label}</span>
             </ComboboxItem>
           ))}
