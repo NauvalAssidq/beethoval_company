@@ -4,9 +4,11 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   images: {
     loader: "custom",
     loaderFile: "./src/lib/image-loader.ts",
+    minimumCacheTTL: 31536000,
   },
   async headers() {
     return [

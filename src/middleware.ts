@@ -16,11 +16,6 @@ function getGeoLocale(request: NextRequest): "id" | "en" | null {
 }
 
 export async function middleware(request: NextRequest) {
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET || process.env.BETTER_AUTH_SECRET,
-  });
-
   const { pathname, search } = request.nextUrl;
 
   const isMissingLocale = routing.locales.every(
@@ -44,6 +39,10 @@ export async function middleware(request: NextRequest) {
       : `/${pathname.split("/").slice(2).join("/")}`;
 
   if (pathWithoutLocale.startsWith("/dashboard")) {
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET || process.env.BETTER_AUTH_SECRET,
+    });
     if (!token) {
       const locale = isMissingLocale ? preferredLocale : pathname.split("/")[1];
       return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
@@ -51,6 +50,10 @@ export async function middleware(request: NextRequest) {
   }
 
   if (pathWithoutLocale === "/login" || pathWithoutLocale.startsWith("/login")) {
+    const token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET || process.env.BETTER_AUTH_SECRET,
+    });
     if (token) {
       const locale = isMissingLocale ? preferredLocale : pathname.split("/")[1];
       return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));

@@ -31,7 +31,7 @@ async function getAllNews() {
 
     const news = await db
       .collection("news")
-      .find({})
+      .find({}, { projection: { title: 1, slug: 1, excerpt: 1, coverImage: 1, tags: 1, createdAt: 1 } })
       .sort({ createdAt: -1 })
       .toArray();
 

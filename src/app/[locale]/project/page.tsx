@@ -32,7 +32,7 @@ async function getAllProjects(): Promise<CatalogProject[]> {
 
     const projects = await db
       .collection("projects")
-      .find({})
+      .find({}, { projection: { title: 1, slug: 1, description: 1, coverImage: 1, marqueeImage: 1, techStack: 1, createdAt: 1 } })
       .sort({ createdAt: -1 })
       .toArray();
 
