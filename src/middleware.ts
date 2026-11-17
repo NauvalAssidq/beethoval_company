@@ -6,17 +6,36 @@ import { routing } from "./i18n/routing";
 
 const intlMiddleware = createMiddleware(routing);
 
+function getGeoLocale(request: NextRequest): "id" | "en" | null {
+  const country =
+    request.headers.get("x-vercel-ip-country") ||
+    request.headers.get("cf-ipcountry");
+
+  if (!country) return null;
+  return country.toUpperCase() === "ID" ? "id" : "en";
+}
+
 export async function middleware(request: NextRequest) {
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET || process.env.BETTER_AUTH_SECRET,
   });
 
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
 
   const isMissingLocale = routing.locales.every(
     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   );
+
+  const localeCookie = request.cookies.get("NEXT_LOCALE")?.value;
+  const hasSavedLocale =
+    localeCookie !== undefined &&
+    routing.locales.includes(localeCookie as (typeof routing.locales)[number]);
+
+  const geoLocale = getGeoLocale(request);
+  const preferredLocale = hasSavedLocale
+    ? localeCookie
+    : geoLocale ?? routing.defaultLocale;
 
   const pathWithoutLocale = isMissingLocale
     ? pathname
@@ -26,16 +45,22 @@ export async function middleware(request: NextRequest) {
 
   if (pathWithoutLocale.startsWith("/dashboard")) {
     if (!token) {
-      const locale = isMissingLocale ? routing.defaultLocale : pathname.split("/")[1];
+      const locale = isMissingLocale ? preferredLocale : pathname.split("/")[1];
       return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
     }
   }
 
   if (pathWithoutLocale === "/login" || pathWithoutLocale.startsWith("/login")) {
     if (token) {
-      const locale = isMissingLocale ? routing.defaultLocale : pathname.split("/")[1];
+      const locale = isMissingLocale ? preferredLocale : pathname.split("/")[1];
       return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));
     }
+  }
+
+  if (isMissingLocale) {
+    const targetLocale = preferredLocale;
+    const targetUrl = new URL(`/${targetLocale}${pathname === "/" ? "" : pathname}${search}`, request.url);
+    return NextResponse.redirect(targetUrl);
   }
 
   return intlMiddleware(request);

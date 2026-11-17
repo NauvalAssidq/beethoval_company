@@ -279,5 +279,12 @@
   },
   "Hero": {
     "portfolio_showcase": "Pameran portofolio"
+  },
+  "CookiesBanner": {
+    "title_primary": "Privasi &",
+    "title_accent": "Cookie",
+    "description": "Kami menggunakan cookie untuk meningkatkan pengalaman Anda dan menganalisis lalu lintas kami. Dengan melanjutkan, Anda menyetujui penggunaan cookie kami.",
+    "decline": "Tolak",
+    "accept_all": "Terima Semua"
   }
 }

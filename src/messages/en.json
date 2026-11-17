@@ -279,5 +279,12 @@
   },
   "Hero": {
     "portfolio_showcase": "Portfolio showcase"
+  },
+  "CookiesBanner": {
+    "title_primary": "Privacy &",
+    "title_accent": "Cookies",
+    "description": "We use cookies to enhance your experience and analyze our traffic. By continuing, you agree to our use of cookies.",
+    "decline": "Decline",
+    "accept_all": "Accept All"
   }
 }

@@ -65,12 +65,6 @@ export function ProjectCatalogClient({ projects }: ProjectCatalogClientProps) {
     <>
       <section className="pt-28 pb-12 sm:pt-32 sm:pb-14 md:pt-40 md:pb-16 border-b border-gray-200 bg-white">
         <div className="w-full max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="h-px w-10 bg-indigo-600" />
-            <p className="text-[11px] font-semibold text-indigo-600 tracking-[0.2em] uppercase font-mono">
-              {t("eyebrow")}
-            </p>
-          </div>
           <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gray-900 tracking-tight leading-[1.05]">
             <span className="font-sans font-normal">{t("title_primary")}</span>{" "}
             <span className="font-serif italic text-indigo-600">{t("title_accent")}</span>
