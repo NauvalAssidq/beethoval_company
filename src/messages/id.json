@@ -15,7 +15,23 @@
     "no_articles_found": "Tidak ada artikel ditemukan.",
     "gallery_overview": "Ikhtisar Galeri",
     "manage_gallery": "Kelola Galeri",
-    "no_images_in_gallery": "Tidak ada gambar di galeri"
+    "no_images_in_gallery": "Tidak ada gambar di galeri",
+    "all_time_suffix": "total",
+    "top_regions": "Wilayah",
+    "range_7d": "7H",
+    "range_30d": "30H",
+    "range_90d": "90H",
+    "range_ytd": "YTD",
+    "range_1y": "1T",
+    "range_all": "Semua",
+    "studio_overview": "Ringkasan",
+    "studio_accent": "Studio",
+    "new_project": "Proyek Baru",
+    "new_article": "Artikel Baru",
+    "view_live": "Lihat Situs",
+    "new_item": "Baru",
+    "peak_label": "Puncak",
+    "avg_label": "Rata-rata"
   },
   "AppHeader": {
     "beethoval_dev": "Beethoval.dev"
@@ -24,6 +40,9 @@
     "beethoval": "Beethoval",
     "dev": ".dev",
     "management": "Manajemen",
+    "overview": "Ringkasan",
+    "content": "Konten",
+    "sections": "Bagian Halaman",
     "dashboard": "Dasbor",
     "hero": "Hero",
     "about": "Tentang",
@@ -50,6 +69,7 @@
   "NavUser": {
     "my_account": "Akun Saya",
     "profile": "Profil",
+    "live_site": "Lihat Situs",
     "log_out": "Keluar"
   },
   "AboutIndex": {
