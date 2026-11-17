@@ -52,9 +52,9 @@ export function Hero({ marqueeItems, heroData }: HeroProps) {
   return (
     <section
       ref={sectionRef}
-      className="relative h-dvh flex flex-col bg-white overflow-hidden border-b border-gray-100"
+      className="relative min-h-dvh md:h-dvh flex flex-col bg-white overflow-hidden border-b border-gray-100"
     >
-      <div className="flex-1 w-full max-w-9xl mx-auto mb-4 sm:mb-4 md:mb-6 lg:mb-8 z-10 relative flex flex-col justify-end px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+      <div className="md:flex-1 w-full max-w-9xl mx-auto mb-2 md:mb-6 lg:mb-8 z-10 relative flex flex-col justify-start md:justify-end px-4 sm:px-6 lg:px-8 pt-[156px] pb-8 md:pt-20 md:pb-12">
         <div className="text-left flex flex-col items-start">
           <h1 className={cn(animateIn, "delay-300 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-gray-900 mb-4 text-left leading-[1.05] tracking-tight")}>
             <span className="font-sans font-regular">{resolveTranslation(data.line1, locale) || "Crafting Digital"}</span>
@@ -79,13 +79,13 @@ export function Hero({ marqueeItems, heroData }: HeroProps) {
         </div>
       </div>
 
-      <div className={cn(animateIn, "delay-1000 w-full z-10 relative mt-auto pb-12 overflow-hidden flex")}>
-        <div className="flex w-max animate-marquee gap-8 pr-8">
+      <div className={cn(animateIn, "delay-1000 w-full z-10 relative mt-auto pb-8 md:pb-12 overflow-hidden flex")}>
+        <div className="flex w-max animate-marquee gap-6 md:gap-8 pr-6 md:pr-8">
           {Array.from({ length: Math.max(2, Math.ceil(8 / resolvedUrls.length)) })
             .flatMap(() => resolvedUrls)
             .map((src, i) => (
-              <div key={i} className="relative w-[320px] h-[320px] md:w-[380px] md:h-[380px] shrink-0 overflow-hidden">
-                <Image src={src} fill sizes="(max-width: 768px) 320px, 380px" className="object-contain object-bottom" alt={t("portfolio_showcase")} />
+              <div key={i} className="relative w-[312px] h-[312px] sm:w-[384px] sm:h-[384px] md:w-[456px] md:h-[456px] shrink-0 overflow-hidden">
+                <Image src={src} fill sizes="(max-width: 640px) 312px, (max-width: 768px) 384px, 456px" className="object-contain object-bottom" alt={t("portfolio_showcase")} />
               </div>
             ))}
         </div>

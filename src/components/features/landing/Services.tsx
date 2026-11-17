@@ -142,7 +142,7 @@ export function Services({ initialServices }: ServicesProps) {
     <section
       ref={sectionRef}
       id="services"
-      className="relative bg-[#fafafa] border-t border-gray-100 mb-12"
+      className="relative bg-[#fafafa] border-t border-gray-100 pb-12"
     >
       <div className="w-full max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 md:pt-32 mb-8">
         <div

@@ -123,7 +123,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
             : "bg-transparent border-b border-transparent"
         )}
       >
-        <nav className="max-w-9xl mx-auto px-5 sm:px-8 lg:px-10 flex items-center justify-between h-[72px]">
+        <nav className="relative max-w-9xl mx-auto px-5 sm:px-8 lg:px-10 flex items-center justify-between h-[72px]">
           <Link
             href="/"
             className={cn(
@@ -135,7 +135,7 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
             <span className="not-italic text-indigo-600">.dev</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
             {navLinks.map((link) => (
               <Link
                 key={link.key}

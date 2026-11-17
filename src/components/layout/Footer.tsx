@@ -89,7 +89,7 @@ export function Footer({ footerData: initialData }: FooterProps) {
       <div
         data-footer="heading"
         className={cn(
-          "w-full border-b border-gray-200 px-6 py-24 md:py-32 flex flex-col items-center justify-center text-center bg-[#fafafa] transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+          "w-full border-b border-gray-200 px-6 py-24 md:py-32 flex flex-col items-center justify-center text-center bg-white transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
           headingVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         )}
       >
@@ -103,7 +103,7 @@ export function Footer({ footerData: initialData }: FooterProps) {
 
       <div
         data-footer="grid"
-        className="w-full grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-gray-200 border-b border-gray-200"
+        className="w-full bg-[#fafafa] grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-gray-200 border-b border-gray-200"
       >
         {allColumns.map((col, colIdx) => (
           <div

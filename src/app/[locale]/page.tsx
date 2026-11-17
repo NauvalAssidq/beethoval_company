@@ -14,6 +14,7 @@ import { News } from "@/components/features/landing/News";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Services } from "@/components/features/landing/Services";
+import { FaqSection } from "@/components/features/landing/FaqSection";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,7 @@ export default async function Home() {
       <About aboutData={aboutData} />
       <Projects initialProjects={projectCards} />
       <Services initialServices={services} />
+      <FaqSection />
       <News initialNews={news} />
       <Footer footerData={footerData} />
     </main>

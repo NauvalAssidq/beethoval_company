@@ -34,7 +34,7 @@ export function News({ initialNews }: NewsProps) {
     <section
       ref={sectionRef}
       id="news"
-      className="relative bg-white py-12 md:py-16 overflow-hidden border-t border-gray-100"
+      className="relative bg-[#fafafa] py-12 md:py-16 overflow-hidden border-t border-gray-100"
     >
       <div className="w-full max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 md:mb-12">
         <div
