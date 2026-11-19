@@ -28,6 +28,20 @@ export function Hero({ marqueeItems, heroData }: HeroProps) {
   const locale = useLocale() as "en" | "id";
   const t = useTranslations("Hero");
 
+  useEffect(() => {
+    try {
+      const key = "beethoval_db_warmed_at";
+      const last = Number(localStorage.getItem(key) || "0");
+      const now = Date.now();
+      if (!last || now - last > 15 * 60 * 1000) {
+        localStorage.setItem(key, String(now));
+        fetch("/api/health").catch(() => {});
+      }
+    } catch {
+      fetch("/api/health").catch(() => {});
+    }
+  }, []);
+
   const data = heroData || {
     line1: "Crafting Digital",
     highlightWord1: "Experiences",

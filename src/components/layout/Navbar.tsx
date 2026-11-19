@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { Link } from "@/i18n/routing";
 import { useRouter, usePathname } from "@/i18n/routing";
 import { Menu, X, ArrowUpRight } from "lucide-react";
@@ -156,7 +156,9 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
 
           <div className="flex items-center gap-3">
             <div className="hidden md:block">
-              <PublicLanguageSwitcher isDarkTheme={isDarkTheme} />
+              <Suspense fallback={null}>
+                <PublicLanguageSwitcher isDarkTheme={isDarkTheme} />
+              </Suspense>
             </div>
 
             <Link
@@ -295,7 +297,9 @@ export function Navbar({ transparentTheme = "light" }: NavbarProps = {}) {
             </Link>
             
             <div className="relative z-[70]">
-              <PublicLanguageSwitcher align="left" />
+              <Suspense fallback={null}>
+                <PublicLanguageSwitcher align="left" />
+              </Suspense>
             </div>
           </div>
         </div>

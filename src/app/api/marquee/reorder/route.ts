@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import clientPromise from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
+import { revalidateSiteContent } from "@/lib/revalidate";
 
 export async function PUT(req: Request) {
   try {
@@ -42,6 +43,8 @@ export async function PUT(req: Request) {
     if (bulkOperationsByCollection.galleries.length > 0) {
       await db.collection("galleries").bulkWrite(bulkOperationsByCollection.galleries);
     }
+
+    revalidateSiteContent(["marquee-items", "gallery", "projects"], ["/"]);
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
